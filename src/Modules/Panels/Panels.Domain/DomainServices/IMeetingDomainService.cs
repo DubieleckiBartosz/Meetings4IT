@@ -1,0 +1,20 @@
+﻿using Meetings4IT.Shared.Domain.Kernel.ValueObjects;
+using Panels.Domain.Meetings;
+using Panels.Domain.Meetings.Categories;
+using Panels.Domain.Meetings.ValueObjects;
+using Panels.Domain.ScheduledMeetings;
+
+namespace Panels.Domain.DomainServices;
+
+public interface IMeetingDomainService
+{
+    Meeting Creation(
+        ScheduledMeeting schedule,
+        Email creator,
+        MeetingCategory category,
+        Description description,
+        Address address,
+        DateRange date,
+        bool isPublic,
+        int? maxInvitations);
+}
