@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <TargetFramework>net6.0</TargetFramework>
@@ -7,11 +7,13 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\..\Shared\Meetings4IT.Shared.Domain\Meetings4IT.Shared.Domain.csproj" />
+    <Compile Remove="Users\Events\**" />
+    <EmbeddedResource Remove="Users\Events\**" />
+    <None Remove="Users\Events\**" />
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Users\Events\" />
+    <ProjectReference Include="..\..\..\Shared\Meetings4IT.Shared.Domain\Meetings4IT.Shared.Domain.csproj" />
   </ItemGroup>
 
 </Project>

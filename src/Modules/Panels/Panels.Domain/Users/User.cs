@@ -46,7 +46,7 @@ public class User : Entity, IAggregateRoot
         this.IncrementVersion();
     }
 
-    public void AddImage(UserImage image)
+    public void SetProfileImage(UserImage image)
     {
         Image = image;
         this.IncrementVersion();
