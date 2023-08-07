@@ -29,6 +29,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Notifications", "Notificati
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Accounts.Core", "src\Modules\Accounts\Accounts.Core\Accounts.Core.csproj", "{2ECFC3DF-D2EF-413E-BAC4-7254DE05D803}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Meetings4IT.Shared.Infrastructure", "src\Shared\Meetings4IT.Shared.Infrastructure\Meetings4IT.Shared.Infrastructure.csproj", "{F7EC3A6C-AC88-422A-AAB3-6515A639D525}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -59,6 +61,10 @@ Global
 		{2ECFC3DF-D2EF-413E-BAC4-7254DE05D803}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{2ECFC3DF-D2EF-413E-BAC4-7254DE05D803}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{2ECFC3DF-D2EF-413E-BAC4-7254DE05D803}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F7EC3A6C-AC88-422A-AAB3-6515A639D525}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F7EC3A6C-AC88-422A-AAB3-6515A639D525}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F7EC3A6C-AC88-422A-AAB3-6515A639D525}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F7EC3A6C-AC88-422A-AAB3-6515A639D525}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -76,6 +82,7 @@ Global
 		{2F77782E-C5B1-485D-AF9B-620C78442A70} = {42434C1F-153B-4B9B-9343-C227C8E7EB24}
 		{D5AD7F16-CA2D-465E-983D-E540FDFC3DBB} = {94E1C654-06B9-4A64-AD92-AB82C5675CD2}
 		{2ECFC3DF-D2EF-413E-BAC4-7254DE05D803} = {11E7A443-1B8C-493D-BE5E-8DBBADD37EBE}
+		{F7EC3A6C-AC88-422A-AAB3-6515A639D525} = {42434C1F-153B-4B9B-9343-C227C8E7EB24}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {2E6C2468-4517-4157-A4EE-9819E4C3756E}
