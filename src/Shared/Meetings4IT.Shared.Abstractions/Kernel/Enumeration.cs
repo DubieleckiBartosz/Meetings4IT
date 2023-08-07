@@ -1,6 +1,6 @@
 ﻿using System.Reflection;
 
-namespace Meetings4IT.Shared.Domain.Kernel;
+namespace Meetings4IT.Shared.Abstractions.Kernel;
 
 public class Enumeration : IComparable
 {
@@ -39,7 +39,7 @@ public class Enumeration : IComparable
         }
 
         return a.Equals(b);
-    }  
+    }
     public override bool Equals(object? obj)
     {
         if (obj is not Enumeration otherValue)

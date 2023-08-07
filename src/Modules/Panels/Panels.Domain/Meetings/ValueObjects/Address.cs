@@ -1,4 +1,4 @@
-﻿using Meetings4IT.Shared.Domain.Kernel.ValueObjects;
+﻿using Meetings4IT.Shared.Abstractions.Kernel.ValueObjects; 
 
 namespace Panels.Domain.Meetings.ValueObjects;
 

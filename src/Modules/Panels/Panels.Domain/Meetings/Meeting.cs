@@ -1,6 +1,6 @@
-﻿using Meetings4IT.Shared.Domain.Kernel;
-using Meetings4IT.Shared.Domain.Kernel.ValueObjects;
-using Meetings4IT.Shared.Domain.Time;
+﻿using Meetings4IT.Shared.Abstractions.Kernel;
+using Meetings4IT.Shared.Abstractions.Kernel.ValueObjects;
+using Meetings4IT.Shared.Abstractions.Time; 
 using Panels.Domain.Meetings.Categories;
 using Panels.Domain.Meetings.Entities;
 using Panels.Domain.Meetings.Events;

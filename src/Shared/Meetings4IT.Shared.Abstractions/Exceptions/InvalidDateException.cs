@@ -1,4 +1,4 @@
-﻿namespace Meetings4IT.Shared.Domain.DomainExceptions;
+﻿namespace Meetings4IT.Shared.Abstractions.Exceptions;
 
 public class InvalidDateException : BusinessException
 {

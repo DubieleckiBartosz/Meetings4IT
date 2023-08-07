@@ -1,4 +1,4 @@
-﻿namespace Meetings4IT.Shared.Domain.Kernel.ValueObjects;
+﻿namespace Meetings4IT.Shared.Abstractions.Kernel.ValueObjects;
 
 public abstract class ValueObject
 {

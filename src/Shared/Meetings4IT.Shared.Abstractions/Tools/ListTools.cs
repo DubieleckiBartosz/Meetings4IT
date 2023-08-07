@@ -1,4 +1,4 @@
-﻿namespace Meetings4IT.Shared.Domain.Tools;
+﻿namespace Meetings4IT.Shared.Abstractions.Tools;
 
 public static class ListTools
 {

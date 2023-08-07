@@ -1,4 +1,4 @@
-﻿using Meetings4IT.Shared.Domain.Kernel;
+﻿using Meetings4IT.Shared.Abstractions.Kernel; 
 using Panels.Domain.Users.Exceptions;
 using Panels.Domain.Users.ValueObjects;
 

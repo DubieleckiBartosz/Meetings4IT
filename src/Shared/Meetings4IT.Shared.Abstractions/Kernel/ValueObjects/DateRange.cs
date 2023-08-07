@@ -1,6 +1,6 @@
-﻿using Meetings4IT.Shared.Domain.Time;
+﻿using Meetings4IT.Shared.Abstractions.Time;
 
-namespace Meetings4IT.Shared.Domain.Kernel.ValueObjects;
+namespace Meetings4IT.Shared.Abstractions.Kernel.ValueObjects;
 
 public class DateRange : ValueObject
 {

@@ -1,4 +1,4 @@
-﻿using Meetings4IT.Shared.Domain.Kernel;
+﻿using Meetings4IT.Shared.Abstractions.Kernel; 
 
 namespace Panels.Domain.Meetings.Statuses;
 

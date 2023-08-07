@@ -1,6 +1,6 @@
-﻿namespace Meetings4IT.Shared.Domain.Kernel;
+﻿namespace Meetings4IT.Shared.Abstractions.Kernel;
 
-public abstract class IndexValuePair 
+public class IndexValuePair
 {
     public int Index { get; }
     public string Value { get; }

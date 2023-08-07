@@ -13,7 +13,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\..\Shared\Meetings4IT.Shared.Domain\Meetings4IT.Shared.Domain.csproj" />
+    <ProjectReference Include="..\..\..\Shared\Meetings4IT.Shared.Abstractions\Meetings4IT.Shared.Abstractions.csproj" />
   </ItemGroup>
 
 </Project>

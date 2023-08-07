@@ -1,5 +1,5 @@
-﻿using Meetings4IT.Shared.Domain.Kernel.ValueObjects;
-using Meetings4IT.Shared.Domain.Time;
+﻿using Meetings4IT.Shared.Abstractions.Kernel.ValueObjects;
+using Meetings4IT.Shared.Abstractions.Time; 
 
 namespace Panels.Domain.Meetings.ValueObjects;
 

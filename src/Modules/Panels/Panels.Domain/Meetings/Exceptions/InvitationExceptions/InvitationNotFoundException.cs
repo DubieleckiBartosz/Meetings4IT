@@ -1,5 +1,5 @@
 ﻿using System.Net;
-using Meetings4IT.Shared.Domain.DomainExceptions;
+using Meetings4IT.Shared.Abstractions.Exceptions; 
 
 namespace Panels.Domain.Meetings.Exceptions.InvitationExceptions;
 

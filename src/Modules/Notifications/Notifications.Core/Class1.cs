@@ -1,4 +1,4 @@
-﻿namespace Panels.Infrastructure
+﻿namespace Notifications.Core
 {
     public class Class1
     {

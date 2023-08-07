@@ -1,6 +1,6 @@
-﻿using Meetings4IT.Shared.Domain.Kernel.ValueObjects;
+﻿using Meetings4IT.Shared.Abstractions.Kernel.ValueObjects;
 
-namespace Meetings4IT.Shared.Domain.Time;
+namespace Meetings4IT.Shared.Abstractions.Time;
 
 public class Clock
 {

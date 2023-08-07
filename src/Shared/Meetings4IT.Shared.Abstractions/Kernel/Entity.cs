@@ -1,6 +1,6 @@
-﻿using Meetings4IT.Shared.Domain.Abstractions;
+﻿using Meetings4IT.Shared.Abstractions.Notifications;
 
-namespace Meetings4IT.Shared.Domain.Kernel;
+namespace Meetings4IT.Shared.Abstractions.Kernel;
 
 public class Entity
 {

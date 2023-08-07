@@ -1,7 +1,6 @@
-﻿using Meetings4IT.Shared.Domain.Kernel;
-using Meetings4IT.Shared.Domain.Kernel.ValueObjects;
-using Meetings4IT.Shared.Domain.Time;
-using Panels.Domain.Meetings.Exceptions;
+﻿using Meetings4IT.Shared.Abstractions.Kernel;
+using Meetings4IT.Shared.Abstractions.Kernel.ValueObjects;
+using Meetings4IT.Shared.Abstractions.Time; 
 using Panels.Domain.Meetings.Exceptions.InvitationExceptions;
 using Panels.Domain.Meetings.Statuses;
 

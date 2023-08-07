@@ -1,4 +1,4 @@
-﻿using Meetings4IT.Shared.Domain.Abstractions;
+﻿using Meetings4IT.Shared.Abstractions.Notifications; 
 
 namespace Panels.Domain.Meetings.Events;
 

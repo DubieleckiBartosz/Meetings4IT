@@ -1,5 +1,5 @@
-﻿using Meetings4IT.Shared.Domain.Kernel;
-using Meetings4IT.Shared.Domain.Kernel.ValueObjects;
+﻿using Meetings4IT.Shared.Abstractions.Kernel;
+using Meetings4IT.Shared.Abstractions.Kernel.ValueObjects; 
 using Panels.Domain.ScheduledMeetings.Events;
 using Panels.Domain.ScheduledMeetings.Exceptions;
 using Panels.Domain.ScheduledMeetings.ValueObjects;

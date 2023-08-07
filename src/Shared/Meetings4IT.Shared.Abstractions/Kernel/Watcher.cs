@@ -1,4 +1,4 @@
-﻿namespace Meetings4IT.Shared.Domain.Kernel;
+﻿namespace Meetings4IT.Shared.Abstractions.Kernel;
 
 public class Watcher
 {
