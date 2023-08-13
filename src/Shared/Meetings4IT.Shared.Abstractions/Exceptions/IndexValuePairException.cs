@@ -2,7 +2,7 @@
 
 namespace Meetings4IT.Shared.Abstractions.Exceptions;
 
-public class IndexValuePairException : BusinessException
+public class IndexValuePairException : BaseException
 {
     public IndexValuePairException(string? title, string message, HttpStatusCode statusCode = HttpStatusCode.BadRequest) : base(title, message, statusCode)
     {

@@ -1,8 +1,8 @@
-﻿using Meetings4IT.Shared.Abstractions.Notifications; 
+﻿using Meetings4IT.Shared.Abstractions.Events;
 
 namespace Panels.Domain.Meetings.Events;
 
-public record MeetingCreated(string MeetingCreator) : IDomainNotification
+public record MeetingCreated(string MeetingCreator) : IDomainEvent
 {
     public static MeetingCreated Create(string meetingCreator)
     {

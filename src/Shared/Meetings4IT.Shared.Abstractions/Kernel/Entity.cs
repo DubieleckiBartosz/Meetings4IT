@@ -1,4 +1,4 @@
-﻿using Meetings4IT.Shared.Abstractions.Notifications;
+﻿using Meetings4IT.Shared.Abstractions.Events;
 
 namespace Meetings4IT.Shared.Abstractions.Kernel;
 
@@ -8,11 +8,11 @@ public class Entity
     public int Version { get; protected set; }
     public Watcher? Watcher { get; set; }
 
-    private readonly List<IDomainNotification> _events = new();
+    private readonly List<IDomainEvent> _events = new();
     private bool _versionIncremented;
-    public List<IDomainNotification> Events => _events;
+    public List<IDomainEvent> Events => _events;
 
-    protected void AddEvent(IDomainNotification @event)
+    protected void AddEvent(IDomainEvent @event)
     {
         if (!_events.Any() && !_versionIncremented)
         {

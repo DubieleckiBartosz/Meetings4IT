@@ -1,9 +1,9 @@
-﻿using Meetings4IT.Shared.Abstractions.Kernel.ValueObjects;
-using Meetings4IT.Shared.Abstractions.Notifications; 
+﻿using Meetings4IT.Shared.Abstractions.Events;
+using Meetings4IT.Shared.Abstractions.Kernel.ValueObjects;
 
 namespace Panels.Domain.Meetings.Events;
 
-public record NewInvitationCreated(string RecipientInvitation, string MeetingCreator) : IDomainNotification
+public record NewInvitationCreated(string RecipientInvitation, string MeetingCreator) : IDomainEvent
 {
     public static NewInvitationCreated Create(Email recipientInvitation, Email meetingCreator)
     {

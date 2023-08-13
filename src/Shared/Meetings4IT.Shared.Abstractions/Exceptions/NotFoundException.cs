@@ -2,7 +2,7 @@
 
 namespace Meetings4IT.Shared.Abstractions.Exceptions;
 
-public class NotFoundException : BusinessException
+public class NotFoundException : BaseException
 {
     public NotFoundException(string? title, string message) :
         base(title, message, HttpStatusCode.NotFound)

@@ -1,8 +1,8 @@
-﻿using Meetings4IT.Shared.Abstractions.Notifications; 
+﻿using Meetings4IT.Shared.Abstractions.Events;
 
 namespace Panels.Domain.Meetings.Events;
 
-public record MeetingCanceled(int MeetingId, List<string> InvitationRecipients) : IDomainNotification
+public record MeetingCanceled(int MeetingId, List<string> InvitationRecipients) : IDomainEvent
 {
     public static MeetingCanceled Create(int meetingId, List<string> invitationRecipients)
     {

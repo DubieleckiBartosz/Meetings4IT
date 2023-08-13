@@ -1,8 +1,8 @@
-﻿namespace Meetings4IT.Shared.Abstractions.Notifications;
+﻿namespace Meetings4IT.Shared.Abstractions.Events;
 
 public interface IDomainDecorator
 {
     Task Publish<TNotification>(TNotification notification,
         CancellationToken cancellationToken = default)
-        where TNotification : IDomainNotification;
+        where TNotification : IDomainEvent;
 }

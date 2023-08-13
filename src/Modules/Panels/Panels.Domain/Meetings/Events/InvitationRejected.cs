@@ -1,8 +1,8 @@
-﻿using Meetings4IT.Shared.Abstractions.Notifications; 
+﻿using Meetings4IT.Shared.Abstractions.Events;
 
 namespace Panels.Domain.Meetings.Events;
 
-public record InvitationRejected(string MeetingCreator) : IDomainNotification
+public record InvitationRejected(string MeetingCreator) : IDomainEvent
 {
     public static InvitationRejected Create(string meetingCreator)
     {
