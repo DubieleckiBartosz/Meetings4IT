@@ -7,8 +7,6 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Folder Include="EventBus\IntegrationEvent\" />
-    <Folder Include="EventBus\InMemoryEventBus\" />
     <Folder Include="Logging\" />
   </ItemGroup>
 

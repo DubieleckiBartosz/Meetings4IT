@@ -33,7 +33,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Notifications.Infrastructur
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Meetings4IT.Shared.Abstractions", "src\Shared\Meetings4IT.Shared.Abstractions\Meetings4IT.Shared.Abstractions.csproj", "{CE0D5700-9C3A-4111-887A-C8A627D6095B}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Meetings4IT.Shared.Implementations", "src\Shared\Meetings4IT.Shared.Implementations\Meetings4IT.Shared.Implementations.csproj", "{68785D57-EA15-4A89-B630-971465849445}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Meetings4IT.Shared.Implementations", "src\Shared\Meetings4IT.Shared.Implementations\Meetings4IT.Shared.Implementations.csproj", "{68785D57-EA15-4A89-B630-971465849445}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Meetings4IT.Shared.IntegrationEvents", "src\Shared\Meetings4IT.Shared.IntegrationEvents\Meetings4IT.Shared.IntegrationEvents.csproj", "{65328BF0-E3CE-46ED-A2E2-99F69667BF02}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -77,6 +79,10 @@ Global
 		{68785D57-EA15-4A89-B630-971465849445}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{68785D57-EA15-4A89-B630-971465849445}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{68785D57-EA15-4A89-B630-971465849445}.Release|Any CPU.Build.0 = Release|Any CPU
+		{65328BF0-E3CE-46ED-A2E2-99F69667BF02}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{65328BF0-E3CE-46ED-A2E2-99F69667BF02}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{65328BF0-E3CE-46ED-A2E2-99F69667BF02}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{65328BF0-E3CE-46ED-A2E2-99F69667BF02}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -97,6 +103,7 @@ Global
 		{55EF9EC2-3138-4476-9B1C-8302AF4AAE5B} = {D5AD7F16-CA2D-465E-983D-E540FDFC3DBB}
 		{CE0D5700-9C3A-4111-887A-C8A627D6095B} = {42434C1F-153B-4B9B-9343-C227C8E7EB24}
 		{68785D57-EA15-4A89-B630-971465849445} = {42434C1F-153B-4B9B-9343-C227C8E7EB24}
+		{65328BF0-E3CE-46ED-A2E2-99F69667BF02} = {42434C1F-153B-4B9B-9343-C227C8E7EB24}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {2E6C2468-4517-4157-A4EE-9819E4C3756E}
