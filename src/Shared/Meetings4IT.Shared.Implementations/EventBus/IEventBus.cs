@@ -1,12 +1,9 @@
-﻿using Meetings4IT.Shared.Implementations.EventBus.IntegrationEvent;
+﻿using Meetings4IT.Shared.Implementations.EventBus.IntegrationEventProcess;
 
 namespace Meetings4IT.Shared.Implementations.EventBus;
 
-internal interface IEventBus
+public interface IEventBus
 {
-    Task Publish<TEvent>(TEvent @event)
-        where TEvent : IntegrationEvent.IntegrationEvent;
-
-    void Subscribe<TEvent>(IIntegrationEventHandler<TEvent> handler)
-        where TEvent : IntegrationEvent.IntegrationEvent;
+    Task Publish<TEvent>(TEvent @event) where TEvent : IntegrationEvent;
+    void Subscribe<TEvent>(IIntegrationEventHandler<TEvent> handler) where TEvent : IntegrationEvent;
 }

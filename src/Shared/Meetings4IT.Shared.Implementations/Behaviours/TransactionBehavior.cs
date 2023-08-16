@@ -11,14 +11,14 @@ public class TransactionBehavior<TRequest, TResponse> : IPipelineBehavior<TReque
 {
     private readonly IRequestHandler<TRequest, TResponse> _requestHandler;
     private readonly ILogger _logger;
-    private readonly ITransactionSupervisor _transaction;
+    private readonly ITransactionSupervisor _transactionSupervisor;
 
     public TransactionBehavior(IRequestHandler<TRequest, TResponse> requestHandler,
-        ILogger logger, ITransactionSupervisor transaction)
+        ILogger logger, ITransactionSupervisor transactionSupervisor)
     {
         this._requestHandler = requestHandler ?? throw new ArgumentNullException(nameof(requestHandler));
         this._logger = logger ?? throw new ArgumentNullException(nameof(logger));
-        this._transaction = transaction ?? throw new ArgumentNullException(nameof(transaction));
+        this._transactionSupervisor = transactionSupervisor ?? throw new ArgumentNullException(nameof(transactionSupervisor));
     }
 
     public async Task<TResponse> Handle(TRequest request, RequestHandlerDelegate<TResponse> next, CancellationToken cancellationToken)
@@ -38,11 +38,11 @@ public class TransactionBehavior<TRequest, TResponse> : IPipelineBehavior<TReque
                 this._logger.Information(
                     $"The transaction will be created by {requestName} ------ HANDLER WITH TRANSACTION ------- ");
 
-                await _transaction.GetOpenOrCreateTransaction();
+                await _transactionSupervisor.GetOpenOrCreateTransaction();
 
                 var response = await next();
 
-                var result = this._transaction.Commit();
+                var result = this._transactionSupervisor.Commit();
 
                 if (result)
                 {
@@ -54,7 +54,7 @@ public class TransactionBehavior<TRequest, TResponse> : IPipelineBehavior<TReque
             }
             catch (Exception ex)
             {
-                this._transaction.Rollback();
+                this._transactionSupervisor.Rollback();
 
                 var message = new
                 {

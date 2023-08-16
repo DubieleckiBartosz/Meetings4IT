@@ -7,8 +7,16 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Folder Include="IntegrationEvents\EventHandling\" />
+    <Folder Include="IntegrationEvents\Events\" />
     <Folder Include="Models\Views\" />
     <Folder Include="Models\Parameters\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\..\Shared\Meetings4IT.Shared.Implementations\Meetings4IT.Shared.Implementations.csproj" />
+    <ProjectReference Include="..\..\..\Shared\Meetings4IT.Shared.IntegrationEvents\Meetings4IT.Shared.IntegrationEvents.csproj" />
+    <ProjectReference Include="..\Panels.Domain\Panels.Domain.csproj" />
   </ItemGroup>
 
 </Project>

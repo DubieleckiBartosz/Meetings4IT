@@ -4,10 +4,12 @@ using System.Data;
 using Meetings4IT.Shared.Abstractions.Exceptions;
 using Meetings4IT.Shared.Implementations.Polly;
 using Serilog;
+using Microsoft.Extensions.Options;
+using Meetings4IT.Shared.Implementations.Options;
 
 namespace Meetings4IT.Shared.Implementations.Dapper;
 
-public class TransactionSupervisor : ITransactionSupervisor
+public class TransactionSupervisor : ITransactionSupervisor, IDisposable 
 {
     private readonly ILogger _logger;
     private readonly string _connectionString;
@@ -16,11 +18,12 @@ public class TransactionSupervisor : ITransactionSupervisor
     private string? _transactionId; 
     private SqlConnection? _connection;
     private SqlTransaction? _transaction;
+    private bool _disposed = false;
 
-    public TransactionSupervisor(ILogger logger, string dbConnection)
+    public TransactionSupervisor(ILogger logger, IOptions<DatabaseOptions> dbConnectionOptions)
     {
         this._logger = logger ?? throw new ArgumentNullException(nameof(logger));
-        this._connectionString = dbConnection ?? throw new ArgumentNullException(nameof(dbConnection));
+        this._connectionString = dbConnectionOptions?.Value?.DefaultConnection ?? throw new ArgumentNullException(nameof(dbConnectionOptions));
         var policy = new PolicySetup();
         this._retryAsyncPolicyConnection = policy.PolicyConnectionAsync(this._logger);
     }
@@ -121,5 +124,34 @@ public class TransactionSupervisor : ITransactionSupervisor
     {
         this._transactionId = Guid.NewGuid().ToString();
         this._logger.Information($"New transaction identifier created: {this._transactionId}");
-    } 
+    }
+
+    public void Dispose()
+    {
+        Dispose(true);
+        GC.SuppressFinalize(this);
+    }
+
+    protected virtual void Dispose(bool disposing)
+    {
+        if (!_disposed)
+        {
+            if (disposing)
+            {
+                // Dispose managed resources here
+                if (_transaction != null)
+                {
+                    _transaction.Dispose();
+                    _transaction = null;
+                }
+                if (_connection != null)
+                {
+                    _connection.Dispose();
+                    _connection = null;
+                }
+            }
+             
+            _disposed = true;
+        }
+    }
 }

@@ -1,0 +1,112 @@
+﻿using Meetings4IT.Shared.Implementations.Mediator;
+using Microsoft.AspNetCore.Builder;
+using Microsoft.Extensions.DependencyInjection;
+using System.Reflection;
+using MediatR;
+using Meetings4IT.Shared.Abstractions.Events;
+using Meetings4IT.Shared.Implementations.Decorators;
+using Meetings4IT.Shared.Implementations.Behaviours;
+using Meetings4IT.Shared.Implementations.Dapper;
+using Meetings4IT.Shared.Implementations.EventBus;
+using Meetings4IT.Shared.Implementations.EventBus.InMemoryMessaging;
+using Meetings4IT.Shared.Implementations.EventBus.IntegrationEventLog.DAL.Repositories;
+using Meetings4IT.Shared.Implementations.EventBus.IntegrationEventLog.Services;
+using Meetings4IT.Shared.Implementations.Options;
+using Meetings4IT.Shared.Implementations.EventBus.IntegrationEventLog.DAL;
+using Serilog.Events;
+using Serilog;
+using Meetings4IT.Shared.Implementations.Reference;
+using Microsoft.Extensions.Configuration;
+using Serilog.Exceptions;
+
+namespace Meetings4IT.Shared.Implementations;
+
+public static class Configurations
+{
+    public static WebApplicationBuilder RegistrationSharedConfigurations(this WebApplicationBuilder builder, List<Type> integrationEventTypes, bool withDapper = true, params Type[] assemblyTypes)
+    {
+        //MEDIATOR
+        var services = builder.Services;
+        var config = builder.Configuration;
+
+        services.AddTransient<IDomainDecorator, MediatorDecorator>();
+        services.RegisterMediator(assemblyTypes);
+
+        if (withDapper)
+        {
+            services.Configure<DatabaseOptions>(config.GetSection(nameof(DatabaseOptions)));
+            services.AddTransient(typeof(IPipelineBehavior<,>), typeof(TransactionBehavior<,>));
+            services.AddScoped<ITransactionSupervisor, TransactionSupervisor>();
+        }
+
+        //EVENT BUS (in memory)
+        services.AddSingleton<IEventBus, InMemoryEventBus>();
+
+        //PIPELINES
+        services.RegisterValidatorPipeline();
+
+        //INTEGRATION LOG REPO
+        services.AddScoped<IntegrationEventLogContext>();
+        services.AddTransient<IIntegrationEventLogRepository, IntegrationEventLogRepository>();
+        services.AddTransient<IIntegrationEventLogService>((_) =>
+        {
+            var integrationRepository = _.GetRequiredService<IIntegrationEventLogRepository>();
+            return new IntegrationEventLogService(integrationRepository, integrationEventTypes!);
+        });
+
+        return builder;
+    }
+
+    public static IServiceCollection RegisterMediator(this IServiceCollection services, params Type[] types)
+    {
+        //MEDIATOR
+        var assemblies = types.Select(_ => _.GetTypeInfo().Assembly);
+
+        foreach (var assembly in assemblies)
+        {
+            services.AddMediatR(assembly);
+        }
+
+        services.AddMediatR(typeof(SharedAssemblyReference).GetTypeInfo().Assembly);
+
+        services.AddScoped<ICommandBus, CommandBus>();
+        services.AddScoped<IQueryBus, QueryBus>();
+
+        return services;
+    }
+
+    public static IServiceCollection RegisterValidatorPipeline(this IServiceCollection services)
+    {
+        //VALIDATOR PIPELINE
+        services.AddTransient(typeof(IPipelineBehavior<,>), typeof(ValidationPipelineBehaviour<,>));
+
+        return services;
+    }
+
+    public static void LogConfigurationService(this LoggerConfiguration loggerConfiguration, IConfiguration configuration)
+    { 
+        var logging = new LoggingOptions();
+        configuration.GetSection(nameof(LoggingOptions)).Bind(logging);
+
+        var dateTimeNowString = $"{DateTime.Now:yyyy-MM-dd}";
+
+        loggerConfiguration
+            .MinimumLevel.Debug()
+            .MinimumLevel.Override("Microsoft", LogEventLevel.Warning)
+            .Enrich.WithExceptionDetails()
+            .Enrich.FromLogContext()
+            .WriteTo.Logger(
+                _ => _.Filter.ByIncludingOnly(e => e.Level == LogEventLevel.Error)
+                    .WriteTo.File($"Logs/{dateTimeNowString}-Error.log",
+                        rollingInterval: RollingInterval.Day, fileSizeLimitBytes: 100000)
+            )
+            .WriteTo.Logger(
+                _ => _.Filter.ByIncludingOnly(e => e.Level == LogEventLevel.Warning)
+                    .WriteTo.File($"Logs/{dateTimeNowString}-Warning.log",
+                        rollingInterval: RollingInterval.Day, fileSizeLimitBytes: 100000)
+            )
+            .WriteTo.File($"Logs/{dateTimeNowString}-All.log")
+            .WriteTo.Console() 
+            .WriteTo.Seq(logging.Address!); 
+    }
+}

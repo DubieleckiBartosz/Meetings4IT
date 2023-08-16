@@ -23,6 +23,8 @@ public class CurrentUser : ICurrentUser
         return response ?? false;
     }
 
+    public List<string>? AvailableRoles() => Roles?.Select(_ => _.Value).ToList();
+
     public bool IsInRoles(string[] roles)
     {
         var resultRoles = Roles;
