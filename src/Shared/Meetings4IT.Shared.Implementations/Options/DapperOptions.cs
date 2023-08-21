@@ -1,6 +1,6 @@
 ﻿namespace Meetings4IT.Shared.Implementations.Options;
 
-public class DatabaseOptions
+public class DapperOptions
 {
     public string DefaultConnection { get; set; } = default!;
 }

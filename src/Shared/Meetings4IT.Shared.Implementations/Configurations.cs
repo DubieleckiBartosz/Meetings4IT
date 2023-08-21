@@ -18,12 +18,15 @@ using Serilog;
 using Meetings4IT.Shared.Implementations.Reference;
 using Microsoft.Extensions.Configuration;
 using Serilog.Exceptions;
+using Meetings4IT.Shared.Implementations.Services;
+using Microsoft.EntityFrameworkCore;
 
 namespace Meetings4IT.Shared.Implementations;
 
 public static class Configurations
 {
-    public static WebApplicationBuilder RegistrationSharedConfigurations(this WebApplicationBuilder builder, List<Type> integrationEventTypes, bool withDapper = true, params Type[] assemblyTypes)
+    public static WebApplicationBuilder RegistrationSharedConfigurations(this WebApplicationBuilder builder,
+        List<Type> integrationEventTypes, bool withDapper = true, params Type[] assemblyTypes)
     {
         //MEDIATOR
         var services = builder.Services;
@@ -34,7 +37,7 @@ public static class Configurations
 
         if (withDapper)
         {
-            services.Configure<DatabaseOptions>(config.GetSection(nameof(DatabaseOptions)));
+            services.Configure<DapperOptions>(config.GetSection(nameof(DapperOptions)));
             services.AddTransient(typeof(IPipelineBehavior<,>), typeof(TransactionBehavior<,>));
             services.AddScoped<ITransactionSupervisor, TransactionSupervisor>();
         }
@@ -53,6 +56,26 @@ public static class Configurations
             var integrationRepository = _.GetRequiredService<IIntegrationEventLogRepository>();
             return new IntegrationEventLogService(integrationRepository, integrationEventTypes!);
         });
+
+        return builder;
+    }
+
+    public static IServiceCollection RegisterAutoMapper(this IServiceCollection services, params Type[] types)
+    {
+        var assemblies = types.Select(_ => _.GetTypeInfo().Assembly);
+
+        foreach (var assembly in assemblies)
+        {
+            services.AddAutoMapper(assembly);
+        }
+
+        return services;
+    }
+     
+    public static WebApplicationBuilder RegisterUserAccessor(this WebApplicationBuilder builder)
+    {
+        builder.Services.AddHttpContextAccessor();
+        builder.Services.AddTransient<ICurrentUser, CurrentUser>();
 
         return builder;
     }
@@ -108,5 +131,19 @@ public static class Configurations
             .WriteTo.File($"Logs/{dateTimeNowString}-All.log")
             .WriteTo.Console() 
             .WriteTo.Seq(logging.Address!); 
+    }
+
+    public static WebApplicationBuilder RegisterEntityFrameworkSqlServer<T>(this WebApplicationBuilder builder,
+        Func<DbContextOptionsBuilder, DbContextOptionsBuilder>? additionalRegistrations = null) where T : DbContext
+    {
+        var options = builder.Configuration.GetSection("EfOptions").Get<EfOptions>()!;
+        builder.Services.AddDbContext<T>(dbContextBuilder =>
+        {
+            dbContextBuilder.UseSqlServer(options.ConnectionString);
+
+            additionalRegistrations?.Invoke(dbContextBuilder);
+        });
+
+        return builder;
     }
 }

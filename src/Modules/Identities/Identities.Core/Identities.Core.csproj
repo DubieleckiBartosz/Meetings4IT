@@ -7,8 +7,17 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Folder Include="DAL\Repositories\" />
     <Folder Include="Validators\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="6.0.21" />
+    <PackageReference Include="OpenIddict.AspNetCore" Version="4.7.0" />
+    <PackageReference Include="OpenIddict.EntityFrameworkCore" Version="4.7.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\..\Shared\Meetings4IT.Shared.Implementations\Meetings4IT.Shared.Implementations.csproj" />
   </ItemGroup>
 
 </Project>

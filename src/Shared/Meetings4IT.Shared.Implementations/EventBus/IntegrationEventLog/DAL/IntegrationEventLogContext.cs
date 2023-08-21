@@ -7,7 +7,7 @@ namespace Meetings4IT.Shared.Implementations.EventBus.IntegrationEventLog.DAL;
 
 public class IntegrationEventLogContext : DapperContext
 {
-    public IntegrationEventLogContext(IOptions<DatabaseOptions> dbConnectionOptions, ILogger logger) : base(dbConnectionOptions, logger)
+    public IntegrationEventLogContext(IOptions<DapperOptions> dbConnectionOptions, ILogger logger) : base(dbConnectionOptions, logger)
     {
     }
 }

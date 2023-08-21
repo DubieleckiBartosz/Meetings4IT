@@ -20,7 +20,7 @@ public class TransactionSupervisor : ITransactionSupervisor, IDisposable
     private SqlTransaction? _transaction;
     private bool _disposed = false;
 
-    public TransactionSupervisor(ILogger logger, IOptions<DatabaseOptions> dbConnectionOptions)
+    public TransactionSupervisor(ILogger logger, IOptions<DapperOptions> dbConnectionOptions)
     {
         this._logger = logger ?? throw new ArgumentNullException(nameof(logger));
         this._connectionString = dbConnectionOptions?.Value?.DefaultConnection ?? throw new ArgumentNullException(nameof(dbConnectionOptions));

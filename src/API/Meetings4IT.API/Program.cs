@@ -5,10 +5,13 @@ using Panels.Application;
 using Serilog;
 using Meetings4IT.Shared.Implementations.EventBus.IntegrationEventProcess;
 using Meetings4IT.Shared.IntegrationEvents.Reference;
+using Meetings4IT.API.Configurations;
 
 var builder = WebApplication.CreateBuilder(args);
-
+var configuration = builder.Configuration;
 // Add services to the container.
+
+builder.RegisterIdentityModule();
 
 var integrationEventTypes = Assembly.Load(typeof(IntegrationEventsAssemblyReference).Assembly.FullName!).GetTypes()
     .Where(t => t.IsSubclassOf(typeof(IntegrationEvent)))
@@ -42,8 +45,11 @@ if (app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 
+app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapControllers();
+
+app.InitDataIdentityModule(configuration);
 
 app.Run();

@@ -17,7 +17,7 @@ public abstract class DapperContext
     private readonly AsyncPolicy _retryAsyncPolicyQuery;
     private readonly AsyncPolicy _retryAsyncPolicyConnection; 
 
-    protected DapperContext(IOptions<DatabaseOptions> dbConnectionOptions, ILogger logger)
+    protected DapperContext(IOptions<DapperOptions> dbConnectionOptions, ILogger logger)
     {
         _connectionString = dbConnectionOptions?.Value?.DefaultConnection ??
                             throw new ArgumentNullException(nameof(dbConnectionOptions));

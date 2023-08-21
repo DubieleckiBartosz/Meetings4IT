@@ -1,4 +1,5 @@
 ﻿using Meetings4IT.Shared.Abstractions.Exceptions;
+using Meetings4IT.Shared.Implementations.Constants;
 using Microsoft.AspNetCore.Http;
 using System.Net;
 using System.Security.Claims;
@@ -15,7 +16,7 @@ public class CurrentUser : ICurrentUser
     }
 
     private ClaimsPrincipal? Claims => _httpContextAccessor?.HttpContext?.User;
-    private List<Claim>? Roles => Claims?.Claims.Where(_ => _.Type == ClaimTypes.Role).ToList();
+    private List<Claim>? Roles => Claims?.Claims.Where(_ => _.Type == MeetingsClaimTypes.Role).ToList();
     public bool IsInRole(string roleName)
     {
         var resultRoles = Roles;
@@ -38,7 +39,7 @@ public class CurrentUser : ICurrentUser
     {
         get
         {
-            var result = Claims?.Claims.FirstOrDefault(_ => _.Type == ClaimTypes.NameIdentifier)?.Value;
+            var result = Claims?.Claims.FirstOrDefault(_ => _.Type == MeetingsClaimTypes.NameIdentifier)?.Value;
             if (result == null)
             {
                 return default;
@@ -52,7 +53,7 @@ public class CurrentUser : ICurrentUser
     {
         get
         {
-            var result = Claims?.Claims.FirstOrDefault(_ => _.Type == ClaimTypes.Name)?.Value;
+            var result = Claims?.Claims.FirstOrDefault(_ => _.Type == MeetingsClaimTypes.UserName)?.Value;
             if (result == null)
             {
                 throw new BaseException("User name cannot be null", "User name is null",
@@ -66,7 +67,7 @@ public class CurrentUser : ICurrentUser
     {
         get
         {
-            var result = Claims?.Claims.FirstOrDefault(_ => _.Type == ClaimTypes.Email)?.Value;
+            var result = Claims?.Claims.FirstOrDefault(_ => _.Type == MeetingsClaimTypes.Email)?.Value;
             if (result == null)
             {
                 throw new BaseException("User mail cannot be null", "User mail is null",
