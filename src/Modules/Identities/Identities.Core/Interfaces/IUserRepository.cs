@@ -9,4 +9,5 @@ public interface IUserRepository
     Task<ApplicationUser?> GetUserByIdAsync(string userId);
     Task<bool> UserIsBlockedAsync(ApplicationUser user, string password);
     Task<bool> UserIsStillAllowedToSignInAsync(ApplicationUser user);
+    Task<string> GetEmailConfirmationTokenAsync(ApplicationUser user);
 }

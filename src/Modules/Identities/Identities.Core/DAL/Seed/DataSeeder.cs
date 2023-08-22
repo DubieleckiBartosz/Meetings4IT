@@ -34,20 +34,36 @@ public class DataSeeder
 
     public async Task SeedAdminAsync()
     {
-        var adminDevEmail = "admin.meetings@dev.com";
-        var resultAdmin = await _userManager.FindByEmailAsync(adminDevEmail);
-        if (resultAdmin == null)
+        var userAdmin = new ApplicationUser()
         {
-            var user = new ApplicationUser()
-            {
-                UserName = "admin_user_name",
-                Email = adminDevEmail,
-                FirstName = "admin_dev",
-                LastName = "admin_meetings_dev",
-            };
+            UserName = "admin_user_name",
+            Email = "admin.meetings@dev.com",
+            FirstName = "admin_dev",
+            LastName = "admin_meetings_dev",
+            EmailConfirmed = true
+        };
 
-            await _userManager.CreateAsync(user, "PasswordAdmin$123");
-            await _userManager.AddToRoleAsync(user, Roles.Admin.ToString());
+        await SaveUser(userAdmin, "PasswordAdmin$123", Roles.Admin.ToString()); 
+
+        var user = new ApplicationUser()
+        {
+            UserName = "user_name",
+            Email = "user.meetings@dev.com",
+            FirstName = "admin_dev",
+            LastName = "admin_meetings_dev",
+            EmailConfirmed = false
+        };
+
+        await SaveUser(user, "PasswordUser$123", Roles.User.ToString());
+    }
+
+    private async Task SaveUser(ApplicationUser user, string password, string role)
+    {
+        var result = await _userManager.FindByEmailAsync(user.Email);
+        if(result == null)
+        {
+            await _userManager.CreateAsync(user, password);
+            await _userManager.AddToRoleAsync(user, role);
 
             await _context.SaveChangesAsync();
         }

@@ -27,20 +27,20 @@ public class AuthorizationController : ControllerBase
     [HttpPost("~/connect/token")]
     [IgnoreAntiforgeryToken]
     [Produces("application/json")]
-    public async Task<IActionResult> Exchange()
+    public async Task<IActionResult> Exchange() 
     {
-        var request = HttpContext.GetOpenIddictServerRequest();
+        var request = HttpContext.GetOpenIddictServerRequest() ?? throw new AbandonedMutexException("Request cannot be null");
         if (request.IsPasswordGrantType())
         { 
-            var user = await _userService.GetUserByNameAsync(request.Username);
+            var user = await _userService.GetUserByNameAsync(request.Username!);
             if (user == null)
             {
                 var properties = new AuthenticationProperties(OpenIdDictErrors.ErrorWhenInvalidUser()!);
                 return Forbid(properties, OpenIddictServerAspNetCoreDefaults.AuthenticationScheme);
             }
 
-            var result = await _userService.UserIsBlockedAsync(user, request.Password);
-            if (result)
+            var blocked = await _userService.UserIsBlockedAsync(user, request.Password!);
+            if (blocked)
             {
                 var properties = new AuthenticationProperties(OpenIdDictErrors.ErrorWhenInvalidUser()!);
                 return Forbid(properties, OpenIddictServerAspNetCoreDefaults.AuthenticationScheme);
@@ -49,7 +49,8 @@ public class AuthorizationController : ControllerBase
             var roles = await _userService.GetUserRolesByUserAsync(user);
             var scopes = request.GetScopes();
 
-            var identity = new ClaimsIdentity(TokenValidationParameters.DefaultAuthenticationType,
+            var identity = new ClaimsIdentity(
+                TokenValidationParameters.DefaultAuthenticationType,
                 MeetingsClaimTypes.Email,
                 MeetingsClaimTypes.Role);
 

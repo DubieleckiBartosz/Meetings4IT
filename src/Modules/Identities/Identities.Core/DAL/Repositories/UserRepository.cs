@@ -32,11 +32,18 @@ public class UserRepository : IUserRepository
     public async Task<bool> UserIsBlockedAsync(ApplicationUser user, string password)
     {
         var result = await _signInManager.CheckPasswordSignInAsync(user, password, lockoutOnFailure: true);
-        return result.Succeeded;
+        return !result.Succeeded;
     }
 
     public async Task<bool> UserIsStillAllowedToSignInAsync(ApplicationUser user)
     {
-        return await _signInManager.CanSignInAsync(user);
+        var result = await _signInManager.CanSignInAsync(user);
+        return result;
+    }
+
+    public async Task<string> GetEmailConfirmationTokenAsync(ApplicationUser user)
+    {
+        var token = await _userManager.GenerateEmailConfirmationTokenAsync(user);
+        return token;
     }
 }

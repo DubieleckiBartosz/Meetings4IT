@@ -10,6 +10,6 @@ public class UserDto
     public string LastName { get; set; } = default!;
     public string Email { get; set; } = default!;
     public bool EmailConfirmed { get; set; } = default!;
-    public string Password { get; set; } = default!;
+    public string PasswordHash { get; set; } = default!;
     public string PhoneNumber { get; set; } = default!;
 }

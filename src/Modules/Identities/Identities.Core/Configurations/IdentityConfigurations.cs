@@ -22,6 +22,7 @@ public static class IdentityConfigurations
 
         services.AddIdentity<ApplicationUser, IdentityRole>(options =>
             {
+                options.User.RequireUniqueEmail = true;
                 options.SignIn.RequireConfirmedAccount = true;
             })
             .AddEntityFrameworkStores<ApplicationDbContext>()
