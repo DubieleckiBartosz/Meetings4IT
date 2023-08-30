@@ -23,50 +23,50 @@ public class TransactionBehavior<TRequest, TResponse> : IPipelineBehavior<TReque
 
     public async Task<TResponse> Handle(TRequest request, RequestHandlerDelegate<TResponse> next, CancellationToken cancellationToken)
     {
-        var hasTransactionAttribute = this._requestHandler.GetType()
+        var hasTransactionAttribute = _requestHandler.GetType()
             .GetCustomAttributes(typeof(WithTransactionAttribute), false).Any();
 
         if (!hasTransactionAttribute)
         {
             return await next();
-        }
-        else
+        }   
+        
+        try
         {
-            try
+            var requestName = request.GetType().FullName;
+            _logger.Information(
+                $"The transaction will be created by {requestName} ------ HANDLER WITH TRANSACTION ------- ");
+
+            await _transactionSupervisor.GetOpenOrCreateTransaction();
+
+            var response = await next();
+
+            var result = _transactionSupervisor.Commit();
+
+            if (result)
+                _logger.Information(
+                    $"Committed transaction {requestName} ------ COMMITTED TRANSACTION IN HANDLER ------- ");
+
+            return response;
+        }
+        catch (Exception ex)
+        {
+            _transactionSupervisor.Rollback();
+
+            var message = new
             {
-                var requestName = request.GetType().FullName;
-                this._logger.Information(
-                    $"The transaction will be created by {requestName} ------ HANDLER WITH TRANSACTION ------- ");
+                Message = "ERROR Handling transaction.",
+                DataException = ex,
+                Request = request
+            };
 
-                await _transactionSupervisor.GetOpenOrCreateTransaction();
+            _logger.Error(message.Serialize());
 
-                var response = await next();
-
-                var result = this._transactionSupervisor.Commit();
-
-                if (result)
-                {
-                    this._logger.Information(
-                        $"Committed transaction {requestName} ------ COMMITTED TRANSACTION IN HANDLER ------- ");
-                }
-
-                return response;
-            }
-            catch (Exception ex)
-            {
-                this._transactionSupervisor.Rollback();
-
-                var message = new
-                {
-                    Message = "ERROR Handling transaction.",
-                    DataException = ex,
-                    Request = request,
-                };
-
-                this._logger.Error(message.Serialize());
-
-                throw;
-            }
+            throw;
+        }
+        finally
+        {
+            _transactionSupervisor.Dispose();
         }
     }
 }

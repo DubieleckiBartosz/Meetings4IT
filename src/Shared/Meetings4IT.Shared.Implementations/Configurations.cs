@@ -8,6 +8,7 @@ using Meetings4IT.Shared.Implementations.Decorators;
 using Meetings4IT.Shared.Implementations.Behaviours;
 using Meetings4IT.Shared.Implementations.Dapper;
 using Meetings4IT.Shared.Implementations.EventBus;
+using Meetings4IT.Shared.Implementations.EventBus.Dispatchers;
 using Meetings4IT.Shared.Implementations.EventBus.InMemoryMessaging;
 using Meetings4IT.Shared.Implementations.EventBus.IntegrationEventLog.DAL.Repositories;
 using Meetings4IT.Shared.Implementations.EventBus.IntegrationEventLog.Services;
@@ -20,6 +21,7 @@ using Microsoft.Extensions.Configuration;
 using Serilog.Exceptions;
 using Meetings4IT.Shared.Implementations.Services;
 using Microsoft.EntityFrameworkCore;
+using Meetings4IT.Shared.Implementations.EventBus.Channel;
 
 namespace Meetings4IT.Shared.Implementations;
 
@@ -43,7 +45,18 @@ public static class Configurations
         }
 
         //EVENT BUS (in memory)
-        services.AddSingleton<IEventBus, InMemoryEventBus>();
+        services.AddScoped<IEventBus, InMemoryEventBus>();
+        services.AddSingleton<IEventRegistry, EventRegistry>();
+
+        //Channel
+        services.AddSingleton<IEventChannel, EventChannel>();
+
+        //Dispatchers
+        services.AddSingleton<IAsyncEventDispatcher, AsyncEventDispatcher>(); 
+        services.AddSingleton<IEventDispatcher, EventDispatcher>();
+
+        //Worker
+        services.AddHostedService<AsyncDispatcherJob>();
 
         //PIPELINES
         services.RegisterValidatorPipeline();
@@ -51,11 +64,7 @@ public static class Configurations
         //INTEGRATION LOG REPO
         services.AddScoped<IntegrationEventLogContext>();
         services.AddTransient<IIntegrationEventLogRepository, IntegrationEventLogRepository>();
-        services.AddTransient<IIntegrationEventLogService>((_) =>
-        {
-            var integrationRepository = _.GetRequiredService<IIntegrationEventLogRepository>();
-            return new IntegrationEventLogService(integrationRepository, integrationEventTypes!);
-        });
+        services.AddTransient<IIntegrationEventLogService, IntegrationEventLogService>();
 
         return builder;
     }
@@ -92,8 +101,8 @@ public static class Configurations
 
         services.AddMediatR(typeof(SharedAssemblyReference).GetTypeInfo().Assembly);
 
-        services.AddScoped<ICommandBus, CommandBus>();
-        services.AddScoped<IQueryBus, QueryBus>();
+        services.AddTransient<ICommandBus, CommandBus>();
+        services.AddTransient<IQueryBus, QueryBus>();
 
         return services;
     }

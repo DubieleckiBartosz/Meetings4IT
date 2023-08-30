@@ -1,6 +1,6 @@
 ﻿using Meetings4IT.Shared.Implementations.EventBus.IntegrationEventProcess;
 
-namespace Meetings4IT.Shared.IntegrationEvents.Events;
+namespace Panels.Application.IntegrationEvents.Events;
 
 public record MeetingCanceledIntegrationEvent : IntegrationEvent
 {

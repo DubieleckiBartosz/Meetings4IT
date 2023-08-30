@@ -1,7 +1,6 @@
 ﻿using System.Data;
 using Dapper;
 using Meetings4IT.Shared.Implementations.Dapper;
-using Meetings4IT.Shared.Implementations.EventBus.IntegrationEventProcess; 
 
 namespace Meetings4IT.Shared.Implementations.EventBus.IntegrationEventLog.DAL.Repositories;
 
@@ -9,39 +8,39 @@ public class IntegrationEventLogRepository : BaseRepository<IntegrationEventLogC
 {
     public IntegrationEventLogRepository(IntegrationEventLogContext dapperContext) : base(dapperContext)
     {
-    }
+    } 
 
-    public Task<List<IntegrationEventLog>> RetrieveEventLogsPendingToPublishAsync(Guid transactionId)
+    public async Task SaveEventLogAsync(IntegrationEventLog integrationEventLog)
     {
         var parameters = new DynamicParameters();
-        parameters.Add("@transactionId", transactionId);
+        parameters.Add("@eventId", integrationEventLog.EventId);
 
-        var result = QueryAsync<IntegrationEventLog>("", parameters);
-        throw new NotImplementedException();
+        await ExecuteAsync("[logs].[integration_saveEventLog_I]", param: parameters, commandType: CommandType.StoredProcedure);  
     }
 
-    public Task SaveEventLogAsync(IntegrationEvent integrationEventLog, IDbTransaction transaction)
+    public async Task MarkEventAsPublishedAsync(Guid eventId)
     {
-        throw new NotImplementedException();
+        await UpdateStatusAsync(eventId, EventState.Published);
     }
 
-    public Task MarkEventAsPublishedAsync(Guid eventId)
+    public async Task MarkEventAsInProgressAsync(Guid eventId)
     {
-        return UpdateStatusAsync(eventId, EventState.Published);
+        await UpdateStatusAsync(eventId, EventState.InProgress);
     }
 
-    public Task MarkEventAsInProgressAsync(Guid eventId)
+    public async Task MarkEventAsFailedAsync(Guid eventId)
     {
-        return UpdateStatusAsync(eventId, EventState.InProgress);
+        await UpdateStatusAsync(eventId, EventState.PublishedFailed);
     }
+    private async Task UpdateStatusAsync(Guid eventId, EventState status)
+    {
+        var parameters = new DynamicParameters();
 
-    public Task MarkEventAsFailedAsync(Guid eventId)
-    {
-        return UpdateStatusAsync(eventId, EventState.PublishedFailed);
-    }
-    private Task UpdateStatusAsync(Guid eventId, EventState status)
-    {
-        throw new NotImplementedException();
+        parameters.Add("@eventId", eventId);
+        parameters.Add("@newStatus", status);
+
+        await ExecuteAsync("[logs].[integration_updateEventLog_U]", param: parameters, commandType: CommandType.StoredProcedure);
+
     }
 
 }

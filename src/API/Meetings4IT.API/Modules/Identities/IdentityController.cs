@@ -8,6 +8,5 @@ namespace Meetings4IT.API.Modules.Identities;
 [ApiController] 
 [Authorize(AuthenticationSchemes = OpenIddictValidationAspNetCoreDefaults.AuthenticationScheme)]
 public class IdentityController : ControllerBase
-{
-     
+{ 
 }

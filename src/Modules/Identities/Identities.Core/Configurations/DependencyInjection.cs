@@ -1,5 +1,6 @@
 ﻿using Identities.Core.DAL.Repositories;
 using Identities.Core.DAL.Seed;
+using Identities.Core.Integration;
 using Identities.Core.Interfaces;
 using Identities.Core.Services;
 using Microsoft.AspNetCore.Builder;
@@ -18,6 +19,8 @@ public static class DependencyInjection
 
         services.AddScoped<IUserService, UserService>();
         services.AddScoped<IUserRepository, UserRepository>();
+
+        services.AddTransient<IIdentityIntegrationEventService, IdentityIntegrationEventService>();
 
         return builder;
     }

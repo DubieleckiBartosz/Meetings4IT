@@ -30,8 +30,4 @@
     <ProjectReference Include="..\Meetings4IT.Shared.Abstractions\Meetings4IT.Shared.Abstractions.csproj" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="EntityFramework\" />
-  </ItemGroup>
-
 </Project>

@@ -9,13 +9,13 @@ using Meetings4IT.Shared.Implementations.Options;
 
 namespace Meetings4IT.Shared.Implementations.Dapper;
 
-public class TransactionSupervisor : ITransactionSupervisor, IDisposable 
+public class TransactionSupervisor : ITransactionSupervisor
 {
     private readonly ILogger _logger;
     private readonly string _connectionString;
     private readonly AsyncPolicy _retryAsyncPolicyConnection;
 
-    private string? _transactionId; 
+    private Guid _transactionId; 
     private SqlConnection? _connection;
     private SqlTransaction? _transaction;
     private bool _disposed = false;
@@ -28,7 +28,9 @@ public class TransactionSupervisor : ITransactionSupervisor, IDisposable
         this._retryAsyncPolicyConnection = policy.PolicyConnectionAsync(this._logger);
     }
 
-    public async Task<IDbTransaction?> GetOpenOrCreateTransaction()
+    public Guid TransactionId => _transactionId;
+
+    public async Task<IDbTransaction> GetOpenOrCreateTransaction()
     {
         try
         {
@@ -122,7 +124,7 @@ public class TransactionSupervisor : ITransactionSupervisor, IDisposable
 
     private void TransactionIdGenerator()
     {
-        this._transactionId = Guid.NewGuid().ToString();
+        this._transactionId = Guid.NewGuid();
         this._logger.Information($"New transaction identifier created: {this._transactionId}");
     }
 

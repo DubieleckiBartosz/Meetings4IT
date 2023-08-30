@@ -1,35 +1,22 @@
 ﻿using Meetings4IT.Shared.Implementations.EventBus.IntegrationEventLog.DAL.Repositories;
 using Meetings4IT.Shared.Implementations.EventBus.IntegrationEventProcess;
-using System.Data;
 
 namespace Meetings4IT.Shared.Implementations.EventBus.IntegrationEventLog.Services;
 
 public class IntegrationEventLogService : IIntegrationEventLogService  
 {
-    private readonly IIntegrationEventLogRepository _integrationEventLogRepository;
-    private readonly List<Type?> _eventTypes;
+    private readonly IIntegrationEventLogRepository _integrationEventLogRepository; 
 
-    public IntegrationEventLogService(IIntegrationEventLogRepository integrationEventLogRepository, List<Type?> eventTypes)
+    public IntegrationEventLogService(IIntegrationEventLogRepository integrationEventLogRepository)
     {
-        _integrationEventLogRepository = integrationEventLogRepository;
-        _eventTypes = eventTypes ?? throw new ArgumentNullException(nameof(eventTypes));
-    }
-    public async Task<List<IntegrationEventLog>> RetrieveEventLogsPendingToPublishAsync(Guid transactionId)
+        _integrationEventLogRepository = integrationEventLogRepository ?? throw new ArgumentNullException(nameof(integrationEventLogRepository)); 
+    } 
+
+    public async Task SaveEventAsync(IntegrationEvent @event)
     {
-        var result = await _integrationEventLogRepository.RetrieveEventLogsPendingToPublishAsync(transactionId);
+        var eventLog = new IntegrationEventLog(@event);
 
-        if (result.Any())
-        {
-            return result.OrderBy(o => o.CreationTime)
-                .Select(e => e.DeserializeJsonContent(_eventTypes.Find(_ => _.Name == e.EventTypeShortName)!)).ToList();
-        }
-
-        return new List<IntegrationEventLog>();
-    }
-
-    public async Task SaveEventAsync(IntegrationEvent @event, IDbTransaction transaction)
-    {
-       await _integrationEventLogRepository.SaveEventLogAsync(@event, transaction);
+        await _integrationEventLogRepository.SaveEventLogAsync(eventLog);
     }
 
     public async Task MarkEventAsPublishedAsync(Guid eventId)

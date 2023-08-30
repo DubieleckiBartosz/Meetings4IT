@@ -1,8 +1,9 @@
-﻿using System.Text.Json.Serialization;
+﻿using MediatR;
+using System.Text.Json.Serialization;
 
 namespace Meetings4IT.Shared.Implementations.EventBus.IntegrationEventProcess;
 
-public record IntegrationEvent
+public record IntegrationEvent : INotification
 {
     public IntegrationEvent()
     {

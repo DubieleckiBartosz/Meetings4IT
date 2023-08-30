@@ -18,7 +18,6 @@
   <ItemGroup>
     <ProjectReference Include="..\..\Modules\Identities\Identities.Core\Identities.Core.csproj" />
     <ProjectReference Include="..\..\Modules\Notifications\Notifications.Core\Notifications.Core.csproj" />
-    <ProjectReference Include="..\..\Modules\Notifications\Notifications.Infrastructure\Notifications.Infrastructure.csproj" />
     <ProjectReference Include="..\..\Modules\Panels\Panels.Application\Panels.Application.csproj" />
     <ProjectReference Include="..\..\Modules\Panels\Panels.Infrastructure\Panels.Infrastructure.csproj" />
   </ItemGroup>

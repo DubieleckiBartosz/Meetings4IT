@@ -5,7 +5,7 @@ namespace Meetings4IT.Shared.Implementations.EventBus.IntegrationEventLog;
 
 public class IntegrationEventLog
 {
-    public IntegrationEventLog(IntegrationEvent @event, Guid transactionId)
+    public IntegrationEventLog(IntegrationEvent @event)
     {
         EventId = @event.Id;
         CreationTime = @event.CreationDate;
@@ -14,9 +14,9 @@ public class IntegrationEventLog
         {
             WriteIndented = true
         });
+
         State = EventState.NotPublished;
-        TimesSent = 0;
-        TransactionId = transactionId.ToString();
+        TimesSent = 0; 
     }
 
     public string EventTypeShortName => EventTypeName!.Split('.').Last();
@@ -26,8 +26,7 @@ public class IntegrationEventLog
     public EventState State { get; private set; }
     public int TimesSent { get; private set; }
     public DateTime CreationTime { get; }
-    public string Content { get; }
-    public string TransactionId { get; }
+    public string Content { get; } 
 
     public IntegrationEventLog DeserializeJsonContent(Type type)
     {

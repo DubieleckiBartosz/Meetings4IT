@@ -3,9 +3,12 @@ using System.Reflection;
 using Meetings4IT.Shared.Implementations.Logging;
 using Panels.Application;
 using Serilog;
-using Meetings4IT.Shared.Implementations.EventBus.IntegrationEventProcess;
-using Meetings4IT.Shared.IntegrationEvents.Reference;
+using Meetings4IT.Shared.Implementations.EventBus.IntegrationEventProcess; 
 using Meetings4IT.API.Configurations;
+using Meetings4IT.API.Modules;
+using Notifications.Core.Reference;
+using Identities.Core.Reference;
+using Meetings4IT.Shared.Implementations.Modules;
 
 var builder = WebApplication.CreateBuilder(args);
 var configuration = builder.Configuration;
@@ -13,14 +16,21 @@ var configuration = builder.Configuration;
 
 builder.RegisterIdentityModule();
 
-var integrationEventTypes = Assembly.Load(typeof(IntegrationEventsAssemblyReference).Assembly.FullName!).GetTypes()
-    .Where(t => t.IsSubclassOf(typeof(IntegrationEvent)))
-    .ToList();
-
-builder.RegistrationSharedConfigurations(integrationEventTypes, assemblyTypes: new Type[]
+//Yes, we can write some dynamic method which could read all needed assemblies, but in this case we have control over it
+var assemblyTypes = new Type[]
 {
-    typeof(PanelAssemblyReference)
-});
+    typeof(PanelAssemblyReference),
+    typeof(NotificationAssemblyReference),
+    typeof(IdentityAssemblyReference)
+};
+ 
+var integrationEventTypes = assemblyTypes
+    .Select(_ => Assembly.Load(_.Assembly.FullName!)
+        .GetTypes()).SelectMany(t => t)
+    .Where(t => t.IsSubclassOf(typeof(IntegrationEvent))).ToList(); 
+
+
+builder.RegistrationSharedConfigurations(integrationEventTypes, assemblyTypes: assemblyTypes);
 
 builder.Services.AddControllers();
 
@@ -51,5 +61,6 @@ app.UseAuthorization();
 app.MapControllers();
 
 app.InitDataIdentityModule(configuration);
+app.RegisterNotificationEvents();
 
 app.Run();

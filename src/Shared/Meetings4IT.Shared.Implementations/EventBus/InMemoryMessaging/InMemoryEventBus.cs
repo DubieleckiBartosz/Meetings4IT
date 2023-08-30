@@ -1,24 +1,21 @@
-﻿using Meetings4IT.Shared.Implementations.EventBus.IntegrationEventProcess;
+﻿using Meetings4IT.Shared.Implementations.EventBus.Dispatchers;
+using Meetings4IT.Shared.Implementations.EventBus.IntegrationEventProcess;
 
 namespace Meetings4IT.Shared.Implementations.EventBus.InMemoryMessaging;
 
 public class InMemoryEventBus : IEventBus
-{
-    private readonly Dictionary<Type, IIntegrationEventHandler> _handlers = new(); 
+{ 
+    private readonly IAsyncEventDispatcher _dispatcher;
 
-    public async Task Publish<TEvent>(TEvent @event) where TEvent : IntegrationEvent
-    {
-        if (_handlers[@event.GetType()] is IIntegrationEventHandler<TEvent> handler)
-        {
-            await handler.Handle(@event);
-            return;
-        }
-
-        throw new NotImplementedException($"The {@event.GetType()} - {@event.Id} event handler has not been registered.");
+    public InMemoryEventBus(IAsyncEventDispatcher dispatcher)
+    { 
+        _dispatcher = dispatcher ?? throw new ArgumentNullException(nameof(dispatcher));
     }
-
-    public void Subscribe<TEvent>(IIntegrationEventHandler<TEvent> handler) where TEvent : IntegrationEvent
+    public async Task PublishAsync<TEvent>(CancellationToken cancellationToken, params TEvent[] @events) where TEvent : IntegrationEvent
     {
-        _handlers.Add(typeof(TEvent), handler);
+        var tasks = @events.Select(@event =>
+              _dispatcher.PublishAsync(@event, cancellationToken));
+
+        await Task.WhenAll(tasks); 
     }
 }
