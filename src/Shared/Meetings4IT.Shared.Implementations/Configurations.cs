@@ -5,7 +5,6 @@ using System.Reflection;
 using MediatR;
 using Meetings4IT.Shared.Abstractions.Events;
 using Meetings4IT.Shared.Implementations.Decorators;
-using Meetings4IT.Shared.Implementations.Behaviours;
 using Meetings4IT.Shared.Implementations.Dapper;
 using Meetings4IT.Shared.Implementations.EventBus;
 using Meetings4IT.Shared.Implementations.EventBus.Dispatchers;
@@ -22,13 +21,14 @@ using Serilog.Exceptions;
 using Meetings4IT.Shared.Implementations.Services;
 using Microsoft.EntityFrameworkCore;
 using Meetings4IT.Shared.Implementations.EventBus.Channel;
+using Meetings4IT.Shared.Implementations.Behaviors;
 
 namespace Meetings4IT.Shared.Implementations;
 
 public static class Configurations
 {
     public static WebApplicationBuilder RegistrationSharedConfigurations(this WebApplicationBuilder builder,
-        List<Type> integrationEventTypes, bool withDapper = true, params Type[] assemblyTypes)
+        bool withDapper = true, params Type[] assemblyTypes)
     {
         //MEDIATOR
         var services = builder.Services;
@@ -36,6 +36,8 @@ public static class Configurations
 
         services.AddTransient<IDomainDecorator, MediatorDecorator>();
         services.RegisterMediator(assemblyTypes);
+
+        services.Configure<LogOptions>(config.GetSection(nameof(LogOptions)));
 
         if (withDapper)
         {
@@ -52,7 +54,7 @@ public static class Configurations
         services.AddSingleton<IEventChannel, EventChannel>();
 
         //Dispatchers
-        services.AddSingleton<IAsyncEventDispatcher, AsyncEventDispatcher>(); 
+        services.AddSingleton<IAsyncEventDispatcher, AsyncEventDispatcher>();
         services.AddSingleton<IEventDispatcher, EventDispatcher>();
 
         //Worker
@@ -80,7 +82,7 @@ public static class Configurations
 
         return services;
     }
-     
+
     public static WebApplicationBuilder RegisterUserAccessor(this WebApplicationBuilder builder)
     {
         builder.Services.AddHttpContextAccessor();
@@ -110,13 +112,13 @@ public static class Configurations
     public static IServiceCollection RegisterValidatorPipeline(this IServiceCollection services)
     {
         //VALIDATOR PIPELINE
-        services.AddTransient(typeof(IPipelineBehavior<,>), typeof(ValidationPipelineBehaviour<,>));
+        services.AddTransient(typeof(IPipelineBehavior<,>), typeof(ValidationPipelineBehavior<,>));
 
         return services;
     }
 
     public static void LogConfigurationService(this LoggerConfiguration loggerConfiguration, IConfiguration configuration)
-    { 
+    {
         var logging = new LoggingOptions();
         configuration.GetSection(nameof(LoggingOptions)).Bind(logging);
 
@@ -138,17 +140,16 @@ public static class Configurations
                         rollingInterval: RollingInterval.Day, fileSizeLimitBytes: 100000)
             )
             .WriteTo.File($"Logs/{dateTimeNowString}-All.log")
-            .WriteTo.Console() 
-            .WriteTo.Seq(logging.Address!); 
+            .WriteTo.Console()
+            .WriteTo.Seq(logging.Address!);
     }
 
-    public static WebApplicationBuilder RegisterEntityFrameworkSqlServer<T>(this WebApplicationBuilder builder,
+    public static WebApplicationBuilder RegisterEntityFrameworkSqlServer<T>(this WebApplicationBuilder builder, EfOptions efOptions,
         Func<DbContextOptionsBuilder, DbContextOptionsBuilder>? additionalRegistrations = null) where T : DbContext
     {
-        var options = builder.Configuration.GetSection("EfOptions").Get<EfOptions>()!;
         builder.Services.AddDbContext<T>(dbContextBuilder =>
         {
-            dbContextBuilder.UseSqlServer(options.ConnectionString);
+            dbContextBuilder.UseSqlServer(efOptions.ConnectionString);
 
             additionalRegistrations?.Invoke(dbContextBuilder);
         });

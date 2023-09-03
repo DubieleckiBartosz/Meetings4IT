@@ -1,0 +1,53 @@
+version: "3.4"
+
+networks:
+  meetings4it-network:
+    name: meetings4IT_network
+
+services: 
+  mssql:
+    build:
+      context: .
+      dockerfile: sql.Dockerfile
+    container_name: meetings4it.mssql
+    restart: unless-stopped
+    environment:
+      ACCEPT_EULA: "Y"
+      SA_PASSWORD: sql123456(!)
+    user: root
+    ports:
+      - "1440:1433"
+    #volumes:
+    #  - "meetings4it-sqldata:/var/opt/mssql"
+    networks:
+      - meetings4it-network
+
+  meeting4ITsmtp:
+    image: rnwood/smtp4dev
+    restart: unless-stopped
+    ports:
+      - "5010:80"
+      - "25:25"
+    networks:
+      - meetings4it-network
+
+  seq:
+    image: datalust/seq
+    restart: unless-stopped
+    ports:
+      - 5341:80
+    environment:
+      - ACCEPT_EULA=Y
+    networks:
+      - meetings4it-network
+
+  #database-insert:
+  #  image: mcr.microsoft.com/mssql-tools:latest 
+  #  volumes:
+  #    - ./sql-scripts:/scripts 
+  #  depends_on:
+  #    - mssql
+  #  entrypoint: ["sh", "-c"]
+  #  command:
+  #    - | 
+  #      /opt/mssql-tools/bin/sqlcmd -S localhost -U sa -P sql123456(!) -d Meetings4IT -i /database/notifications-inserts.sql

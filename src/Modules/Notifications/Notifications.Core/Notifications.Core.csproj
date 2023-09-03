@@ -16,8 +16,4 @@
     <ProjectReference Include="..\..\..\Shared\Meetings4IT.Shared.Implementations\Meetings4IT.Shared.Implementations.csproj" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="Handlers\Identities\" />
-  </ItemGroup>
-
 </Project>

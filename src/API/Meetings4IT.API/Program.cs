@@ -1,20 +1,19 @@
-using Meetings4IT.Shared.Implementations;
-using System.Reflection;
-using Meetings4IT.Shared.Implementations.Logging;
-using Panels.Application;
-using Serilog;
-using Meetings4IT.Shared.Implementations.EventBus.IntegrationEventProcess; 
+using Identities.Core.Reference;
 using Meetings4IT.API.Configurations;
 using Meetings4IT.API.Modules;
+using Meetings4IT.Shared.Implementations;
+using Meetings4IT.Shared.Implementations.Logging;
 using Notifications.Core.Reference;
-using Identities.Core.Reference;
-using Meetings4IT.Shared.Implementations.Modules;
+using Panels.Application;
+using Serilog;
 
 var builder = WebApplication.CreateBuilder(args);
 var configuration = builder.Configuration;
 // Add services to the container.
 
-builder.RegisterIdentityModule();
+builder
+    .RegisterIdentitiesModule()
+    .RegisterNotificationsModule();
 
 //Yes, we can write some dynamic method which could read all needed assemblies, but in this case we have control over it
 var assemblyTypes = new Type[]
@@ -23,14 +22,13 @@ var assemblyTypes = new Type[]
     typeof(NotificationAssemblyReference),
     typeof(IdentityAssemblyReference)
 };
- 
-var integrationEventTypes = assemblyTypes
-    .Select(_ => Assembly.Load(_.Assembly.FullName!)
-        .GetTypes()).SelectMany(t => t)
-    .Where(t => t.IsSubclassOf(typeof(IntegrationEvent))).ToList(); 
 
+//var integrationEventTypes = assemblyTypes
+//    .Select(_ => Assembly.Load(_.Assembly.FullName!)
+//        .GetTypes()).SelectMany(t => t)
+//    .Where(t => t.IsSubclassOf(typeof(IntegrationEvent))).ToList();
 
-builder.RegistrationSharedConfigurations(integrationEventTypes, assemblyTypes: assemblyTypes);
+builder.RegistrationSharedConfigurations(assemblyTypes: assemblyTypes);
 
 builder.Services.AddControllers();
 
@@ -60,7 +58,10 @@ app.UseAuthorization();
 
 app.MapControllers();
 
-app.InitDataIdentityModule(configuration);
-app.RegisterNotificationEvents();
+app.RegisterEvents();
+
+//Modules
+app.ConfigureIdentities(configuration);
+app.ConfigureNotifications();
 
 app.Run();

@@ -1,8 +1,8 @@
-﻿using System.Collections.Immutable;
-using System.Security.Claims;
-using Identities.Core.Models.DataTransferObjects;
-using Meetings4IT.Shared.Implementations.Constants; 
+﻿using Identities.Core.Models.Entities;
+using Meetings4IT.Shared.Implementations.Constants;
 using OpenIddict.Abstractions;
+using System.Collections.Immutable;
+using System.Security.Claims;
 using static OpenIddict.Abstractions.OpenIddictConstants;
 
 namespace Identities.Core.Helpers;
@@ -10,8 +10,8 @@ namespace Identities.Core.Helpers;
 public static class ClaimHelper
 {
     public static ClaimsPrincipal SetUserClaims(
-        this ClaimsIdentity identity, 
-        UserDto user, 
+        this ClaimsIdentity identity,
+        ApplicationUser user,
         ImmutableArray<string> roles,
         ImmutableArray<string> scopes)
     {
@@ -32,32 +32,32 @@ public static class ClaimHelper
         switch (claim.Type)
         {
             case Claims.Name:
-            {
-                yield return Destinations.AccessToken;
+                {
+                    yield return Destinations.AccessToken;
 
-                if (claim.Subject!.HasScope(Scopes.Profile))
-                    yield return Destinations.IdentityToken;
+                    if (claim.Subject!.HasScope(Scopes.Profile))
+                        yield return Destinations.IdentityToken;
 
-                yield break;
-            }
+                    yield break;
+                }
             case Claims.Email:
-            {
-                yield return Destinations.AccessToken;
+                {
+                    yield return Destinations.AccessToken;
 
-                if (claim.Subject!.HasScope(Scopes.Email))
-                    yield return Destinations.IdentityToken;
+                    if (claim.Subject!.HasScope(Scopes.Email))
+                        yield return Destinations.IdentityToken;
 
-                yield break;
-            }
+                    yield break;
+                }
             case Claims.Role:
-            {
-                yield return Destinations.AccessToken;
+                {
+                    yield return Destinations.AccessToken;
 
-                if (claim.Subject!.HasScope(Scopes.Roles))
-                    yield return Destinations.IdentityToken;
+                    if (claim.Subject!.HasScope(Scopes.Roles))
+                        yield return Destinations.IdentityToken;
 
-                yield break;
-            }
+                    yield break;
+                }
             // Never include the security stamp in the access and identity tokens, as it's a secret value.
             case "AspNet.Identity.SecurityStamp": yield break;
 

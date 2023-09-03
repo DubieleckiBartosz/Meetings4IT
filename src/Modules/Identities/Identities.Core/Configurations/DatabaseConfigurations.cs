@@ -1,5 +1,8 @@
-﻿using Identities.Core.DAL.Seed;
+﻿using Identities.Core.DAL;
+using Identities.Core.DAL.Seed;
 using Identities.Core.Options;
+using Meetings4IT.Shared.Implementations.EntityFramework;
+using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
@@ -8,8 +11,15 @@ namespace Identities.Core.Configurations;
 
 public static class DatabaseConfigurations
 {
+    public static WebApplication IdentitiesMigration(this WebApplication app)
+    {
+        app.RunMigration<ApplicationDbContext>();
+
+        return app;
+    }
+
     public static void InitData(this IHost app, IConfiguration configuration)
-    { 
+    {
         var dataInitOptions = configuration.GetSection("DataInitializationOptions").Get<DataInitializationOptions>()!;
 
         if (!dataInitOptions.InsertOpenIdDictApplicationConfigurations && !dataInitOptions.InsertUserData)

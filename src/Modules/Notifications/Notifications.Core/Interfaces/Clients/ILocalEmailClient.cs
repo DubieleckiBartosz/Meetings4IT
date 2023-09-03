@@ -2,7 +2,7 @@
 
 namespace Notifications.Core.Interfaces.Clients;
 
-public interface ILocalEmailClient
+public interface IEmailClient
 {
-    Task SendAsync(EmailDetails email, EmailOptions emailOptions);
+    Task SendEmailAsync(EmailDetails email, EmailOptions emailOptions);
 }

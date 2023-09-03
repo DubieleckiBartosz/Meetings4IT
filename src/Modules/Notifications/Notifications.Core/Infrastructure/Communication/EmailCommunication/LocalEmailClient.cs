@@ -4,9 +4,9 @@ using System.Net.Mail;
 
 namespace Notifications.Core.Infrastructure.Communication.EmailCommunication;
 
-public class LocalEmailClient : ILocalEmailClient
+public class LocalEmailClient : IEmailClient
 {
-    public async Task SendAsync(EmailDetails email, EmailOptions emailOptions)
+    public async Task SendEmailAsync(EmailDetails email, EmailOptions emailOptions)
     {
         var message = new MailMessage
         {
@@ -15,6 +15,7 @@ public class LocalEmailClient : ILocalEmailClient
             Body = email.Body,
             IsBodyHtml = true
         };
+
         foreach (var recipient in email.Recipients)
         {
             message.To.Add(new MailAddress(recipient));

@@ -7,7 +7,7 @@ public class OpenIdDictErrors
     {
         [".error"] = "invalid_grant",
         [".error_description"] =
-            "The username/password couple is invalid."
+            "The userName/password couple is invalid."
     };
 
     public static Dictionary<string, string> ErrorWhenUserIsNull() => new Dictionary<string, string>

@@ -1,16 +1,17 @@
 ﻿using Meetings4IT.Shared.Abstractions.Kernel;
 using Meetings4IT.Shared.Abstractions.Kernel.ValueObjects;
-using Meetings4IT.Shared.Abstractions.Time; 
+using Meetings4IT.Shared.Abstractions.Time;
 using Panels.Domain.Meetings.Exceptions.InvitationExceptions;
 using Panels.Domain.Meetings.Statuses;
 
 namespace Panels.Domain.Meetings.Entities;
 
 public class Invitation : Entity
-{ 
+{
     public Email Email { get; }
     public InvitationStatus Status { get; private set; }
     public Date ExpirationDate { get; private set; }
+    public Watcher? Watcher { get; set; }
     private bool IsExpired => ExpirationDate.Value <= Clock.CurrentDate();
     internal Invitation(Email email, Date expirationDate)
     {
@@ -62,5 +63,5 @@ public class Invitation : Entity
         }
 
         Status = InvitationStatus.Expired;
-    } 
+    }
 }

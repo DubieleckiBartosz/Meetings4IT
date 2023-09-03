@@ -1,7 +1,7 @@
 ﻿using System.Collections.Immutable;
 using System.Security.Claims;
 using Identities.Core.Helpers;
-using Identities.Core.Interfaces;
+using Identities.Core.Interfaces.Services;
 using Identities.Core.Responses;
 using Meetings4IT.Shared.Implementations.Constants;
 using Microsoft.AspNetCore;
@@ -17,9 +17,9 @@ namespace Meetings4IT.API.Modules.Identities;
 [ApiController]
 public class AuthorizationController : ControllerBase
 {
-    private readonly IUserService _userService; 
+    private readonly IUserQueryService _userService; 
 
-    public AuthorizationController(IUserService userService)
+    public AuthorizationController(IUserQueryService userService)
     {
         _userService = userService;
     }

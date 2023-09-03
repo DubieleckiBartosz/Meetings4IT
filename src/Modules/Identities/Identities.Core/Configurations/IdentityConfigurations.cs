@@ -2,9 +2,11 @@
 using Identities.Core.Models.Entities;
 using Identities.Core.Models.Entities.OpenIdDictCustomEntities;
 using Meetings4IT.Shared.Implementations;
+using Meetings4IT.Shared.Implementations.Options;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace Identities.Core.Configurations;
@@ -15,8 +17,9 @@ public static class IdentityConfigurations
     public static WebApplicationBuilder RegisterIdentity(this WebApplicationBuilder builder)
     {
         var services = builder.Services;
+        var options = builder.Configuration.GetSection("EfOptions").Get<EfOptions>()!;
 
-        builder.RegisterEntityFrameworkSqlServer<ApplicationDbContext>(_ =>
+        builder.RegisterEntityFrameworkSqlServer<ApplicationDbContext>(options, _ =>
             _.UseOpenIddict<CustomApplicationEntity, CustomAuthorizationEntity, CustomScopeEntity, CustomTokenEntity,
                 string>());
 
