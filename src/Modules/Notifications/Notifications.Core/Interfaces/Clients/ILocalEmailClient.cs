@@ -4,5 +4,5 @@ namespace Notifications.Core.Interfaces.Clients;
 
 public interface IEmailClient
 {
-    Task SendEmailAsync(EmailDetails email, EmailOptions emailOptions);
+    Task SendEmailAsync(EmailDetails email);
 }

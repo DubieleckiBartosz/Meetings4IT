@@ -15,10 +15,10 @@ public static class EventInitiator
     private static WebApplication RegisterEvents(WebApplication app)
     {
         using var scope = app.Services.CreateScope();
-        var service = scope.ServiceProvider.GetRequiredService<IEventRegistry>(); 
-        typeof(NotificationAssemblyReference).Assembly.RegistrationAssemblyIntegrationEvents(service); 
+        var service = scope.ServiceProvider.GetRequiredService<IEventRegistry>();
+        typeof(NotificationAssemblyReference).Assembly.RegistrationAssemblyIntegrationEvents(service);
 
         return app;
     }
-     
+
 }

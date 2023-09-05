@@ -1,6 +1,4 @@
-﻿using Meetings4IT.Shared.Abstractions.Exceptions; 
-
-namespace Panels.Domain.Meetings.Exceptions;
+﻿namespace Panels.Domain.Meetings.Exceptions;
 
 public class MeetingEndedException : Meetings4IT.Shared.Abstractions.Exceptions.BaseException
 {

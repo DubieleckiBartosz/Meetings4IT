@@ -12,7 +12,7 @@ public static class Mapping
             cfg.CreateMap<TSource, TTarget>());
 
         var mapper = new Mapper(config);
-        var result = mapper.Map<TSource, TTarget>(value); 
+        var result = mapper.Map<TSource, TTarget>(value);
 
         return result;
     }
@@ -26,7 +26,7 @@ public static class Mapping
 
         var mapper = new Mapper(config);
         var result = mapper.Map<List<TSource>, List<TTarget>>(value);
-         
+
         return result;
     }
 }

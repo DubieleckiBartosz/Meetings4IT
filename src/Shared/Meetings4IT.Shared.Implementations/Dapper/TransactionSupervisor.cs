@@ -1,11 +1,11 @@
-﻿using Polly;
-using System.Data.SqlClient;
-using System.Data;
-using Meetings4IT.Shared.Abstractions.Exceptions;
-using Meetings4IT.Shared.Implementations.Polly;
-using Serilog;
-using Microsoft.Extensions.Options;
+﻿using Meetings4IT.Shared.Abstractions.Exceptions;
 using Meetings4IT.Shared.Implementations.Options;
+using Meetings4IT.Shared.Implementations.Polly;
+using Microsoft.Extensions.Options;
+using Polly;
+using Serilog;
+using System.Data;
+using System.Data.SqlClient;
 
 namespace Meetings4IT.Shared.Implementations.Dapper;
 
@@ -15,7 +15,7 @@ public class TransactionSupervisor : ITransactionSupervisor
     private readonly string _connectionString;
     private readonly AsyncPolicy _retryAsyncPolicyConnection;
 
-    private Guid _transactionId; 
+    private Guid _transactionId;
     private SqlConnection? _connection;
     private SqlTransaction? _transaction;
     private bool _disposed = false;
@@ -71,7 +71,7 @@ public class TransactionSupervisor : ITransactionSupervisor
             {
                 this._logger.Information("Rollback start.");
                 this._transaction?.Rollback();
-                this._logger.Information("Rollback OK."); 
+                this._logger.Information("Rollback OK.");
             }
         }
         catch
@@ -152,7 +152,7 @@ public class TransactionSupervisor : ITransactionSupervisor
                     _connection = null;
                 }
             }
-             
+
             _disposed = true;
         }
     }

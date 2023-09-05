@@ -25,7 +25,7 @@ public class AsyncDispatcherJob : BackgroundService
     }
 
     protected override async Task ExecuteAsync(CancellationToken stoppingToken)
-    { 
+    {
         await foreach (var message in _eventChannel.Reader.ReadAllAsync(stoppingToken))
         {
             try

@@ -58,7 +58,7 @@ internal class UserCommandService : IUserCommandService
         var verificationUri = QueryHelpers.AddQueryString(routeUri.ToString(), "code", token);
 
         await _identityIntegrationEventService.SaveEventAndPublishAsync(
-            new UserRegisteredIntegrationEvent(applicationUser.Email, verificationUri));
+            new UserRegisteredIntegrationEvent(applicationUser.Email, applicationUser.UserName, verificationUri));
 
         return Response.Ok();
     }

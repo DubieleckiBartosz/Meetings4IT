@@ -22,7 +22,7 @@ public class LogDetails
 
     private static string GetUserInfo(ClaimsPrincipal user)
     {
-        if (user.Identity is {IsAuthenticated: true})
+        if (user.Identity is { IsAuthenticated: true })
         {
             return user.Identity.Name!;
         }

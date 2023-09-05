@@ -1,5 +1,5 @@
-﻿using System.Text.RegularExpressions;
-using Meetings4IT.Shared.Abstractions.Exceptions;
+﻿using Meetings4IT.Shared.Abstractions.Exceptions;
+using System.Text.RegularExpressions;
 
 namespace Meetings4IT.Shared.Abstractions.Kernel.ValueObjects;
 

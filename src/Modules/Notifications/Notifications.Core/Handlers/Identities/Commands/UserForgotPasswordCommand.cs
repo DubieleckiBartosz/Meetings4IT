@@ -5,7 +5,7 @@ namespace Notifications.Core.Handlers.Identities.Commands;
 
 public class UserForgotPasswordCommand : ICommand<Unit>
 {
-    private string Email { get; }
+    public string Email { get; }
     public string Link { get; }
     public string Token { get; }
 

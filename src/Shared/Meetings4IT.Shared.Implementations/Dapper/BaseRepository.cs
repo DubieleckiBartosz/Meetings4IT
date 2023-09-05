@@ -1,5 +1,5 @@
-﻿using System.Data;
-using Dapper;
+﻿using Dapper;
+using System.Data;
 
 namespace Meetings4IT.Shared.Implementations.Dapper;
 
@@ -10,7 +10,7 @@ public abstract class BaseRepository<TContext> where TContext : DapperContext
     protected BaseRepository(TContext dapperContext)
     {
         _dapperContext = dapperContext;
-    } 
+    }
 
     protected async Task<IEnumerable<T>> QueryAsync<T>(string sql, object? param = null,
         CommandType? commandType = null, IDbConnection? dbConnection = null, IDbTransaction? transaction = null)
@@ -36,7 +36,7 @@ public abstract class BaseRepository<TContext> where TContext : DapperContext
     {
         return await _dapperContext.WithConnection(
             async _ => await _.QueryAsync(sql, map, splitOn: splitOn, param: param,
-                commandType: commandType, transaction: transaction), transaction, dbConnection); 
+                commandType: commandType, transaction: transaction), transaction, dbConnection);
     }
 
     protected async Task<IEnumerable<TReturn>> QueryAsync<T1, T2, T3, T4, TReturn>(string sql,

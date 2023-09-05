@@ -22,6 +22,6 @@ public class ProcessUserRegistered : IEventHandler<UserRegisteredIntegrationEven
     {
         _logger.Information($"Event processing {notification.GetType().Name}: {notification.Serialize()}");
 
-        await _commandBus.Send(new UserRegisteredCommand(notification.Email, notification.VerificationUri));
+        await _commandBus.Send(new UserRegisteredCommand(notification.Email, notification.VerificationUri, notification.UserName));
     }
 }

@@ -2,4 +2,4 @@
 
 namespace Identities.Core.Integration.Events;
 
-public record UserRegisteredIntegrationEvent(string Email, string VerificationUri) : IntegrationEvent;
+public record UserRegisteredIntegrationEvent(string Email, string UserName, string VerificationUri) : IntegrationEvent;

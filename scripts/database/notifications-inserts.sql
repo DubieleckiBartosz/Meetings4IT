@@ -13,8 +13,8 @@ BEGIN
         INSERT INTO notifications.Templates (Body, [Type], Created, Modified)
         VALUES ('<!DOCTYPE html><html><body><h4>Reset Password Email</h4>
                 <p>Please use the below token to reset your password with the <code>
-                {origin}/user/reset-password</code> api route: </p>
-                <p><code>{resetToken}</code></p></body></html>', 2, GETDATE(), GETDATE())
+                {Path}</code> api route: </p>
+                <p><code>{ResetToken}</code></p></body></html>', 2, GETDATE(), GETDATE())
     END
 
 END

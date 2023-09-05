@@ -1,5 +1,4 @@
-﻿using Meetings4IT.Shared.Abstractions.Exceptions;
-using Meetings4IT.Shared.Abstractions.Kernel.ValueObjects; 
+﻿using Meetings4IT.Shared.Abstractions.Kernel.ValueObjects;
 
 namespace Panels.Domain.Meetings.Exceptions.InvitationExceptions;
 

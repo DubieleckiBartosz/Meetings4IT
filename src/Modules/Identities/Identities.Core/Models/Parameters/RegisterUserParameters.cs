@@ -3,7 +3,8 @@
 namespace Identities.Core.Models.Parameters;
 
 public class RegisterUserParameters
-{    public string UserName { get; init; }
+{
+    public string UserName { get; init; }
     public string Email { get; init; }
     public string PhoneNumber { get; init; }
     public string Password { get; init; }
@@ -17,11 +18,11 @@ public class RegisterUserParameters
     [JsonConstructor]
     public RegisterUserParameters(
         string userName,
-        string email, 
-        string phoneNumber, 
+        string email,
+        string phoneNumber,
         string password,
-        string confirmPassword, 
-        string firstName, 
+        string confirmPassword,
+        string firstName,
         string lastName)
     {
         UserName = userName;
@@ -31,5 +32,5 @@ public class RegisterUserParameters
         ConfirmPassword = confirmPassword;
         FirstName = firstName;
         LastName = lastName;
-    } 
+    }
 }

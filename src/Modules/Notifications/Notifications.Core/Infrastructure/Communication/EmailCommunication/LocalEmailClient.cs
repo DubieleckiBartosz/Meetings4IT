@@ -1,4 +1,5 @@
-﻿using Notifications.Core.Interfaces.Clients;
+﻿using Microsoft.Extensions.Options;
+using Notifications.Core.Interfaces.Clients;
 using Notifications.Core.Models.Clients.EmailModels;
 using System.Net.Mail;
 
@@ -6,14 +7,21 @@ namespace Notifications.Core.Infrastructure.Communication.EmailCommunication;
 
 public class LocalEmailClient : IEmailClient
 {
-    public async Task SendEmailAsync(EmailDetails email, EmailOptions emailOptions)
+    private readonly EmailOptions _options;
+
+    public LocalEmailClient(IOptions<EmailOptions> options)
+    {
+        _options = options.Value ?? throw new ArgumentNullException(nameof(options));
+    }
+
+    public async Task SendEmailAsync(EmailDetails email)
     {
         var message = new MailMessage
         {
-            From = new MailAddress(emailOptions.FromAddress),
+            From = new MailAddress(_options.FromAddress),
             Subject = email.Subject,
             Body = email.Body,
-            IsBodyHtml = true
+            IsBodyHtml = true,
         };
 
         foreach (var recipient in email.Recipients)
@@ -21,7 +29,7 @@ public class LocalEmailClient : IEmailClient
             message.To.Add(new MailAddress(recipient));
         }
 
-        using var client = new SmtpClient(emailOptions.Host, emailOptions.Port);
+        using var client = new SmtpClient(_options.Host, _options.Port);
         await client.SendMailAsync(message);
     }
 }

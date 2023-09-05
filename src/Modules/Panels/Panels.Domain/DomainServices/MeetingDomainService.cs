@@ -1,4 +1,4 @@
-﻿using Meetings4IT.Shared.Abstractions.Kernel.ValueObjects; 
+﻿using Meetings4IT.Shared.Abstractions.Kernel.ValueObjects;
 using Panels.Domain.Meetings;
 using Panels.Domain.Meetings.Categories;
 using Panels.Domain.Meetings.Exceptions;
@@ -10,7 +10,7 @@ namespace Panels.Domain.DomainServices;
 public class MeetingDomainService : IMeetingDomainService
 {
     public Meeting Creation(
-        ScheduledMeeting schedule, 
+        ScheduledMeeting schedule,
         Email creator,
         MeetingCategory category,
         Description description,

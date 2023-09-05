@@ -1,6 +1,4 @@
-﻿using System.Collections.Immutable;
-using System.Security.Claims;
-using Identities.Core.Helpers;
+﻿using Identities.Core.Helpers;
 using Identities.Core.Interfaces.Services;
 using Identities.Core.Responses;
 using Meetings4IT.Shared.Implementations.Constants;
@@ -10,6 +8,8 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.IdentityModel.Tokens;
 using OpenIddict.Abstractions;
 using OpenIddict.Server.AspNetCore;
+using System.Collections.Immutable;
+using System.Security.Claims;
 
 namespace Meetings4IT.API.Modules.Identities;
 
@@ -17,7 +17,7 @@ namespace Meetings4IT.API.Modules.Identities;
 [ApiController]
 public class AuthorizationController : ControllerBase
 {
-    private readonly IUserQueryService _userService; 
+    private readonly IUserQueryService _userService;
 
     public AuthorizationController(IUserQueryService userService)
     {
@@ -27,11 +27,11 @@ public class AuthorizationController : ControllerBase
     [HttpPost("~/connect/token")]
     [IgnoreAntiforgeryToken]
     [Produces("application/json")]
-    public async Task<IActionResult> Exchange() 
+    public async Task<IActionResult> Exchange()
     {
         var request = HttpContext.GetOpenIddictServerRequest() ?? throw new AbandonedMutexException("Request cannot be null");
         if (request.IsPasswordGrantType())
-        { 
+        {
             var user = await _userService.GetUserByNameAsync(request.Username!);
             if (user == null)
             {
@@ -55,7 +55,7 @@ public class AuthorizationController : ControllerBase
                 MeetingsClaimTypes.Role);
 
             var claimsPrincipal = identity.SetUserClaims(user, roles.ToImmutableArray(), scopes);
-             
+
             return SignIn(claimsPrincipal, OpenIddictServerAspNetCoreDefaults.AuthenticationScheme);
         }
 
@@ -74,7 +74,7 @@ public class AuthorizationController : ControllerBase
 
                 return Forbid(properties, OpenIddictServerAspNetCoreDefaults.AuthenticationScheme);
             }
-             
+
             if (!await _userService.UserIsStillAllowedToSignInAsync(user))
             {
                 var properties = new AuthenticationProperties(OpenIdDictErrors.ErrorWhenUserIsNoLongerAllowed()!);
@@ -90,11 +90,11 @@ public class AuthorizationController : ControllerBase
                 MeetingsClaimTypes.Email,
                 MeetingsClaimTypes.Role);
 
-            var claimsPrincipal = identity.SetUserClaims(user, roles.ToImmutableArray(), scopes); 
+            var claimsPrincipal = identity.SetUserClaims(user, roles.ToImmutableArray(), scopes);
 
             return SignIn(claimsPrincipal, OpenIddictServerAspNetCoreDefaults.AuthenticationScheme);
         }
 
         throw new NotImplementedException(OpenIdDictErrors.GrantTypeNotImplemented);
-    } 
+    }
 }

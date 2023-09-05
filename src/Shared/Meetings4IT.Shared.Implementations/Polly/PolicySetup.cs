@@ -1,16 +1,16 @@
-﻿using Polly;
-using System.Data.SqlClient;
-using Meetings4IT.Shared.Implementations.Tools;
+﻿using Meetings4IT.Shared.Implementations.Tools;
+using Polly;
 using Serilog;
+using System.Data.SqlClient;
 
 namespace Meetings4IT.Shared.Implementations.Polly;
 
 public class PolicySetup
-{ 
+{
     public PolicySetup()
     {
     }
-     
+
     public AsyncPolicy PolicyConnectionAsync(ILogger logger) => Policy
         .Handle<SqlException>()
         .Or<TimeoutException>()

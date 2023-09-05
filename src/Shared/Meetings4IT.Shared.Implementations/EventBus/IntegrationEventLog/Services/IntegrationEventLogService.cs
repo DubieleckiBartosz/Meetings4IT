@@ -3,14 +3,14 @@ using Meetings4IT.Shared.Implementations.EventBus.IntegrationEventProcess;
 
 namespace Meetings4IT.Shared.Implementations.EventBus.IntegrationEventLog.Services;
 
-public class IntegrationEventLogService : IIntegrationEventLogService  
+public class IntegrationEventLogService : IIntegrationEventLogService
 {
-    private readonly IIntegrationEventLogRepository _integrationEventLogRepository; 
+    private readonly IIntegrationEventLogRepository _integrationEventLogRepository;
 
     public IntegrationEventLogService(IIntegrationEventLogRepository integrationEventLogRepository)
     {
-        _integrationEventLogRepository = integrationEventLogRepository ?? throw new ArgumentNullException(nameof(integrationEventLogRepository)); 
-    } 
+        _integrationEventLogRepository = integrationEventLogRepository ?? throw new ArgumentNullException(nameof(integrationEventLogRepository));
+    }
 
     public async Task SaveEventAsync(IntegrationEvent @event)
     {

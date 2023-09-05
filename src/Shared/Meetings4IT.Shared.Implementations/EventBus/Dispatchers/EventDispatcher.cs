@@ -2,7 +2,7 @@
 using Meetings4IT.Shared.Implementations.EventBus.IntegrationEventProcess;
 
 namespace Meetings4IT.Shared.Implementations.EventBus.Dispatchers;
- 
+
 public class EventDispatcher : IEventDispatcher
 {
     private readonly IMediator _mediator;

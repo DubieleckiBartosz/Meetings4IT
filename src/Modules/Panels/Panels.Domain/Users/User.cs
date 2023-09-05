@@ -1,4 +1,4 @@
-﻿using Meetings4IT.Shared.Abstractions.Kernel; 
+﻿using Meetings4IT.Shared.Abstractions.Kernel;
 using Panels.Domain.Users.Exceptions;
 using Panels.Domain.Users.ValueObjects;
 
@@ -6,7 +6,7 @@ namespace Panels.Domain.Users;
 
 public class User : Entity, IAggregateRoot
 {
-    private readonly HashSet<Technology> _stack = new(); 
+    private readonly HashSet<Technology> _stack = new();
     public List<Technology> TechStack => _stack.ToList();
     public UserImage Image { get; private set; }
 

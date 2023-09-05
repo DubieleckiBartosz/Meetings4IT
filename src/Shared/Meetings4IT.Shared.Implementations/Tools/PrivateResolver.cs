@@ -1,5 +1,5 @@
-﻿using Newtonsoft.Json.Serialization;
-using Newtonsoft.Json;
+﻿using Newtonsoft.Json;
+using Newtonsoft.Json.Serialization;
 using System.Reflection;
 
 namespace Meetings4IT.Shared.Implementations.Tools;
@@ -11,7 +11,7 @@ public class PrivateResolver : DefaultContractResolver
     }
 
     protected override JsonProperty CreateProperty(MemberInfo member, MemberSerialization memberSerialization)
-    { 
+    {
         var prop = base.CreateProperty(member, memberSerialization);
 
         if (!prop.Writable)

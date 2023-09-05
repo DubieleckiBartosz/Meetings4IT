@@ -1,6 +1,4 @@
-﻿using Meetings4IT.Shared.Abstractions.Exceptions; 
-
-namespace Panels.Domain.Meetings.Exceptions.InvitationExceptions;
+﻿namespace Panels.Domain.Meetings.Exceptions.InvitationExceptions;
 
 public class InvitationInvalidStatusException : Meetings4IT.Shared.Abstractions.Exceptions.BaseException
 {

@@ -20,7 +20,7 @@ public class UserRepository : IUserRepository
     {
         return await _userManager.CreateAsync(user, password);
     }
-     
+
     public async Task<IdentityResult> UserToRoleAsync(ApplicationUser user, Roles role)
     {
         return await _userManager.AddToRoleAsync(user, role.ToString());
@@ -43,7 +43,7 @@ public class UserRepository : IUserRepository
 
     public async Task<ApplicationUser?> GetUserByIdAsync(string userId)
     {
-       return await _userManager.FindByIdAsync(userId);
+        return await _userManager.FindByIdAsync(userId);
     }
 
     public async Task<bool> UserIsBlockedAsync(ApplicationUser user, string password)
@@ -63,7 +63,7 @@ public class UserRepository : IUserRepository
         var token = await _userManager.GenerateEmailConfirmationTokenAsync(user);
         return token;
     }
-    
+
     public async Task<string> GeneratePasswordResetTokenAsync(ApplicationUser user)
     {
         var token = await _userManager.GeneratePasswordResetTokenAsync(user);

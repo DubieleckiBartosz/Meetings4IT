@@ -6,7 +6,7 @@ public interface ICurrentUser
     bool IsInRole(string roleName);
     bool IsInRoles(string[] roles);
     List<string>? AvailableRoles();
-    int UserId { get; } 
+    int UserId { get; }
     string UserName { get; }
     string Email { get; }
 }

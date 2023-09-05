@@ -24,7 +24,7 @@ internal class IdentityIntegrationEventService : IIdentityIntegrationEventServic
 
     public async Task PublishThroughEventBusAsync(IntegrationEvent evt, CancellationToken cancellationToken = default)
     {
-        await _eventBus.PublishAsync(cancellationToken, evt); 
+        await _eventBus.PublishAsync(cancellationToken, evt);
     }
 
     public async Task SaveEventAndPublishAsync(IntegrationEvent evt, CancellationToken cancellationToken = default)
@@ -58,5 +58,5 @@ internal class IdentityIntegrationEventService : IIdentityIntegrationEventServic
                 evt.Id, module, evt);
             await _integrationEventLogService.MarkEventAsFailedAsync(evt.Id);
         }
-    } 
+    }
 }

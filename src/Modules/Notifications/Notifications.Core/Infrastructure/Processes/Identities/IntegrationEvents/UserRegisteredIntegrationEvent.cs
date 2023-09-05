@@ -5,4 +5,4 @@ using Notifications.Core.Constants;
 namespace Notifications.Core.Infrastructure.Processes.Identities.IntegrationEvents;
 
 [IntegrationEventDecorator(Navigators.UserRegisteredNavigator)]
-public record UserRegisteredIntegrationEvent(string Email, string VerificationUri) : IntegrationEvent;
+public record UserRegisteredIntegrationEvent(string Email, string UserName, string VerificationUri) : IntegrationEvent;

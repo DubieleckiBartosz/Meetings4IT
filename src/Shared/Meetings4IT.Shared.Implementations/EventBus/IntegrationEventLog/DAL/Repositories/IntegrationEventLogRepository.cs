@@ -1,6 +1,6 @@
-﻿using System.Data;
-using Dapper;
+﻿using Dapper;
 using Meetings4IT.Shared.Implementations.Dapper;
+using System.Data;
 
 namespace Meetings4IT.Shared.Implementations.EventBus.IntegrationEventLog.DAL.Repositories;
 
@@ -8,14 +8,14 @@ public class IntegrationEventLogRepository : BaseRepository<IntegrationEventLogC
 {
     public IntegrationEventLogRepository(IntegrationEventLogContext dapperContext) : base(dapperContext)
     {
-    } 
+    }
 
     public async Task SaveEventLogAsync(IntegrationEventLog integrationEventLog)
     {
         var parameters = new DynamicParameters();
         parameters.Add("@eventId", integrationEventLog.EventId);
 
-        await ExecuteAsync("[logs].[integration_saveEventLog_I]", param: parameters, commandType: CommandType.StoredProcedure);  
+        await ExecuteAsync("[logs].[integration_saveEventLog_I]", param: parameters, commandType: CommandType.StoredProcedure);
     }
 
     public async Task MarkEventAsPublishedAsync(Guid eventId)

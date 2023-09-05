@@ -1,5 +1,4 @@
 ﻿using System.Net;
-using Meetings4IT.Shared.Abstractions.Exceptions;
 
 namespace Panels.Domain.ScheduledMeetings.Exceptions;
 

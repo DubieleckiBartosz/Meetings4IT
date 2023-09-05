@@ -47,7 +47,7 @@ public class CurrentUser : ICurrentUser
 
             return int.TryParse(result, out var identifier) ? identifier : default;
         }
-    } 
+    }
 
     public string UserName
     {

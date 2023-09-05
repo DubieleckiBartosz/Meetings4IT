@@ -1,5 +1,5 @@
-﻿using System.Text.Json;
-using Meetings4IT.Shared.Implementations.EventBus.IntegrationEventProcess;
+﻿using Meetings4IT.Shared.Implementations.EventBus.IntegrationEventProcess;
+using System.Text.Json;
 
 namespace Meetings4IT.Shared.Implementations.EventBus.IntegrationEventLog;
 
@@ -16,7 +16,7 @@ public class IntegrationEventLog
         });
 
         State = EventState.NotPublished;
-        TimesSent = 0; 
+        TimesSent = 0;
     }
 
     public string EventTypeShortName => EventTypeName!.Split('.').Last();
@@ -26,12 +26,12 @@ public class IntegrationEventLog
     public EventState State { get; private set; }
     public int TimesSent { get; private set; }
     public DateTime CreationTime { get; }
-    public string Content { get; } 
+    public string Content { get; }
 
     public IntegrationEventLog DeserializeJsonContent(Type type)
     {
         IntegrationEvent =
-            JsonSerializer.Deserialize(Content, type, new JsonSerializerOptions {PropertyNameCaseInsensitive = true}) as
+            JsonSerializer.Deserialize(Content, type, new JsonSerializerOptions { PropertyNameCaseInsensitive = true }) as
                 IntegrationEvent;
 
         return this;

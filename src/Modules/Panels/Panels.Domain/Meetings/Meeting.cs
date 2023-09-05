@@ -1,6 +1,6 @@
 ﻿using Meetings4IT.Shared.Abstractions.Kernel;
 using Meetings4IT.Shared.Abstractions.Kernel.ValueObjects;
-using Meetings4IT.Shared.Abstractions.Time; 
+using Meetings4IT.Shared.Abstractions.Time;
 using Panels.Domain.Meetings.Categories;
 using Panels.Domain.Meetings.Entities;
 using Panels.Domain.Meetings.Events;
@@ -12,10 +12,10 @@ using Panels.Domain.Meetings.ValueObjects;
 namespace Panels.Domain.Meetings;
 
 public class Meeting : Entity, IAggregateRoot
-{ 
+{
     private readonly HashSet<Invitation> _invitations = new();
     private readonly HashSet<MeetingImage> _images = new();
-    public Email Creator { get; } 
+    public Email Creator { get; }
     public MeetingCategory Category { get; set; }
 
     //Anyone can come if public property is true
@@ -40,12 +40,12 @@ public class Meeting : Entity, IAggregateRoot
         Email creator,
         MeetingCategory category,
         Description description,
-        Address address, 
+        Address address,
         DateRange date,
         bool isPublic,
         int? maxInvitations)
     {
-        Creator = creator; 
+        Creator = creator;
         Category = category;
         Description = description;
         Address = address;
@@ -72,11 +72,11 @@ public class Meeting : Entity, IAggregateRoot
         }
 
         return new Meeting(
-            creator, 
+            creator,
             category,
-            description, 
-            address, 
-            date, 
+            description,
+            address,
+            date,
             isPublic,
             maxInvitations);
     }
@@ -113,7 +113,7 @@ public class Meeting : Entity, IAggregateRoot
 
         this.AddEvent(MeetingCanceled.Create(Id, invitationRecipients));
         IncrementVersion();
-    } 
+    }
 
     public void CreateNewInvitation(Email email, Date invitationExpirationDate)
     {
@@ -157,7 +157,7 @@ public class Meeting : Entity, IAggregateRoot
     {
         this.CheckIfMeetingOperationIsPossible();
 
-        var invitation = FindInvitation(email); 
+        var invitation = FindInvitation(email);
         invitation.Reject();
 
         this.AddEvent(InvitationRejected.Create(Creator));

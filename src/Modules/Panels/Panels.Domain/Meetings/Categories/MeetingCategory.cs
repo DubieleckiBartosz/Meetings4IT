@@ -1,5 +1,5 @@
 ﻿using Meetings4IT.Shared.Abstractions.Exceptions;
-using Meetings4IT.Shared.Abstractions.Kernel; 
+using Meetings4IT.Shared.Abstractions.Kernel;
 
 namespace Panels.Domain.Meetings.Categories;
 

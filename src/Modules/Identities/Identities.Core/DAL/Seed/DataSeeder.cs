@@ -43,7 +43,7 @@ public class DataSeeder
             EmailConfirmed = true
         };
 
-        await SaveUser(userAdmin, "PasswordAdmin$123", Roles.Admin.ToString()); 
+        await SaveUser(userAdmin, "PasswordAdmin$123", Roles.Admin.ToString());
 
         var user = new ApplicationUser()
         {
@@ -60,7 +60,7 @@ public class DataSeeder
     private async Task SaveUser(ApplicationUser user, string password, string role)
     {
         var result = await _userManager.FindByEmailAsync(user.Email);
-        if(result == null)
+        if (result == null)
         {
             await _userManager.CreateAsync(user, password);
             await _userManager.AddToRoleAsync(user, role);
