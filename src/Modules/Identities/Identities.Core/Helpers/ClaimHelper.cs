@@ -22,7 +22,8 @@ public static class ClaimHelper
             .SetClaims(MeetingsClaimTypes.Role, roles);
 
         identity.SetScopes(scopes);
-        identity.SetDestinations(GetDestinations);
+        //identity.SetDestinations(GetDestinations);
+        identity.SetDestinations(claim => new[] { Destinations.AccessToken, Destinations.IdentityToken });
 
         return new ClaimsPrincipal(identity);
     }
@@ -31,7 +32,7 @@ public static class ClaimHelper
     {
         switch (claim.Type)
         {
-            case Claims.Name:
+            case MeetingsClaimTypes.UserName:
                 {
                     yield return Destinations.AccessToken;
 
@@ -40,7 +41,7 @@ public static class ClaimHelper
 
                     yield break;
                 }
-            case Claims.Email:
+            case MeetingsClaimTypes.Email:
                 {
                     yield return Destinations.AccessToken;
 
@@ -49,7 +50,7 @@ public static class ClaimHelper
 
                     yield break;
                 }
-            case Claims.Role:
+            case MeetingsClaimTypes.Role:
                 {
                     yield return Destinations.AccessToken;
 

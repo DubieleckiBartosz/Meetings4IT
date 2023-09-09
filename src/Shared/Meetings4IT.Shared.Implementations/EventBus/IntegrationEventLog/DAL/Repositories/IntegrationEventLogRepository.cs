@@ -14,6 +14,12 @@ public class IntegrationEventLogRepository : BaseRepository<IntegrationEventLogC
     {
         var parameters = new DynamicParameters();
         parameters.Add("@eventId", integrationEventLog.EventId);
+        parameters.Add("@creationTime", integrationEventLog.CreationTime);
+        parameters.Add("@eventTypeName", integrationEventLog.EventTypeName);
+        parameters.Add("@content", integrationEventLog.Content);
+        parameters.Add("@state", integrationEventLog.State);
+        parameters.Add("@timesSent", integrationEventLog.TimesSent);
+        parameters.Add("@eventTypeShortName", integrationEventLog.EventTypeShortName);
 
         await ExecuteAsync("[logs].[integration_saveEventLog_I]", param: parameters, commandType: CommandType.StoredProcedure);
     }
@@ -25,22 +31,22 @@ public class IntegrationEventLogRepository : BaseRepository<IntegrationEventLogC
 
     public async Task MarkEventAsInProgressAsync(Guid eventId)
     {
-        await UpdateStatusAsync(eventId, EventState.InProgress);
+        await UpdateStatusAsync(eventId, EventState.InProgress, true);
     }
 
     public async Task MarkEventAsFailedAsync(Guid eventId)
     {
         await UpdateStatusAsync(eventId, EventState.PublishedFailed);
     }
-    private async Task UpdateStatusAsync(Guid eventId, EventState status)
+
+    private async Task UpdateStatusAsync(Guid eventId, EventState status, bool sent = false)
     {
         var parameters = new DynamicParameters();
 
         parameters.Add("@eventId", eventId);
         parameters.Add("@newStatus", status);
+        parameters.Add("@sent", sent);
 
         await ExecuteAsync("[logs].[integration_updateEventLog_U]", param: parameters, commandType: CommandType.StoredProcedure);
-
     }
-
 }

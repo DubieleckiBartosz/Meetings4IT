@@ -4,5 +4,5 @@ namespace Meetings4IT.Shared.Implementations.EventBus.Dispatchers;
 
 public interface IEventDispatcher
 {
-    Task PublishAsync(params IntegrationEvent[] @events);
+    Task PublishAsync(CancellationToken cancellationToken = default, params IntegrationEvent[] @events);
 }

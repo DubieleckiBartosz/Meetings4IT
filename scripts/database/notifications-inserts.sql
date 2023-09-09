@@ -1,6 +1,6 @@
 PRINT 'Insert templates...'
 
-IF EXISTS (SELECT * FROM sysobjects WHERE name='notifications.Templates' and xtype='U')
+IF EXISTS (SELECT * FROM sysobjects WHERE name='Templates' and xtype='U')
 BEGIN 
     
     IF NOT EXISTS(SELECT 1 FROM notifications.Templates)

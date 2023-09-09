@@ -16,6 +16,7 @@ public static class OpenIdDictConfigurations
     public static WebApplicationBuilder RegisterOpenIdDict(this WebApplicationBuilder builder)
     {
         builder.Services.Configure<OpenIdDictOptions>(builder.Configuration.GetSection("OpenIdDictOptions"));
+        var openIdDictOptions = builder.Configuration.GetSection("OpenIdDictOptions").Get<OpenIdDictOptions>();
 
         builder.Services.AddOpenIddict()
             .AddCore(options =>
@@ -28,21 +29,20 @@ public static class OpenIdDictConfigurations
                 options.ReplaceAuthorizationManager<AuthorizationManager>();
             }).AddServer(options =>
             {
-                options.SetTokenEndpointUris("connect/token")
-                    .SetRevocationEndpointUris("connect/token/revoke")
-                    .SetIntrospectionEndpointUris("connect/token/introspect");
+                options
+                    .SetTokenEndpointUris("connect/token")
+                    .SetRevocationEndpointUris("connect/revoke")
+                    .SetIntrospectionEndpointUris("connect/introspect");
 
                 options
                     .AllowPasswordFlow()
                     .AllowRefreshTokenFlow();
 
                 options.UseReferenceRefreshTokens();
-
-                var openIdDictOptions = builder.Configuration.GetSection("OpenIdDictOptions").Get<OpenIdDictOptions>();
-
                 options.RegisterScopes(
                     OpenIddictConstants.Scopes.OpenId,
                     OpenIddictConstants.Scopes.Profile,
+                    //https://github.com/manfredsteyer/angular-oauth2-oidc/issues/1241
                     OpenIddictConstants.Scopes.OfflineAccess,
                     openIdDictOptions!.Scope);
 
@@ -51,12 +51,15 @@ public static class OpenIdDictConfigurations
 
                 if (builder.Environment.IsDevelopment())
                 {
-                    options.AddDevelopmentEncryptionCertificate().AddDevelopmentSigningCertificate();
+                    options
+                    .AddDevelopmentEncryptionCertificate()
+                    .AddDevelopmentSigningCertificate();
+
                     options.DisableAccessTokenEncryption();
                 }
                 else
                 {
-                    //registration real certification 
+                    //registration real certification
                 }
 
                 options
@@ -69,9 +72,8 @@ public static class OpenIdDictConfigurations
                 options.UseAspNetCore();
                 options.EnableAuthorizationEntryValidation();
                 options.EnableTokenEntryValidation();
-            });
-
-        builder.Services.AddAuthentication(OpenIddictValidationAspNetCoreDefaults.AuthenticationScheme);
+            })
+            .Services.AddAuthentication(OpenIddictValidationAspNetCoreDefaults.AuthenticationScheme);
 
         return builder;
     }

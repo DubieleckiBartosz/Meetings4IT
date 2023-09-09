@@ -19,12 +19,17 @@ internal class UserCommandService : IUserCommandService
 {
     private readonly IUserRepository _userRepository;
     private readonly IIdentityIntegrationEventService _identityIntegrationEventService;
+    private readonly IOpenIdDIctAuthService _openIdDIctAuthService;
     private readonly PathOptions _options;
 
-    public UserCommandService(IUserRepository userRepository, IIdentityIntegrationEventService identityIntegrationEventService, IOptions<PathOptions> options)
+    public UserCommandService(
+        IUserRepository userRepository,
+        IIdentityIntegrationEventService identityIntegrationEventService,
+        IOptions<PathOptions> options, IOpenIdDIctAuthService openIdDIctAuthService)
     {
         _userRepository = userRepository ?? throw new ArgumentNullException(nameof(userRepository));
         _identityIntegrationEventService = identityIntegrationEventService ?? throw new ArgumentNullException(nameof(identityIntegrationEventService));
+        _openIdDIctAuthService = openIdDIctAuthService;
         _options = options?.Value ?? throw new ArgumentNullException(nameof(options));
     }
 
@@ -39,14 +44,14 @@ internal class UserCommandService : IUserCommandService
         };
 
         var result = await _userRepository.CreateUserAsync(applicationUser, parameters.Password);
-        if (result.Succeeded!)
+        if (!result.Succeeded!)
         {
             var errors = result.ReadResult();
             return Response<List<IdentityErrorResponse>>.Error(errors);
         }
 
         var resultRole = await _userRepository.UserToRoleAsync(applicationUser, Roles.User);
-        if (resultRole.Succeeded!)
+        if (!resultRole.Succeeded!)
         {
             var errors = result.ReadResult();
             return Response<List<IdentityErrorResponse>>.Error(errors);
@@ -55,7 +60,12 @@ internal class UserCommandService : IUserCommandService
         var token = await _userRepository.GenerateEmailConfirmationTokenAsync(applicationUser);
 
         var routeUri = new Uri(string.Concat($"{_options.ClientAddress}", _options.ConfirmUserPath));
-        var verificationUri = QueryHelpers.AddQueryString(routeUri.ToString(), "code", token);
+        var queryParams = new Dictionary<string, string>();
+
+        queryParams["code"] = token;
+        queryParams["email"] = applicationUser.Email;
+
+        var verificationUri = QueryHelpers.AddQueryString(routeUri.ToString(), queryParams);
 
         await _identityIntegrationEventService.SaveEventAndPublishAsync(
             new UserRegisteredIntegrationEvent(applicationUser.Email, applicationUser.UserName, verificationUri));
@@ -66,13 +76,14 @@ internal class UserCommandService : IUserCommandService
     public async Task<Response> ResetPasswordUserAsync(ResetPasswordParameters parameters)
     {
         var user = await _userRepository.GetUserByEmailAsync(parameters.Email);
+        await _openIdDIctAuthService.DeleteAllAuthorizationsForUser(user.Id);
         if (user == null)
         {
             throw new NotFoundException(ErrorMessages.UserNotFound(parameters.Email));
         }
 
         var resetPassResult = await _userRepository.ResetUserPasswordAsync(user, parameters.Token, parameters.Password);
-        if (resetPassResult.Succeeded!)
+        if (!resetPassResult.Succeeded!)
         {
             var errors = resetPassResult.ReadResult();
             return Response<List<IdentityErrorResponse>>.Error(errors);
@@ -112,7 +123,7 @@ internal class UserCommandService : IUserCommandService
         }
 
         var result = await _userRepository.ConfirmUserAsync(user!, tokenConfirmation);
-        if (result.Succeeded!)
+        if (!result.Succeeded!)
         {
             var errors = result.ReadResult();
             return Response<List<IdentityErrorResponse>>.Error(errors);

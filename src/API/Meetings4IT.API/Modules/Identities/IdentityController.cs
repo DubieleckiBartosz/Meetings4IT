@@ -18,6 +18,13 @@ public class IdentityController : ControllerBase
         _userCommandService = userCommandService ?? throw new ArgumentNullException(nameof(userCommandService));
     }
 
+    [HttpGet("Test")]
+    public async Task<IActionResult> Test()
+    {
+        return Ok(new { message = "OK" });
+    }
+
+    [AllowAnonymous]
     [HttpPost("[action]")]
     public async Task<IActionResult> Register([FromBody] RegisterUserParameters parameters)
     {
@@ -48,10 +55,11 @@ public class IdentityController : ControllerBase
         return result.Success ? Ok(result) : BadRequest(result);
     }
 
+    [AllowAnonymous]
     [HttpGet("confirm-user")]
-    public async Task<IActionResult> ConfirmUser(string token, string email)
+    public async Task<IActionResult> ConfirmUser(string code, string email)
     {
-        var result = await _userCommandService.ConfirmUserAsync(token, email);
+        var result = await _userCommandService.ConfirmUserAsync(code, email);
         return result.Success ? Ok(result) : BadRequest(result);
     }
 }

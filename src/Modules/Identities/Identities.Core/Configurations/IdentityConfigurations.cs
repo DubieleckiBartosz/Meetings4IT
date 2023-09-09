@@ -20,8 +20,7 @@ public static class IdentityConfigurations
         var options = builder.Configuration.GetSection("EfOptions").Get<EfOptions>()!;
 
         builder.RegisterEntityFrameworkSqlServer<ApplicationDbContext>(options, _ =>
-            _.UseOpenIddict<CustomApplicationEntity, CustomAuthorizationEntity, CustomScopeEntity, CustomTokenEntity,
-                string>());
+            _.UseOpenIddict<CustomApplicationEntity, CustomAuthorizationEntity, CustomScopeEntity, CustomTokenEntity, string>());
 
         services.AddIdentity<ApplicationUser, IdentityRole>(options =>
             {

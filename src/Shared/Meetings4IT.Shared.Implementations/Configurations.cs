@@ -41,9 +41,10 @@ public static class Configurations
 
         if (withDapper)
         {
-            services.Configure<DapperOptions>(config.GetSection(nameof(DapperOptions)));
-            services.AddTransient(typeof(IPipelineBehavior<,>), typeof(TransactionBehavior<,>));
-            services.AddScoped<ITransactionSupervisor, TransactionSupervisor>();
+            services
+                .Configure<DapperOptions>(config.GetSection(nameof(DapperOptions)))
+                .AddTransient(typeof(IPipelineBehavior<,>), typeof(TransactionBehavior<,>))
+                .AddScoped<ITransactionSupervisor, TransactionSupervisor>();
         }
 
         //EVENT BUS (in memory)
@@ -54,8 +55,9 @@ public static class Configurations
         services.AddSingleton<IEventChannel, EventChannel>();
 
         //Dispatchers
-        services.AddSingleton<IAsyncEventDispatcher, AsyncEventDispatcher>();
-        services.AddSingleton<IEventDispatcher, EventDispatcher>();
+        services
+            .AddSingleton<IAsyncEventDispatcher, AsyncEventDispatcher>()
+            .AddSingleton<IEventDispatcher, EventDispatcher>();
 
         //Worker
         services.AddHostedService<AsyncDispatcherJob>();
@@ -64,9 +66,10 @@ public static class Configurations
         services.RegisterValidatorPipeline();
 
         //INTEGRATION LOG REPO
-        services.AddScoped<IntegrationEventLogContext>();
-        services.AddTransient<IIntegrationEventLogRepository, IntegrationEventLogRepository>();
-        services.AddTransient<IIntegrationEventLogService, IntegrationEventLogService>();
+        services
+            .AddScoped<IntegrationEventLogContext>()
+            .AddTransient<IIntegrationEventLogRepository, IntegrationEventLogRepository>()
+            .AddTransient<IIntegrationEventLogService, IntegrationEventLogService>();
 
         return builder;
     }
@@ -85,8 +88,9 @@ public static class Configurations
 
     public static WebApplicationBuilder RegisterUserAccessor(this WebApplicationBuilder builder)
     {
-        builder.Services.AddHttpContextAccessor();
-        builder.Services.AddTransient<ICurrentUser, CurrentUser>();
+        builder.Services
+            .AddHttpContextAccessor()
+            .AddTransient<ICurrentUser, CurrentUser>();
 
         return builder;
     }
@@ -94,17 +98,12 @@ public static class Configurations
     public static IServiceCollection RegisterMediator(this IServiceCollection services, params Type[] types)
     {
         //MEDIATOR
-        var assemblies = types.Select(_ => _.GetTypeInfo().Assembly);
+        services.AddMediatR(types);
+        services.AddMediatR(typeof(SharedAssemblyReference));
 
-        foreach (var assembly in assemblies)
-        {
-            services.AddMediatR(assembly);
-        }
-
-        services.AddMediatR(typeof(SharedAssemblyReference).GetTypeInfo().Assembly);
-
-        services.AddTransient<ICommandBus, CommandBus>();
-        services.AddTransient<IQueryBus, QueryBus>();
+        services
+            .AddTransient<ICommandBus, CommandBus>()
+            .AddTransient<IQueryBus, QueryBus>();
 
         return services;
     }

@@ -35,7 +35,7 @@ public class AsyncDispatcherJob : BackgroundService
                 var target = _eventRegistry.Navigate(message.Navigator);
                 var @event = messageString.Deserialize<IntegrationEvent>(target, JsonSettings.DefaultSerializerSettings)!;
 
-                await _eventDispatcher.PublishAsync(@event);
+                await _eventDispatcher.PublishAsync(stoppingToken, @event);
             }
             catch (Exception exception)
             {

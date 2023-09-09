@@ -18,7 +18,7 @@ public class UserRegisteredHandler : ICommandHandler<UserRegisteredCommand, Unit
     private readonly ITemplateRepository _templateRepository;
     private readonly ILogger _logger;
 
-    public UserRegisteredHandler(IEmailClient emailClient, ITemplateRepository templateRepository, ILogger logger)
+    public UserRegisteredHandler(ILogger logger, IEmailClient emailClient, ITemplateRepository templateRepository)
     {
         _emailClient = emailClient ?? throw new ArgumentNullException(nameof(emailClient));
         _templateRepository = templateRepository ?? throw new ArgumentNullException(nameof(templateRepository));

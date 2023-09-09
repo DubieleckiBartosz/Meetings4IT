@@ -1,17 +1,20 @@
 ﻿using Identities.Core.Options;
 using Microsoft.Extensions.Options;
 using OpenIddict.Abstractions;
+using static OpenIddict.Abstractions.OpenIddictConstants;
 
 namespace Identities.Core.DAL.Seed;
 
 public class OpenIdAppConfigSeeder
 {
     private readonly IOpenIddictApplicationManager _manager;
+    private readonly IOpenIddictScopeManager _openIddictScopeManager;
     private readonly OpenIdDictOptions _options;
 
-    public OpenIdAppConfigSeeder(IOpenIddictApplicationManager manager, IOptions<OpenIdDictOptions> options)
+    public OpenIdAppConfigSeeder(IOpenIddictApplicationManager manager, IOptions<OpenIdDictOptions> options, IOpenIddictScopeManager openIddictScopeManager)
     {
         _manager = manager ?? throw new ArgumentNullException(nameof(manager));
+        _openIddictScopeManager = openIddictScopeManager ?? throw new ArgumentNullException(nameof(openIddictScopeManager));
         _options = options?.Value ?? throw new ArgumentNullException(nameof(options));
     }
 
@@ -21,7 +24,7 @@ public class OpenIdAppConfigSeeder
         //try
         //{
         //    var applicationConfig = await _manager.FindByClientIdAsync(_options.ClientId);
-        //    if(applicationConfig != null)
+        //    if (applicationConfig != null)
         //    {
         //        await _manager.DeleteAsync(applicationConfig);
         //    }
@@ -40,13 +43,26 @@ public class OpenIdAppConfigSeeder
                 ClientSecret = _options.ClientSecret,
                 Permissions =
                 {
-                    OpenIddictConstants.Permissions.GrantTypes.RefreshToken,
-                    OpenIddictConstants.Permissions.GrantTypes.Password,
-                    OpenIddictConstants.Permissions.Prefixes.Scope + _options.Scope,
-                    OpenIddictConstants.Permissions.Endpoints.Token,
-                    OpenIddictConstants.Permissions.Endpoints.Revocation,
-                    OpenIddictConstants.Permissions.Endpoints.Introspection,
-                }
+                    Permissions.GrantTypes.RefreshToken,
+                    Permissions.GrantTypes.Password,
+                    Permissions.Endpoints.Token,
+                    Permissions.Endpoints.Revocation,
+                    Permissions.Endpoints.Introspection,
+                    Permissions.Prefixes.Scope + _options.Scope,
+                },
+            });
+        }
+
+        if (await _openIddictScopeManager.FindByNameAsync(_options.Scope) is null)
+        {
+            await _openIddictScopeManager.CreateAsync(new OpenIddictScopeDescriptor
+            {
+                DisplayName = "Meetings API access",
+                Name = _options.Scope,
+                Resources =
+                    {
+                       _options.ClientId
+                    }
             });
         }
     }

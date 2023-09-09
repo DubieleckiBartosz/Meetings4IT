@@ -18,10 +18,12 @@ public static class DependencyInjection
         services.AddScoped<OpenIdAppConfigSeeder>();
         services.AddScoped<DataSeeder>();
 
-        services.AddScoped<IUserQueryService, UserQueryService>();
-        services.AddScoped<IUserRepository, UserRepository>();
-
-        services.AddTransient<IIdentityIntegrationEventService, IdentityIntegrationEventService>();
+        services
+            .AddTransient<IIdentityIntegrationEventService, IdentityIntegrationEventService>()
+            .AddScoped<IUserQueryService, UserQueryService>()
+            .AddScoped<IUserCommandService, UserCommandService>()
+            .AddScoped<IOpenIdDIctAuthService, OpenIdDIctAuthService>()
+            .AddScoped<IUserRepository, UserRepository>();
 
         return builder;
     }

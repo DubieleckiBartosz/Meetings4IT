@@ -47,14 +47,25 @@ public class AuthorizationController : ControllerBase
             }
 
             var roles = await _userService.GetUserRolesByUserAsync(user);
-            var scopes = request.GetScopes();
+            var requestScopes = request.GetScopes();
+
+            var scopes = new List<string>()
+            {
+                //https://github.com/manfredsteyer/angular-oauth2-oidc/issues/1241
+                OpenIddictConstants.Scopes.OfflineAccess
+            };
+
+            foreach (var scope in requestScopes)
+            {
+                scopes.Add(scope);
+            }
 
             var identity = new ClaimsIdentity(
                 TokenValidationParameters.DefaultAuthenticationType,
                 MeetingsClaimTypes.Email,
                 MeetingsClaimTypes.Role);
 
-            var claimsPrincipal = identity.SetUserClaims(user, roles.ToImmutableArray(), scopes);
+            var claimsPrincipal = identity.SetUserClaims(user, roles.ToImmutableArray(), scopes.ToImmutableArray());
 
             return SignIn(claimsPrincipal, OpenIddictServerAspNetCoreDefaults.AuthenticationScheme);
         }
