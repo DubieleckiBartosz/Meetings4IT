@@ -10,8 +10,8 @@ namespace Panels.Domain.DomainServices;
 public class MeetingDomainService : IMeetingDomainService
 {
     public Meeting Creation(
-        ScheduledMeeting schedule,
-        Email creator,
+        ScheduledMeeting? schedule,
+        UserInfo organizer,
         MeetingCategory category,
         Description description,
         Address address,
@@ -19,14 +19,21 @@ public class MeetingDomainService : IMeetingDomainService
         bool isPublic,
         int? maxInvitations)
     {
-        var scheduledMeeting = schedule.UpcomingMeetings.SingleOrDefault(_ => IsOverlappingWithExisting(date, _.MeetingDateRange));
+        var scheduledMeeting = schedule?.UpcomingMeetings.SingleOrDefault(_ => IsOverlappingWithExisting(date, _.MeetingDateRange));
 
         if (scheduledMeeting != null)
         {
             throw new MeetingOverlapException(scheduledMeeting.MeetingId);
         }
 
-        return Meeting.Create(creator, category, description, address, date, isPublic, maxInvitations);
+        return Meeting.Create(
+            organizer,
+            category,
+            description,
+            address,
+            date,
+            isPublic,
+            maxInvitations);
     }
 
     private bool IsOverlappingWithExisting(DateRange newRange, DateRange existingRange)

@@ -5,7 +5,7 @@ namespace Meetings4IT.Shared.Abstractions.Kernel.ValueObjects;
 
 public class Email : ValueObject
 {
-    public string Value { get; set; }
+    public string Value { get; }
 
     public Email(string value)
     {
@@ -22,7 +22,9 @@ public class Email : ValueObject
     public static implicit operator Email?(string? value) => value == null ? null : new Email(value);
 
     public static implicit operator string(Email value) => value.Value;
+
     public override string ToString() => Value;
+
     protected override IEnumerable<object?> GetEqualityComponents()
     {
         yield return this.Value;

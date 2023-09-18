@@ -2,10 +2,10 @@
 
 namespace Panels.Domain.Meetings.Events;
 
-public record InvitationAccepted(string MeetingCreator) : IDomainEvent
+public record InvitationAccepted(int MeetingId, string OrganizerId, string AcceptedBy) : IDomainEvent
 {
-    public static InvitationAccepted Create(string meetingCreator)
+    public static InvitationAccepted Create(int meetingId, string organizerId, string acceptedBy)
     {
-        return new InvitationAccepted(meetingCreator);
+        return new InvitationAccepted(meetingId, organizerId, acceptedBy);
     }
 }

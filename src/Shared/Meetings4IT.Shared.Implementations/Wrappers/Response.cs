@@ -36,6 +36,11 @@ public class Response<T> : Response
         Data = data;
     }
 
+    public static Response<T> Ok(T data, string? message = null)
+    {
+        return new Response<T>(data, true, message);
+    }
+
     public static Response<T> Error(T data, string message)
     {
         return new Response<T>(data, false, message);

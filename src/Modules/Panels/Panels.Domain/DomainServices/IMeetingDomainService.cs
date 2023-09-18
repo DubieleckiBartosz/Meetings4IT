@@ -9,8 +9,8 @@ namespace Panels.Domain.DomainServices;
 public interface IMeetingDomainService
 {
     Meeting Creation(
-        ScheduledMeeting schedule,
-        Email creator,
+        ScheduledMeeting? schedule,
+        UserInfo organizer,
         MeetingCategory category,
         Description description,
         Address address,

@@ -7,6 +7,9 @@ public class UpcomingMeeting : ValueObject
     public int MeetingId { get; }
     public DateRange MeetingDateRange { get; }
 
+    private UpcomingMeeting()
+    { }
+
     private UpcomingMeeting(int meetingId, DateRange meetingDateRange)
     {
         MeetingId = meetingId;

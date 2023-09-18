@@ -1,5 +1,7 @@
-﻿namespace Panels.Infrastructure.Repositories;
+﻿using Panels.Application.Contracts.Repositories;
 
-public class UserRepository
+namespace Panels.Infrastructure.Repositories;
+
+public class UserRepository : IUserRepository
 {
 }

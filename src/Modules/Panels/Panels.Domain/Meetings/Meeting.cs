@@ -13,20 +13,21 @@ namespace Panels.Domain.Meetings;
 
 public class Meeting : Entity, IAggregateRoot
 {
-    private readonly HashSet<Invitation> _invitations = new();
-    private readonly HashSet<MeetingImage> _images = new();
-    public Email Creator { get; }
-    public MeetingCategory Category { get; set; }
+    private readonly List<Invitation> _invitations;
+    private readonly List<MeetingImage> _images;
+    public UserInfo Organizer { get; private set; }
+    public int CategoryIndex { get; set; }
+    public MeetingCategory Category { get; private set; }
 
     //Anyone can come if public property is true
-    public bool IsPublic { get; set; }
-    public int? MaxInvitations { get; set; }
-    public Description Description { get; set; }
-    public Address Address { get; set; }
-    public MeetingCancellation? Cancellation { get; set; }
-    public DateRange Date { get; set; }
-    public List<Invitation> Invitations => _invitations.ToList();
-    public List<MeetingImage> Images => _images.ToList();
+    public bool IsPublic { get; private set; }
+
+    public int? MaxInvitations { get; private set; }
+    public Description Description { get; private set; }
+    public Address Address { get; private set; }
+    public MeetingCancellation? Cancellation { get; private set; }
+    public DateRange Date { get; private set; }
+
     public bool Completed => Date.StartDate <= Clock.CurrentDate() && Cancellation == null;
     private int AcceptedInvitations => NumberInvitationsByStatus(InvitationStatus.Accepted);
     private int PendingInvitations => NumberInvitationsByStatus(InvitationStatus.Pending);
@@ -36,8 +37,14 @@ public class Meeting : Entity, IAggregateRoot
         return _invitations.Count(_ => _.Status == status);
     }
 
+    private Meeting()
+    {
+        this._invitations = new();
+        this._images = new();
+    }
+
     private Meeting(
-        Email creator,
+        UserInfo organizer,
         MeetingCategory category,
         Description description,
         Address address,
@@ -45,20 +52,24 @@ public class Meeting : Entity, IAggregateRoot
         bool isPublic,
         int? maxInvitations)
     {
-        Creator = creator;
-        Category = category;
+        Organizer = organizer;
+        CategoryIndex = category.Index;
+        //Category = category;
         Description = description;
         Address = address;
         Date = date;
         IsPublic = isPublic;
         MaxInvitations = maxInvitations;
+        this._invitations = new();
+        this._images = new();
+
         IncrementVersion();
 
-        this.AddEvent(MeetingCreated.Create(creator));
+        this.AddEvent(MeetingCreated.Create(this.Id, organizer, date));
     }
 
     public static Meeting Create(
-        Email creator,
+        UserInfo organizer,
         MeetingCategory category,
         Description description,
         Address address,
@@ -72,7 +83,7 @@ public class Meeting : Entity, IAggregateRoot
         }
 
         return new Meeting(
-            creator,
+            organizer,
             category,
             description,
             address,
@@ -136,7 +147,7 @@ public class Meeting : Entity, IAggregateRoot
         var invitation = new Invitation(email, invitationExpirationDate);
         _invitations.Add(invitation);
 
-        this.AddEvent(NewInvitationCreated.Create(email, Creator));
+        this.AddEvent(NewInvitationCreated.Create(email, Organizer.Name));
         IncrementVersion();
     }
 
@@ -149,7 +160,7 @@ public class Meeting : Entity, IAggregateRoot
 
         invitation.Accept();
 
-        this.AddEvent(InvitationAccepted.Create(Creator));
+        this.AddEvent(InvitationAccepted.Create(Id, Organizer.Identifier, email));
         IncrementVersion();
     }
 
@@ -160,7 +171,7 @@ public class Meeting : Entity, IAggregateRoot
         var invitation = FindInvitation(email);
         invitation.Reject();
 
-        this.AddEvent(InvitationRejected.Create(Creator));
+        this.AddEvent(InvitationRejected.Create(Organizer.Identifier));
         IncrementVersion();
     }
 
@@ -171,7 +182,7 @@ public class Meeting : Entity, IAggregateRoot
         var invitation = FindInvitation(email);
         invitation.Expire();
 
-        this.AddEvent(InvitationExpired.Create(email, Creator));
+        this.AddEvent(InvitationExpired.Create(email, Organizer.Name));
         IncrementVersion();
     }
 

@@ -18,12 +18,6 @@ public class IdentityController : ControllerBase
         _userCommandService = userCommandService ?? throw new ArgumentNullException(nameof(userCommandService));
     }
 
-    [HttpGet("Test")]
-    public async Task<IActionResult> Test()
-    {
-        return Ok(new { message = "OK" });
-    }
-
     [AllowAnonymous]
     [HttpPost("[action]")]
     public async Task<IActionResult> Register([FromBody] RegisterUserParameters parameters)

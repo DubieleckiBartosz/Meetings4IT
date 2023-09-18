@@ -9,9 +9,11 @@ public class User : Entity, IAggregateRoot
     private readonly HashSet<Technology> _stack = new();
     public List<Technology> TechStack => _stack.ToList();
     public UserImage Image { get; private set; }
+    public string Identifier { get; }
 
-    public User(UserImage image, List<Technology>? stack)
+    public User(string identifier, UserImage image, List<Technology>? stack)
     {
+        Identifier = identifier ?? throw new ArgumentNullException("User identifier cannot be null.");
         Image = image;
         if (stack != null && stack.Any())
         {

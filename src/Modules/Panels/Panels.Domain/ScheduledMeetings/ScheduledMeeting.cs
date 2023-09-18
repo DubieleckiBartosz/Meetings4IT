@@ -8,35 +8,41 @@ namespace Panels.Domain.ScheduledMeetings;
 
 public class ScheduledMeeting : Entity, IAggregateRoot
 {
-    private readonly HashSet<UpcomingMeeting> _upcomingMeeting = new();
-    public Email ScheduleOwner { get; }
-    public List<UpcomingMeeting> UpcomingMeetings => _upcomingMeeting.ToList();
+    private readonly List<UpcomingMeeting> _upcomingMeetings;
+    public UserInfo ScheduleOwner { get; }
+    public List<UpcomingMeeting> UpcomingMeetings => _upcomingMeetings;
 
-    private ScheduledMeeting(Email scheduleOwner)
+    private ScheduledMeeting()
+    {
+        _upcomingMeetings = new();
+    }
+
+    private ScheduledMeeting(UserInfo scheduleOwner)
     {
         ScheduleOwner = scheduleOwner;
+        _upcomingMeetings = new();
         IncrementVersion();
     }
 
-    public static ScheduledMeeting CreateMeetingSchedule(Email creator) => new(creator);
+    public static ScheduledMeeting CreateMeetingSchedule(UserInfo scheduleOwner) => new(scheduleOwner);
 
     public void NewUpcomingMeeting(UpcomingMeeting newUpcomingMeeting)
     {
-        _upcomingMeeting.Add(newUpcomingMeeting);
+        _upcomingMeetings.Add(newUpcomingMeeting);
         IncrementVersion();
     }
 
     public void RevokeMeeting(int meetingId)
     {
-        var upcomingMeeting = _upcomingMeeting.SingleOrDefault(_ => _.MeetingId == meetingId);
+        var upcomingMeeting = _upcomingMeetings.SingleOrDefault(_ => _.MeetingId == meetingId);
         if (upcomingMeeting == null)
         {
             throw new UpcomingMeetingNotFoundException(meetingId);
         }
 
-        _upcomingMeeting.Remove(upcomingMeeting);
+        _upcomingMeetings.Remove(upcomingMeeting);
 
-        this.AddEvent(UpcomingMeetingRevoked.Create(meetingId, ScheduleOwner));
+        this.AddEvent(UpcomingMeetingRevoked.Create(meetingId, ScheduleOwner.Name));
         IncrementVersion();
     }
 }

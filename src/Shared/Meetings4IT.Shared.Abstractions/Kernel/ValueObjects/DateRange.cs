@@ -15,7 +15,7 @@ public class DateRange : ValueObject
             throw new ArgumentException("EndDate must be greater than StartDate.");
         }
 
-        if (StartDate < Clock.CurrentDate())
+        if (startDate < Clock.CurrentDate())
         {
             throw new ArgumentException("StartDate must be younger than the current date.");
         }
@@ -23,8 +23,10 @@ public class DateRange : ValueObject
         StartDate = startDate;
         EndDate = endDate;
     }
+
     public int DurationInMinutes => Duration.Minutes;
     public int DurationInHours => Duration.Hours;
+
     public override string ToString()
     {
         var endDate = EndDate.HasValue ? $"-{EndDate.Value:T}" : string.Empty;

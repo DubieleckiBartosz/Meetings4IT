@@ -7,7 +7,7 @@ public class NotificationContext : DbContext
 {
     public DbSet<Template> Templates { get; set; }
 
-    public NotificationContext(DbContextOptions options) : base(options)
+    public NotificationContext(DbContextOptions<NotificationContext> options) : base(options)
     {
     }
 

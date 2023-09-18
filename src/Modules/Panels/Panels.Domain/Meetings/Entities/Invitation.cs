@@ -11,13 +11,15 @@ public class Invitation : Entity
     public Email Email { get; }
     public InvitationStatus Status { get; private set; }
     public Date ExpirationDate { get; private set; }
-    public Watcher? Watcher { get; set; }
     private bool IsExpired => ExpirationDate.Value <= Clock.CurrentDate();
+
+    private Invitation()
+    { }
+
     internal Invitation(Email email, Date expirationDate)
     {
         Email = email;
         ExpirationDate = expirationDate;
-        Watcher = Watcher.Create();
         Status = InvitationStatus.Pending;
     }
 
@@ -29,7 +31,6 @@ public class Invitation : Entity
         }
 
         Status = InvitationStatus.Accepted;
-        Watcher!.Update();
     }
 
     internal void Reject()
@@ -40,7 +41,6 @@ public class Invitation : Entity
         }
 
         Status = InvitationStatus.Rejected;
-        Watcher!.Update();
     }
 
     internal void Cancel()
@@ -52,7 +52,6 @@ public class Invitation : Entity
         }
 
         Status = InvitationStatus.Canceled;
-        Watcher!.Update();
     }
 
     internal void Expire()

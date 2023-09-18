@@ -2,10 +2,10 @@
 
 namespace Panels.Domain.Meetings.Events;
 
-public record InvitationExpired(string RecipientInvitation, string MeetingCreator) : IDomainEvent
+public record InvitationExpired(string RecipientInvitation, string MeetingOrganizer) : IDomainEvent
 {
-    public static InvitationExpired Create(string recipientInvitation, string meetingCreator)
+    public static InvitationExpired Create(string recipientInvitation, string meetingOrganizer)
     {
-        return new InvitationExpired(recipientInvitation, meetingCreator);
+        return new InvitationExpired(recipientInvitation, meetingOrganizer);
     }
 }

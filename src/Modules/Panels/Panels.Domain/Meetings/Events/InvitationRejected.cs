@@ -2,10 +2,10 @@
 
 namespace Panels.Domain.Meetings.Events;
 
-public record InvitationRejected(string MeetingCreator) : IDomainEvent
+public record InvitationRejected(string MeetingOrganizerId) : IDomainEvent
 {
-    public static InvitationRejected Create(string meetingCreator)
+    public static InvitationRejected Create(string meetingOrganizerId)
     {
-        return new InvitationRejected(meetingCreator);
+        return new InvitationRejected(meetingOrganizerId);
     }
 }

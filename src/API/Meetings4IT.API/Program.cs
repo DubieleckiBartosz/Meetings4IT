@@ -13,7 +13,8 @@ var configuration = builder.Configuration;
 
 builder
     .RegisterIdentitiesModule()
-    .RegisterNotificationsModule();
+    .RegisterNotificationsModule()
+    .RegisterPanelsModule();
 
 //Yes, we can write some dynamic method which could read all needed assemblies, but in this case we have control over it
 var assemblyTypes = new Type[]

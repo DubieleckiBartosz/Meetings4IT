@@ -1,8 +1,10 @@
 ﻿using MediatR;
 using Meetings4IT.Shared.Abstractions.Events;
+using Meetings4IT.Shared.Abstractions.Kernel;
 using Meetings4IT.Shared.Implementations.Behaviors;
 using Meetings4IT.Shared.Implementations.Dapper;
 using Meetings4IT.Shared.Implementations.Decorators;
+using Meetings4IT.Shared.Implementations.EntityFramework;
 using Meetings4IT.Shared.Implementations.EventBus;
 using Meetings4IT.Shared.Implementations.EventBus.Channel;
 using Meetings4IT.Shared.Implementations.EventBus.Dispatchers;
@@ -18,6 +20,7 @@ using Microsoft.AspNetCore.Builder;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Logging;
 using Serilog;
 using Serilog.Events;
 using Serilog.Exceptions;
@@ -35,6 +38,7 @@ public static class Configurations
         var config = builder.Configuration;
 
         services.AddTransient<IDomainDecorator, MediatorDecorator>();
+
         services.RegisterMediator(assemblyTypes);
 
         services.Configure<LogOptions>(config.GetSection(nameof(LogOptions)));
@@ -144,11 +148,15 @@ public static class Configurations
     }
 
     public static WebApplicationBuilder RegisterEntityFrameworkSqlServer<T>(this WebApplicationBuilder builder, EfOptions efOptions,
-        Func<DbContextOptionsBuilder, DbContextOptionsBuilder>? additionalRegistrations = null) where T : DbContext
+        Func<DbContextOptionsBuilder, DbContextOptionsBuilder>? additionalRegistrations = null, ILoggerFactory? loggerFactory = null) where T : DbContext
     {
         builder.Services.AddDbContext<T>(dbContextBuilder =>
         {
             dbContextBuilder.UseSqlServer(efOptions.ConnectionString);
+            if (loggerFactory != null)
+            {
+                dbContextBuilder.UseLoggerFactory(loggerFactory);
+            }
 
             additionalRegistrations?.Invoke(dbContextBuilder);
         });

@@ -17,6 +17,7 @@ public class CurrentUser : ICurrentUser
 
     private ClaimsPrincipal? Claims => _httpContextAccessor?.HttpContext?.User;
     private List<Claim>? Roles => Claims?.Claims.Where(_ => _.Type == MeetingsClaimTypes.Role).ToList();
+
     public bool IsInRole(string roleName)
     {
         var resultRoles = Roles;
@@ -35,17 +36,11 @@ public class CurrentUser : ICurrentUser
 
     public bool IsAdmin => IsInRole("Admin");
 
-    public int UserId
+    public string UserId
     {
         get
         {
-            var result = Claims?.Claims.FirstOrDefault(_ => _.Type == MeetingsClaimTypes.NameIdentifier)?.Value;
-            if (result == null)
-            {
-                return default;
-            }
-
-            return int.TryParse(result, out var identifier) ? identifier : default;
+            return Claims?.Claims?.First(_ => _.Type == MeetingsClaimTypes.Subject)?.Value!;
         }
     }
 
@@ -53,7 +48,7 @@ public class CurrentUser : ICurrentUser
     {
         get
         {
-            var result = Claims?.Claims.FirstOrDefault(_ => _.Type == MeetingsClaimTypes.UserName)?.Value;
+            var result = Claims?.Claims.First(_ => _.Type == MeetingsClaimTypes.UserName)?.Value;
             if (result == null)
             {
                 throw new BaseException("User name cannot be null", "User name is null",
@@ -63,11 +58,12 @@ public class CurrentUser : ICurrentUser
             return result;
         }
     }
+
     public string Email
     {
         get
         {
-            var result = Claims?.Claims.FirstOrDefault(_ => _.Type == MeetingsClaimTypes.Email)?.Value;
+            var result = Claims?.Claims.First(_ => _.Type == MeetingsClaimTypes.Email)?.Value;
             if (result == null)
             {
                 throw new BaseException("User mail cannot be null", "User mail is null",

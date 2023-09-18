@@ -6,6 +6,7 @@ public class Entity
 {
     public int Id { get; protected set; }
     public int Version { get; protected set; }
+
     private readonly List<IDomainEvent> _events = new();
     private bool _versionIncremented;
     public List<IDomainEvent> Events => _events;
