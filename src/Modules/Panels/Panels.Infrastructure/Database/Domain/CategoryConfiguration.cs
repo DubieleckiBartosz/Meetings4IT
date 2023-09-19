@@ -18,6 +18,14 @@ public class CategoryConfiguration : IEntityTypeConfiguration<MeetingCategory>
         builder
             .Property(category => category.Value)
             .HasColumnName("Value").IsRequired()
-            .IsRequired();
+        .IsRequired();
+
+        builder.HasData(
+            new MeetingCategory(1, "Party"),
+            new MeetingCategory(2, "Social"),
+            new MeetingCategory(3, "Business"),
+            new MeetingCategory(4, "SomeCoffee"),
+            new MeetingCategory(5, "Mentoring"),
+            new MeetingCategory(6, "Unknown"));
     }
 }

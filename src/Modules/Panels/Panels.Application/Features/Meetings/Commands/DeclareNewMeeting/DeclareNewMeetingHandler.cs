@@ -6,6 +6,7 @@ using Panels.Application.Contracts.Repositories;
 using Panels.Domain.DomainServices;
 using Panels.Domain.Meetings.Categories;
 using Panels.Domain.Meetings.ValueObjects;
+using System.Transactions;
 
 namespace Panels.Application.Features.Meetings.Commands.DeclareNewMeeting;
 

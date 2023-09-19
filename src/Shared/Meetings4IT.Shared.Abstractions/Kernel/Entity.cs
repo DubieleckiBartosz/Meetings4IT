@@ -4,7 +4,10 @@ namespace Meetings4IT.Shared.Abstractions.Kernel;
 
 public class Entity
 {
+    //https://medium.com/@quocnguyen2501/int-or-guid-for-your-primary-key-what-your-choice-927f40c9dc08
+    //https://www.reddit.com/r/dotnet/comments/ha4kyc/when_do_you_decide_whether_to_use_a_guid_or_an/
     public int Id { get; protected set; }
+
     public int Version { get; protected set; }
 
     private readonly List<IDomainEvent> _events = new();

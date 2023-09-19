@@ -49,12 +49,16 @@ namespace Panels.Infrastructure.Database.Migrations
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
+                    ExplicitMeetingId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     OrganizerId = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     OrganizerName = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     CategoryIndex = table.Column<int>(type: "int", nullable: false),
                     IsPublic = table.Column<bool>(type: "bit", nullable: false),
                     MaxInvitations = table.Column<int>(type: "int", nullable: true),
                     Description = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    City = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
+                    Street = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
+                    NumberStreet = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Cancellation_Reason = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     CancellationDate = table.Column<DateTime>(type: "datetime2", nullable: true),
                     StartDate = table.Column<DateTime>(type: "datetime2", nullable: false),
@@ -74,23 +78,25 @@ namespace Panels.Infrastructure.Database.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "Addresses",
+                name: "UpcomingMeetings",
                 schema: "panels",
                 columns: table => new
                 {
-                    MeetingId = table.Column<int>(type: "int", nullable: false),
-                    City = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
-                    Street = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
-                    NumberStreet = table.Column<string>(type: "nvarchar(max)", nullable: false)
+                    ScheduledMeetingId = table.Column<int>(type: "int", nullable: false),
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    MeetingId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    StartDate = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    EndDate = table.Column<DateTime>(type: "datetime2", nullable: true)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Addresses", x => x.MeetingId);
+                    table.PrimaryKey("PK_UpcomingMeetings", x => new { x.ScheduledMeetingId, x.Id });
                     table.ForeignKey(
-                        name: "FK_Addresses_Meetings_MeetingId",
-                        column: x => x.MeetingId,
+                        name: "FK_UpcomingMeetings_ScheduledMeetings_ScheduledMeetingId",
+                        column: x => x.ScheduledMeetingId,
                         principalSchema: "panels",
-                        principalTable: "Meetings",
+                        principalTable: "ScheduledMeetings",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
@@ -130,8 +136,7 @@ namespace Panels.Infrastructure.Database.Migrations
                     Created = table.Column<DateTime>(type: "datetime2", nullable: false),
                     DeletedAt = table.Column<DateTime>(type: "datetime2", nullable: true),
                     LastModified = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    MeetingId = table.Column<int>(type: "int", nullable: false),
-                    Version = table.Column<int>(type: "int", nullable: false)
+                    MeetingId = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -145,35 +150,18 @@ namespace Panels.Infrastructure.Database.Migrations
                         onDelete: ReferentialAction.Cascade);
                 });
 
-            migrationBuilder.CreateTable(
-                name: "UpcomingMeetings",
+            migrationBuilder.InsertData(
                 schema: "panels",
-                columns: table => new
+                table: "MeetingCategories",
+                columns: new[] { "Index", "Value" },
+                values: new object[,]
                 {
-                    ScheduledMeetingId = table.Column<int>(type: "int", nullable: false),
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    MeetingId = table.Column<int>(type: "int", nullable: false),
-                    StartDate = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    EndDate = table.Column<DateTime>(type: "datetime2", nullable: true)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_UpcomingMeetings", x => new { x.ScheduledMeetingId, x.Id });
-                    table.ForeignKey(
-                        name: "FK_UpcomingMeetings_Meetings_MeetingId",
-                        column: x => x.MeetingId,
-                        principalSchema: "panels",
-                        principalTable: "Meetings",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
-                        name: "FK_UpcomingMeetings_ScheduledMeetings_ScheduledMeetingId",
-                        column: x => x.ScheduledMeetingId,
-                        principalSchema: "panels",
-                        principalTable: "ScheduledMeetings",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                    { 1, "Party" },
+                    { 2, "Social" },
+                    { 3, "Business" },
+                    { 4, "SomeCoffee" },
+                    { 5, "Mentoring" },
+                    { 6, "Unknown" }
                 });
 
             migrationBuilder.CreateIndex(
@@ -195,19 +183,14 @@ namespace Panels.Infrastructure.Database.Migrations
                 column: "CategoryIndex");
 
             migrationBuilder.CreateIndex(
-                name: "IX_UpcomingMeetings_MeetingId",
+                name: "IX_Meetings_ExplicitMeetingId",
                 schema: "panels",
-                table: "UpcomingMeetings",
-                column: "MeetingId",
-                unique: true);
+                table: "Meetings",
+                column: "ExplicitMeetingId");
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
         {
-            migrationBuilder.DropTable(
-                name: "Addresses",
-                schema: "panels");
-
             migrationBuilder.DropTable(
                 name: "Images",
                 schema: "panels");

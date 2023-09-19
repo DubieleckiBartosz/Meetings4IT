@@ -28,12 +28,17 @@ internal class ScheduledMeetingConfiguration : IEntityTypeConfiguration<Schedule
             _.WithOwner().HasForeignKey("ScheduledMeetingId");
             _.ToTable("UpcomingMeetings", "panels");
 
-            _.HasOne<Meeting>().WithOne().HasForeignKey<UpcomingMeeting>(m => m.MeetingId);
-            _.Property(_ => _.MeetingId).HasColumnName("MeetingId").IsRequired();
+            _.Property(_ => _.MeetingId).HasColumnName("MeetingId")
+                .HasConversion(x => x.Value, v => new MeetingId(v))
+                .IsRequired();
+
             _.OwnsOne<DateRange>("MeetingDateRange", b =>
             {
                 b.Property(p => p.StartDate).HasColumnName("StartDate").IsRequired();
                 b.Property(p => p.EndDate).HasColumnName("EndDate").IsRequired(false);
+
+                b.Ignore(p => p.DurationInMinutes);
+                b.Ignore(p => p.DurationInHours);
             });
         });
 

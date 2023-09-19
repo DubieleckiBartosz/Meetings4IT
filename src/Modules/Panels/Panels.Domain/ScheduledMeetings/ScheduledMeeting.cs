@@ -32,7 +32,7 @@ public class ScheduledMeeting : Entity, IAggregateRoot
         IncrementVersion();
     }
 
-    public void RevokeMeeting(int meetingId)
+    public void RevokeMeeting(Guid meetingId)
     {
         var upcomingMeeting = _upcomingMeetings.SingleOrDefault(_ => _.MeetingId == meetingId);
         if (upcomingMeeting == null)

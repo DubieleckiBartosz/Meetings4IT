@@ -18,8 +18,12 @@ internal class MeetingConfiguration : WatcherConfiguration, IEntityTypeConfigura
         builder.ToTable("Meetings", "panels");
         builder.HasKey(_ => _.Id);
 
-        builder.Property(_ => _.Id)
-        .ValueGeneratedOnAdd();
+        builder.Property(x => x.ExplicitMeetingId)
+            .HasColumnName("ExplicitMeetingId")
+            .HasConversion(x => x.Value, v => new MeetingId(v))
+            .IsRequired();
+
+        builder.HasIndex("ExplicitMeetingId");
 
         builder.Ignore(x => x.Events);
 
@@ -42,6 +46,9 @@ internal class MeetingConfiguration : WatcherConfiguration, IEntityTypeConfigura
         {
             b.Property(p => p.StartDate).HasColumnName("StartDate").IsRequired();
             b.Property(p => p.EndDate).HasColumnName("EndDate").IsRequired(false);
+
+            b.Ignore(p => p.DurationInMinutes);
+            b.Ignore(p => p.DurationInHours);
         });
 
         builder.OwnsOne(_ => _.Cancellation, b =>
@@ -56,8 +63,11 @@ internal class MeetingConfiguration : WatcherConfiguration, IEntityTypeConfigura
 
         builder.OwnsOne(_ => _.Address, b =>
         {
-            b.WithOwner().HasForeignKey("MeetingId");
-            b.ToTable("Addresses", "panels");
+            //b.WithOwner().HasForeignKey("MeetingId");
+            //b.ToTable("Addresses", "panels");
+
+            //b.Property<int>("AddressId");
+            //b.HasKey("AddressId", "MeetingId");
 
             b.Property(p => p.City)
                 .HasMaxLength(50)
@@ -78,8 +88,8 @@ internal class MeetingConfiguration : WatcherConfiguration, IEntityTypeConfigura
         {
             _.WithOwner().HasForeignKey("MeetingId");
             _.ToTable("Invitations", "panels");
+
             _.HasKey(_ => _.Id);
-            _.Ignore(x => x.Events);
 
             _.Property(p => p.Email)
                 .HasColumnName("Email")
@@ -97,6 +107,9 @@ internal class MeetingConfiguration : WatcherConfiguration, IEntityTypeConfigura
                         .IsRequired();
 
             this.ConfigureWatcher(_);
+
+            _.Ignore(x => x.Events);
+            _.Ignore(x => x.Version);
         });
 
         builder.OwnsMany<MeetingImage>(Images, _ =>

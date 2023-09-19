@@ -2,9 +2,9 @@
 
 namespace Panels.Domain.ScheduledMeetings.Events;
 
-public record UpcomingMeetingRevoked(int MeetingRevoked, string ScheduleOwner) : IDomainEvent
+public record UpcomingMeetingRevoked(Guid MeetingRevoked, string ScheduleOwner) : IDomainEvent
 {
-    public static UpcomingMeetingRevoked Create(int meetingRevoked, string scheduleOwner)
+    public static UpcomingMeetingRevoked Create(Guid meetingRevoked, string scheduleOwner)
     {
         return new UpcomingMeetingRevoked(meetingRevoked, scheduleOwner);
     }

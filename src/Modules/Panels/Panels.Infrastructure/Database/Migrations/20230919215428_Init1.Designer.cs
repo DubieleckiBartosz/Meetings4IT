@@ -12,7 +12,7 @@ using Panels.Infrastructure.Database;
 namespace Panels.Infrastructure.Database.Migrations
 {
     [DbContext(typeof(PanelContext))]
-    [Migration("20230918214448_Init1")]
+    [Migration("20230919215428_Init1")]
     partial class Init1
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -41,6 +41,38 @@ namespace Panels.Infrastructure.Database.Migrations
                     b.HasKey("Index");
 
                     b.ToTable("MeetingCategories", "panels");
+
+                    b.HasData(
+                        new
+                        {
+                            Index = 1,
+                            Value = "Party"
+                        },
+                        new
+                        {
+                            Index = 2,
+                            Value = "Social"
+                        },
+                        new
+                        {
+                            Index = 3,
+                            Value = "Business"
+                        },
+                        new
+                        {
+                            Index = 4,
+                            Value = "SomeCoffee"
+                        },
+                        new
+                        {
+                            Index = 5,
+                            Value = "Mentoring"
+                        },
+                        new
+                        {
+                            Index = 6,
+                            Value = "Unknown"
+                        });
                 });
 
             modelBuilder.Entity("Panels.Domain.Meetings.Meeting", b =>
@@ -59,6 +91,10 @@ namespace Panels.Infrastructure.Database.Migrations
                         .HasColumnType("nvarchar(max)")
                         .HasColumnName("Description");
 
+                    b.Property<Guid>("ExplicitMeetingId")
+                        .HasColumnType("uniqueidentifier")
+                        .HasColumnName("ExplicitMeetingId");
+
                     b.Property<bool>("IsPublic")
                         .HasColumnType("bit")
                         .HasColumnName("IsPublic");
@@ -73,6 +109,8 @@ namespace Panels.Infrastructure.Database.Migrations
                     b.HasKey("Id");
 
                     b.HasIndex("CategoryIndex");
+
+                    b.HasIndex("ExplicitMeetingId");
 
                     b.ToTable("Meetings", "panels");
                 });
@@ -136,9 +174,6 @@ namespace Panels.Infrastructure.Database.Migrations
                             b1.Property<int>("Status")
                                 .HasColumnType("int")
                                 .HasColumnName("Status");
-
-                            b1.Property<int>("Version")
-                                .HasColumnType("int");
 
                             b1.HasKey("Id");
 
@@ -218,7 +253,7 @@ namespace Panels.Infrastructure.Database.Migrations
 
                             b1.HasKey("MeetingId");
 
-                            b1.ToTable("Addresses", "panels");
+                            b1.ToTable("Meetings", "panels");
 
                             b1.WithOwner()
                                 .HasForeignKey("MeetingId");
@@ -325,22 +360,13 @@ namespace Panels.Infrastructure.Database.Migrations
 
                             SqlServerPropertyBuilderExtensions.UseIdentityColumn(b1.Property<int>("Id"), 1L, 1);
 
-                            b1.Property<int>("MeetingId")
-                                .HasColumnType("int")
+                            b1.Property<Guid>("MeetingId")
+                                .HasColumnType("uniqueidentifier")
                                 .HasColumnName("MeetingId");
 
                             b1.HasKey("ScheduledMeetingId", "Id");
 
-                            b1.HasIndex("MeetingId")
-                                .IsUnique();
-
                             b1.ToTable("UpcomingMeetings", "panels");
-
-                            b1.HasOne("Panels.Domain.Meetings.Meeting", null)
-                                .WithOne()
-                                .HasForeignKey("Panels.Domain.ScheduledMeetings.ValueObjects.UpcomingMeeting", "MeetingId")
-                                .OnDelete(DeleteBehavior.Cascade)
-                                .IsRequired();
 
                             b1.WithOwner()
                                 .HasForeignKey("ScheduledMeetingId");

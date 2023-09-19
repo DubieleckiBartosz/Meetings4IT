@@ -1,14 +1,14 @@
 ﻿using Meetings4IT.Shared.Abstractions.Kernel;
 using Meetings4IT.Shared.Implementations.Dapper;
+using Meetings4IT.Shared.Implementations.EntityFramework.Extensions;
 using Meetings4IT.Shared.Implementations.Options;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
 using Panels.Application.Contracts.Repositories;
 using Panels.Domain.Meetings;
 using Panels.Infrastructure.Database;
-using Polly;
+using Panels.Infrastructure.Database.Domain;
 using Serilog;
-using static Dapper.SqlMapper;
 
 namespace Panels.Infrastructure.Repositories;
 
@@ -32,8 +32,16 @@ public class MeetingRepository : DapperContext, IMeetingRepository
         await _meetings.AddAsync(meeting, cancellationToken);
     }
 
-    public Task<Meeting> GetMeetingByIdAsync(int meetingId, CancellationToken cancellationToken = default)
+    public void UpdateMeetingAsync(Meeting meeting)
     {
-        throw new NotImplementedException();
+        _meetings.Update(meeting);
+    }
+
+    public async Task<Meeting?> GetMeetingWithInvitationsByIdAsync(int meetingId, CancellationToken cancellationToken = default)
+    {
+        return await _meetings
+            .IncludePaths(MeetingConfiguration.Invitations)
+            .Include(_ => _.Category)
+            .FirstOrDefaultAsync(_ => _.Id == meetingId);
     }
 }

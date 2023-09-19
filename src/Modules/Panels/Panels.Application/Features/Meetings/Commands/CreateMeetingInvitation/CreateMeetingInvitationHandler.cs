@@ -24,7 +24,7 @@ public class CreateMeetingInvitationHandler : ICommandHandler<CreateMeetingInvit
     {
         var organizerId = _currentUser.UserId;
         var meetingId = request.MeetingId;
-        var meeting = await _meetingRepository.GetMeetingByIdAsync(meetingId);
+        var meeting = await _meetingRepository.GetMeetingWithInvitationsByIdAsync(meetingId);
         if (meeting == null || meeting.Organizer.Identifier != organizerId)
         {
             throw new NotFoundException($"Meeting {meetingId} not found.");
@@ -33,8 +33,12 @@ public class CreateMeetingInvitationHandler : ICommandHandler<CreateMeetingInvit
         Date expiration = request.InvitationExpirationDate;
         Email recipient = request.InvitationRecipient!;
 
-        meeting.CreateNewInvitation(recipient, expiration);
+        var invitation = meeting.CreateNewInvitation(recipient, expiration);
 
-        return null;//Response<int>.Ok();
+        _meetingRepository.UpdateMeetingAsync(meeting);
+
+        await _meetingRepository.UnitOfWork.SaveAsync();
+
+        return Response<int>.Ok(invitation.Id);
     }
 }

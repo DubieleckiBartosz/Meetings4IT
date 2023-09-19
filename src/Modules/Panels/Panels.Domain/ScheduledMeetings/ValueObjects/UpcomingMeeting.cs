@@ -1,22 +1,23 @@
 ﻿using Meetings4IT.Shared.Abstractions.Kernel.ValueObjects;
+using Panels.Domain.Meetings;
 
 namespace Panels.Domain.ScheduledMeetings.ValueObjects;
 
 public class UpcomingMeeting : ValueObject
 {
-    public int MeetingId { get; }
+    public MeetingId MeetingId { get; }
     public DateRange MeetingDateRange { get; }
 
     private UpcomingMeeting()
     { }
 
-    private UpcomingMeeting(int meetingId, DateRange meetingDateRange)
+    private UpcomingMeeting(MeetingId meetingId, DateRange meetingDateRange)
     {
         MeetingId = meetingId;
         MeetingDateRange = meetingDateRange;
     }
 
-    public static UpcomingMeeting Create(int meetingId, DateRange meetingDateRange)
+    public static UpcomingMeeting Create(MeetingId meetingId, DateRange meetingDateRange)
     {
         return new UpcomingMeeting(meetingId, meetingDateRange);
     }

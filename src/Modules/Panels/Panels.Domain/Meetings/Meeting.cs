@@ -15,8 +15,15 @@ public class Meeting : Entity, IAggregateRoot
 {
     private readonly List<Invitation> _invitations;
     private readonly List<MeetingImage> _images;
-    public UserInfo Organizer { get; private set; }
-    public int CategoryIndex { get; set; }
+
+    /// <summary>
+    /// This property is responsible for upcoming meetings.
+    /// We don't have access to the int Id when creating a meeting
+    /// </summary>
+    public MeetingId ExplicitMeetingId { get; }
+
+    public UserInfo Organizer { get; }
+    public int CategoryIndex { get; private set; }
     public MeetingCategory Category { get; private set; }
 
     //Anyone can come if public property is true
@@ -54,18 +61,18 @@ public class Meeting : Entity, IAggregateRoot
     {
         Organizer = organizer;
         CategoryIndex = category.Index;
-        //Category = category;
         Description = description;
         Address = address;
         Date = date;
         IsPublic = isPublic;
         MaxInvitations = maxInvitations;
+        ExplicitMeetingId = MeetingId.Create();
         this._invitations = new();
         this._images = new();
 
         IncrementVersion();
 
-        this.AddEvent(MeetingCreated.Create(this.Id, organizer, date));
+        this.AddEvent(MeetingCreated.Create(this.ExplicitMeetingId, organizer, date));
     }
 
     public static Meeting Create(
@@ -126,7 +133,7 @@ public class Meeting : Entity, IAggregateRoot
         IncrementVersion();
     }
 
-    public void CreateNewInvitation(Email email, Date invitationExpirationDate)
+    public Invitation CreateNewInvitation(Email email, Date invitationExpirationDate)
     {
         this.CheckIfMeetingOperationIsPossible();
         this.CheckIfMeetingWasCanceled();
@@ -149,6 +156,8 @@ public class Meeting : Entity, IAggregateRoot
 
         this.AddEvent(NewInvitationCreated.Create(email, Organizer.Name));
         IncrementVersion();
+
+        return invitation;
     }
 
     public void AcceptInvitation(Email email)

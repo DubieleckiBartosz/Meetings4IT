@@ -2,7 +2,7 @@
 
 public class MeetingOverlapException : Meetings4IT.Shared.Abstractions.Exceptions.BaseException
 {
-    public MeetingOverlapException(int scheduledMeetingId) : base($"Meeting overlap with meeting {scheduledMeetingId}")
+    public MeetingOverlapException(Guid scheduledMeetingId) : base($"Meeting overlap with meeting {scheduledMeetingId}")
     {
     }
 }
