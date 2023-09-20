@@ -5,14 +5,21 @@ namespace Notifications.Core.Infrastructure.Database.ObjectConfigurations.Extens
 
 public static class DateConfiguration
 {
-    public static EntityTypeBuilder<TEntity> ConfigureDefaultDateProperties<TEntity>(this EntityTypeBuilder<TEntity> builder) where TEntity : class
+    public static EntityTypeBuilder<TEntity> ConfigureDefaultDateProperties<TEntity>(
+        this EntityTypeBuilder<TEntity> builder, bool created = true, bool modified = true) where TEntity : class
     {
-        builder.Property<DateTime>("Created")
-            .HasDefaultValueSql("GETUTCDATE()");
+        if (created)
+        {
+            builder.Property<DateTime>("Created")
+                .HasDefaultValueSql("GETUTCDATE()");
+        }
 
-        builder.Property<DateTime>("Modified")
-            .HasDefaultValueSql("GETUTCDATE()")
-            .ValueGeneratedOnAddOrUpdate();
+        if (modified)
+        {
+            builder.Property<DateTime>("Modified")
+                .HasDefaultValueSql("GETUTCDATE()")
+                .ValueGeneratedOnAddOrUpdate();
+        }
 
         return builder;
     }

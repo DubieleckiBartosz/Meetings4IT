@@ -2,6 +2,4 @@
 
 namespace Panels.Application.IntegrationEvents.Events;
 
-public record InvitationCreatedIntegrationEvent : IntegrationEvent
-{
-}
+public record InvitationCreatedIntegrationEvent(string Recipient, string? RecipientId, string MeetingOrganizer, string Meeting, string Code) : IntegrationEvent;

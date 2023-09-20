@@ -1,4 +1,5 @@
-﻿using Meetings4IT.Shared.Abstractions.Kernel.ValueObjects;
+﻿using Meetings4IT.Shared.Abstractions.Exceptions;
+using Meetings4IT.Shared.Abstractions.Kernel.ValueObjects;
 using Meetings4IT.Shared.Implementations.Mediator;
 using Meetings4IT.Shared.Implementations.Services;
 using Meetings4IT.Shared.Implementations.Wrappers;
@@ -6,7 +7,6 @@ using Panels.Application.Contracts.Repositories;
 using Panels.Domain.DomainServices;
 using Panels.Domain.Meetings.Categories;
 using Panels.Domain.Meetings.ValueObjects;
-using System.Transactions;
 
 namespace Panels.Application.Features.Meetings.Commands.DeclareNewMeeting;
 
@@ -39,7 +39,10 @@ public class DeclareNewMeetingHandler : ICommandHandler<DeclareNewMeetingCommand
 
         var scheduledMeeting = await _scheduledMeetingRepository.GetScheduledMeetingAsync(organizerId, cancellationToken);
         var category = await _meetingCategoryRepository.GetMeetingCategoryByIndexAsync(request.IndexCategory, cancellationToken);
-        //Exception category
+        if (string.IsNullOrEmpty(category))
+        {
+            throw new NotFoundException("Category not found.", $"Category with {request.IndexCategory} index not found.");
+        }
 
         Address address = Address.Create(request.City, request.Street, request.NumberStreet);
         Description description = request.Description;

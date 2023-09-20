@@ -1,10 +1,13 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using Notifications.Core.Domain.Alerts;
 using Notifications.Core.Domain.Templates;
 
 namespace Notifications.Core.Infrastructure.Database;
 
 public class NotificationContext : DbContext
 {
+    public DbSet<Alert> Alerts { get; set; }
+    public DbSet<AlertDetails> AlertDetails { get; set; }
     public DbSet<Template> Templates { get; set; }
 
     public NotificationContext(DbContextOptions<NotificationContext> options) : base(options)
@@ -18,24 +21,4 @@ public class NotificationContext : DbContext
 
         base.OnModelCreating(modelBuilder);
     }
-
-    //public async Task<int> SaveChangesAsync()
-    //{
-    //    var modifiedEntities = ChangeTracker.Entries()
-    //     .Where(e => e.State == EntityState.Added || e.State == EntityState.Modified);
-
-    //    var currentTime = Clock.CurrentDate();
-
-    //    foreach (var entry in modifiedEntities)
-    //    {
-    //        if (entry.State == EntityState.Added)
-    //        {
-    //            entry.Property("Created").CurrentValue = currentTime;
-    //        }
-
-    //        entry.Property("Modified").CurrentValue = currentTime;
-    //    }
-
-    //    return await base.SaveChangesAsync();
-    //}
 }

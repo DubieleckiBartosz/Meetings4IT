@@ -15,9 +15,9 @@ public class TemplateRepository : ITemplateRepository
         _context = context;
     }
 
-    public async Task<Template?> TemplateByTypeAsync(TemplateType type)
+    public async Task<Template?> TemplateByTypeAsync(TemplateType type, CancellationToken cancellationToken = default)
     {
-        var result = await _context.Templates.FirstOrDefaultAsync(_ => _.Type == type);
+        var result = await _context.Templates.FirstOrDefaultAsync(_ => _.Type == type, cancellationToken);
         return result;
     }
 }

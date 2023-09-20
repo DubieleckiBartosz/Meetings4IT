@@ -1,10 +1,8 @@
 ﻿using MediatR;
 using Meetings4IT.Shared.Abstractions.Events;
-using Meetings4IT.Shared.Abstractions.Kernel;
 using Meetings4IT.Shared.Implementations.Behaviors;
 using Meetings4IT.Shared.Implementations.Dapper;
 using Meetings4IT.Shared.Implementations.Decorators;
-using Meetings4IT.Shared.Implementations.EntityFramework;
 using Meetings4IT.Shared.Implementations.EventBus;
 using Meetings4IT.Shared.Implementations.EventBus.Channel;
 using Meetings4IT.Shared.Implementations.EventBus.Dispatchers;
@@ -12,6 +10,7 @@ using Meetings4IT.Shared.Implementations.EventBus.InMemoryMessaging;
 using Meetings4IT.Shared.Implementations.EventBus.IntegrationEventLog.DAL;
 using Meetings4IT.Shared.Implementations.EventBus.IntegrationEventLog.DAL.Repositories;
 using Meetings4IT.Shared.Implementations.EventBus.IntegrationEventLog.Services;
+using Meetings4IT.Shared.Implementations.EventBus.IntegrationEventProcess;
 using Meetings4IT.Shared.Implementations.Mediator;
 using Meetings4IT.Shared.Implementations.Options;
 using Meetings4IT.Shared.Implementations.Reference;
@@ -74,6 +73,9 @@ public static class Configurations
             .AddScoped<IntegrationEventLogContext>()
             .AddTransient<IIntegrationEventLogRepository, IntegrationEventLogRepository>()
             .AddTransient<IIntegrationEventLogService, IntegrationEventLogService>();
+
+        //Integration service
+        services.AddScoped<IIntegrationService, IntegrationService>();
 
         return builder;
     }

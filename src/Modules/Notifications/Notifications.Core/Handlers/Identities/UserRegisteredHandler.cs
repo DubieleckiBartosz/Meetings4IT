@@ -7,7 +7,7 @@ using Notifications.Core.Handlers.Identities.Commands;
 using Notifications.Core.Interfaces.Clients;
 using Notifications.Core.Interfaces.Repositories;
 using Notifications.Core.Models.Clients.EmailModels;
-using Notifications.Core.Tools;
+using Notifications.Core.Tools.Creators;
 using Serilog;
 
 namespace Notifications.Core.Handlers.Identities;
@@ -28,14 +28,14 @@ public class UserRegisteredHandler : ICommandHandler<UserRegisteredCommand, Unit
     public async Task<Unit> Handle(UserRegisteredCommand request, CancellationToken cancellationToken)
     {
         var templateType = TemplateType.Registration;
-        var template = await _templateRepository.TemplateByTypeAsync(templateType);
+        var template = await _templateRepository.TemplateByTypeAsync(templateType, cancellationToken);
         if (template == null)
         {
             throw new NotFoundException($"Template {templateType} not found.");
         }
 
         var dictData = TemplateCreator.TemplateRegisterAccount(request.UserName, request.VerificationUri);
-        var emailMessageBody = template.Body.ReplaceTemplateData(dictData);
+        var emailMessageBody = template.Body.ReplaceData(dictData);
         var emailMessage = new EmailDetails(new List<string> { request.Email }, Subjects.WelcomeNewUser, emailMessageBody);
 
         _logger.Warning($"Sending registration user mail to {request.Email}...");

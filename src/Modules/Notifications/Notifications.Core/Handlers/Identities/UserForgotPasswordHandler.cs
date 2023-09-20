@@ -7,7 +7,7 @@ using Notifications.Core.Handlers.Identities.Commands;
 using Notifications.Core.Interfaces.Clients;
 using Notifications.Core.Interfaces.Repositories;
 using Notifications.Core.Models.Clients.EmailModels;
-using Notifications.Core.Tools;
+using Notifications.Core.Tools.Creators;
 using Serilog;
 
 namespace Notifications.Core.Handlers.Identities;
@@ -28,14 +28,14 @@ public class UserForgotPasswordHandler : ICommandHandler<UserForgotPasswordComma
     public async Task<Unit> Handle(UserForgotPasswordCommand request, CancellationToken cancellationToken)
     {
         var templateType = TemplateType.ForgotPassword;
-        var template = await _templateRepository.TemplateByTypeAsync(templateType);
+        var template = await _templateRepository.TemplateByTypeAsync(templateType, cancellationToken);
         if (template == null)
         {
             throw new NotFoundException($"Template {templateType} not found.");
         }
 
         var dictData = TemplateCreator.TemplateResetPassword(request.Token, request.Link);
-        var emailMessageBody = template.Body.ReplaceTemplateData(dictData);
+        var emailMessageBody = template.Body.ReplaceData(dictData);
         var emailMessage = new EmailDetails(new List<string> { request.Email }, Subjects.NewPassword, emailMessageBody);
 
         _logger.Warning($"Sending password reset mail to {request.Email}...");

@@ -1,7 +1,8 @@
-﻿namespace Notifications.Core.Tools;
+﻿namespace Notifications.Core.Tools.Creators;
 
 public class TemplateCreator
 {
+    //IDENTITY
     public static Dictionary<string, string> TemplateRegisterAccount(string userName, string code)
     {
         var dictData = new Dictionary<string, string>
@@ -19,6 +20,19 @@ public class TemplateCreator
             {"ResetToken", resetToken},
             {"Path", path}
         };
+        return dictData;
+    }
+
+    //PANELS
+    public static Dictionary<string, string> TemplateInvitation(string meetingOrganizer, string meetingId, string code)
+    {
+        var dictData = new Dictionary<string, string>
+        {
+            {"MeetingOrganizer", meetingOrganizer},
+            {"MeetingId", meetingId},
+            {"Code", code}
+        };
+
         return dictData;
     }
 }

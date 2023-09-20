@@ -1,16 +1,25 @@
-﻿using Meetings4IT.Shared.Implementations.EventBus;
-using Meetings4IT.Shared.Implementations.EventBus.IntegrationEventLog.Services;
+﻿using Meetings4IT.Shared.Implementations.EventBus.IntegrationEventProcess;
+using Meetings4IT.Shared.Implementations.Modules;
 
 namespace Panels.Application.IntegrationEvents;
 
 public class PanelIntegrationEventService : IPanelIntegrationEventService
 {
-    private readonly IEventBus _eventBus;
-    private readonly IIntegrationEventLogService _integrationEventLogService;
+    private readonly IIntegrationService _integrationService;
 
-    public PanelIntegrationEventService(IEventBus eventBus, IIntegrationEventLogService integrationEventLogService)
+    public PanelIntegrationEventService(IIntegrationService integrationService)
     {
-        _eventBus = eventBus ?? throw new ArgumentNullException(nameof(eventBus));
-        _integrationEventLogService = integrationEventLogService ?? throw new ArgumentNullException(nameof(integrationEventLogService));
+        _integrationService = integrationService;
+    }
+
+    public async Task PublishThroughEventBusAsync(IntegrationEvent evt, CancellationToken cancellationToken = default)
+    {
+        await _integrationService.PublishThroughEventBusAsync(evt, cancellationToken);
+    }
+
+    public async Task SaveEventAndPublishAsync(IntegrationEvent evt, CancellationToken cancellationToken = default)
+    {
+        var module = typeof(PanelAssemblyReference).ReadModuleName();
+        await _integrationService.SaveEventAndPublishAsync(evt, module, cancellationToken);
     }
 }

@@ -4,4 +4,5 @@ public enum TemplateType
 {
     Registration = 1,
     ForgotPassword = 2,
+    Invitation = 3
 }

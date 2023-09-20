@@ -1,8 +1,8 @@
-﻿namespace Notifications.Core.Tools;
+﻿namespace Notifications.Core.Tools.Creators;
 
-public static class TemplateTools
+public static class Exchanger
 {
-    public static string ReplaceTemplateData(this string template, Dictionary<string, string> dictData)
+    public static string ReplaceData(this string template, Dictionary<string, string> dictData)
     {
         if (template == null)
         {

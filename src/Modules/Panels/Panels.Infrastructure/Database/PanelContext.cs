@@ -3,11 +3,11 @@ using Meetings4IT.Shared.Abstractions.Kernel;
 using Meetings4IT.Shared.Abstractions.Time;
 using Meetings4IT.Shared.Implementations.EntityFramework.Extensions;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Logging;
 using Panels.Domain.Meetings;
 using Panels.Domain.Meetings.Categories;
 using Panels.Domain.Meetings.Entities;
 using Panels.Domain.ScheduledMeetings;
+using Panels.Domain.Users;
 
 namespace Panels.Infrastructure.Database;
 
@@ -15,6 +15,7 @@ public class PanelContext : DbContext, IUnitOfWork
 {
     private readonly IDomainDecorator _decorator;
     public DbSet<Meeting> Meetings { get; set; }
+    public DbSet<User> Users { get; set; }
     public DbSet<MeetingCategory> MeetingCategories { get; set; }
     public DbSet<ScheduledMeeting> ScheduledMeetings { get; set; }
 

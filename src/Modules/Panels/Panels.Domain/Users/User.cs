@@ -1,4 +1,5 @@
 ﻿using Meetings4IT.Shared.Abstractions.Kernel;
+using Meetings4IT.Shared.Abstractions.Kernel.ValueObjects;
 using Panels.Domain.Users.Exceptions;
 using Panels.Domain.Users.ValueObjects;
 
@@ -10,10 +11,14 @@ public class User : Entity, IAggregateRoot
     public List<Technology> TechStack => _stack.ToList();
     public UserImage Image { get; private set; }
     public string Identifier { get; }
+    public string Name { get; private set; }
+    public Email Email { get; private set; }
 
-    public User(string identifier, UserImage image, List<Technology>? stack)
+    private User(string identifier, UserImage image, string name, Email email, List<Technology>? stack)
     {
         Identifier = identifier ?? throw new ArgumentNullException("User identifier cannot be null.");
+        Name = name ?? throw new ArgumentNullException("Name cannot be null.");
+        Email = email ?? throw new ArgumentNullException("Email cannot be null.");
         Image = image;
         if (stack != null && stack.Any())
         {
@@ -24,6 +29,18 @@ public class User : Entity, IAggregateRoot
         }
 
         this.IncrementVersion();
+        Name = name;
+        Email = email;
+    }
+
+    public static User Create(
+        string identifier,
+        UserImage image,
+        string name,
+        Email email,
+        List<Technology>? stack)
+    {
+        return new User(identifier, image, name, email, stack);
     }
 
     public void AddNewTechnology(Technology technology)

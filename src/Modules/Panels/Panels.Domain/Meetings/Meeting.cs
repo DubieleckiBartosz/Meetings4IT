@@ -166,7 +166,7 @@ public class Meeting : Entity, IAggregateRoot
         var invitation = new Invitation(email, invitationExpirationDate, code);
         _invitations.Add(invitation);
 
-        this.AddEvent(NewInvitationCreated.Create(email, Organizer.Name, ExplicitMeetingId));
+        this.AddEvent(NewInvitationCreated.Create(email, Organizer.Name, ExplicitMeetingId, code));
         IncrementVersion();
 
         return invitation;

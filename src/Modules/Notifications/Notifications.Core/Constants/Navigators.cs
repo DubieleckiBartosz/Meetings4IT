@@ -4,4 +4,5 @@ public class Navigators
 {
     public const string UserRegisteredNavigator = "UserRegisteredIntegrationEvent";
     public const string UserForgotPasswordNavigator = "UserForgotPasswordIntegrationEvent";
+    public const string InvitationCreatedNavigator = "InvitationCreatedIntegrationEvent";
 }
