@@ -1,13 +1,16 @@
 ﻿using Meetings4IT.Shared.Abstractions.Kernel;
 using Meetings4IT.Shared.Abstractions.Kernel.ValueObjects;
 using Meetings4IT.Shared.Abstractions.Time;
+using Panels.Domain.Generators;
 using Panels.Domain.Meetings.Exceptions.InvitationExceptions;
 using Panels.Domain.Meetings.Statuses;
+using Panels.Domain.Meetings.ValueObjects;
 
 namespace Panels.Domain.Meetings.Entities;
 
 public class Invitation : Entity
-{   //Unique code for invitation
+{
+    public InvitationCode Code { get; }
     public Email Email { get; }
     public InvitationStatus Status { get; private set; }
     public Date ExpirationDate { get; private set; }
@@ -16,9 +19,10 @@ public class Invitation : Entity
     private Invitation()
     { }
 
-    internal Invitation(Email email, Date expirationDate)
+    internal Invitation(Email email, Date expirationDate, InvitationCode code)
     {
         Email = email;
+        Code = code;
         ExpirationDate = expirationDate;
         Status = InvitationStatus.Pending;
     }

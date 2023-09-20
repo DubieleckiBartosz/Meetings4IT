@@ -11,6 +11,7 @@ namespace Panels.Infrastructure.Database.Domain;
 internal class MeetingConfiguration : WatcherConfiguration, IEntityTypeConfiguration<Meeting>
 {
     internal const string Invitations = "_invitations";
+
     internal const string Images = "_images";
 
     public void Configure(EntityTypeBuilder<Meeting> builder)
@@ -19,9 +20,9 @@ internal class MeetingConfiguration : WatcherConfiguration, IEntityTypeConfigura
         builder.HasKey(_ => _.Id);
 
         builder.Property(x => x.ExplicitMeetingId)
-            .HasColumnName("ExplicitMeetingId")
-            .HasConversion(x => x.Value, v => new MeetingId(v))
-            .IsRequired();
+          .HasColumnName("ExplicitMeetingId")
+          .HasConversion(x => x.Value, v => new MeetingId(v))
+          .IsRequired();
 
         builder.HasIndex("ExplicitMeetingId");
 
@@ -31,8 +32,8 @@ internal class MeetingConfiguration : WatcherConfiguration, IEntityTypeConfigura
         builder.Property(_ => _.MaxInvitations).HasColumnName("MaxInvitations").IsRequired(false);
 
         builder.Property(_ => _.Description)
-            .HasColumnName("Description")
-            .HasConversion(x => x.Value, x => new Description(x)).IsRequired();
+          .HasColumnName("Description")
+          .HasConversion(x => x.Value, x => new Description(x)).IsRequired();
 
         builder.HasOne(_ => _.Category).WithMany().HasForeignKey(x => x.CategoryIndex);
 
@@ -54,9 +55,9 @@ internal class MeetingConfiguration : WatcherConfiguration, IEntityTypeConfigura
         builder.OwnsOne(_ => _.Cancellation, b =>
         {
             b.Property(p => p.CancellationDate)
-                        .HasColumnName("CancellationDate")
-                        .HasConversion(x => x.Value, x => new Date(x))
-                        .IsRequired();
+              .HasColumnName("CancellationDate")
+              .HasConversion(x => x.Value, x => new Date(x))
+              .IsRequired();
 
             b.Property(_ => _.Reason).IsRequired(false);
         });
@@ -70,18 +71,18 @@ internal class MeetingConfiguration : WatcherConfiguration, IEntityTypeConfigura
             //b.HasKey("AddressId", "MeetingId");
 
             b.Property(p => p.City)
-                .HasMaxLength(50)
-                .HasColumnName("City")
-                .IsRequired();
+              .HasMaxLength(50)
+              .HasColumnName("City")
+              .IsRequired();
 
             b.Property(p => p.Street)
-                .HasMaxLength(50)
-                .HasColumnName("Street")
-                .IsRequired();
+              .HasMaxLength(50)
+              .HasColumnName("Street")
+              .IsRequired();
 
             b.Property(p => p.NumberStreet)
-                .HasColumnName("NumberStreet")
-                .IsRequired();
+              .HasColumnName("NumberStreet")
+              .IsRequired();
         });
 
         builder.OwnsMany<Invitation>(Invitations, _ =>
@@ -92,19 +93,24 @@ internal class MeetingConfiguration : WatcherConfiguration, IEntityTypeConfigura
             _.HasKey(_ => _.Id);
 
             _.Property(p => p.Email)
-                .HasColumnName("Email")
-                .HasConversion(x => x.Value, x => new Email(x))
-            .IsRequired();
+              .HasColumnName("Email")
+              .HasConversion(x => x.Value, x => new Email(x))
+              .IsRequired();
 
             _.Property(p => p.Status)
-                .HasColumnName("Status")
-                .HasConversion<InvitationStatusConverter>()
-            .IsRequired();
+              .HasColumnName("Status")
+              .HasConversion<InvitationStatusConverter>()
+              .IsRequired();
+
+            _.Property(p => p.Code)
+              .HasColumnName("Code")
+              .HasConversion(x => x.Value, x => InvitationCode.Create(x))
+              .IsRequired();
 
             _.Property(p => p.ExpirationDate)
-                        .HasColumnName("ExpirationDate")
-                        .HasConversion(x => x.Value, x => new Date(x))
-                        .IsRequired();
+              .HasColumnName("ExpirationDate")
+              .HasConversion(x => x.Value, x => new Date(x))
+              .IsRequired();
 
             this.ConfigureWatcher(_);
 

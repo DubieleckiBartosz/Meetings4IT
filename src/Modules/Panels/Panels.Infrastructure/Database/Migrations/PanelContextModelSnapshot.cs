@@ -145,6 +145,11 @@ namespace Panels.Infrastructure.Database.Migrations
 
                             SqlServerPropertyBuilderExtensions.UseIdentityColumn(b1.Property<int>("Id"), 1L, 1);
 
+                            b1.Property<string>("Code")
+                                .IsRequired()
+                                .HasColumnType("nvarchar(max)")
+                                .HasColumnName("Code");
+
                             b1.Property<DateTime>("Created")
                                 .HasColumnType("datetime2")
                                 .HasColumnName("Created");

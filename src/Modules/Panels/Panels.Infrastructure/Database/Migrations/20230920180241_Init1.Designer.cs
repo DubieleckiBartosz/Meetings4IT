@@ -12,7 +12,7 @@ using Panels.Infrastructure.Database;
 namespace Panels.Infrastructure.Database.Migrations
 {
     [DbContext(typeof(PanelContext))]
-    [Migration("20230919215428_Init1")]
+    [Migration("20230920180241_Init1")]
     partial class Init1
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -146,6 +146,11 @@ namespace Panels.Infrastructure.Database.Migrations
                                 .HasColumnType("int");
 
                             SqlServerPropertyBuilderExtensions.UseIdentityColumn(b1.Property<int>("Id"), 1L, 1);
+
+                            b1.Property<string>("Code")
+                                .IsRequired()
+                                .HasColumnType("nvarchar(max)")
+                                .HasColumnName("Code");
 
                             b1.Property<DateTime>("Created")
                                 .HasColumnType("datetime2")

@@ -1,6 +1,7 @@
 ﻿using Meetings4IT.Shared.Abstractions.Kernel;
 using Meetings4IT.Shared.Abstractions.Kernel.ValueObjects;
 using Meetings4IT.Shared.Abstractions.Time;
+using Panels.Domain.Generators;
 using Panels.Domain.Meetings.Categories;
 using Panels.Domain.Meetings.Entities;
 using Panels.Domain.Meetings.Events;
@@ -151,7 +152,18 @@ public class Meeting : Entity, IAggregateRoot
             throw new InvitationAlreadyExistsException(email);
         }
 
-        var invitation = new Invitation(email, invitationExpirationDate);
+        var code = string.Empty;
+        while (code == string.Empty)
+        {
+            var newCode = InvitationCode.Create(InvitationCodeGenerator.GenerateCode(this.Id));
+            var codeExists = _invitations.FirstOrDefault(_ => _.Code == newCode);
+            if (codeExists == null)
+            {
+                code = newCode;
+            }
+        }
+
+        var invitation = new Invitation(email, invitationExpirationDate, code);
         _invitations.Add(invitation);
 
         this.AddEvent(NewInvitationCreated.Create(email, Organizer.Name, ExplicitMeetingId));
