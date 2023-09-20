@@ -7,7 +7,7 @@ using Panels.Domain.Meetings.Statuses;
 namespace Panels.Domain.Meetings.Entities;
 
 public class Invitation : Entity
-{
+{   //Unique code for invitation
     public Email Email { get; }
     public InvitationStatus Status { get; private set; }
     public Date ExpirationDate { get; private set; }

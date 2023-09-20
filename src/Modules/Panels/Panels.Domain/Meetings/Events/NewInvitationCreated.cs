@@ -3,10 +3,10 @@ using Meetings4IT.Shared.Abstractions.Kernel.ValueObjects;
 
 namespace Panels.Domain.Meetings.Events;
 
-public record NewInvitationCreated(string RecipientInvitation, string MeetingOrganizer) : IDomainEvent
+public record NewInvitationCreated(string RecipientInvitation, string MeetingOrganizer, MeetingId MeetingId) : IDomainEvent
 {
-    public static NewInvitationCreated Create(Email recipientInvitation, string meetingOrganizer)
+    public static NewInvitationCreated Create(Email recipientInvitation, string meetingOrganizer, MeetingId meetingId)
     {
-        return new NewInvitationCreated(recipientInvitation, meetingOrganizer);
+        return new NewInvitationCreated(recipientInvitation, meetingOrganizer, meetingId);
     }
 }
