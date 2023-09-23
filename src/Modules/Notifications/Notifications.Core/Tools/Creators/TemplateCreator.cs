@@ -35,4 +35,15 @@ public class TemplateCreator
 
         return dictData;
     }
+
+    public static Dictionary<string, string> TemplateMeetingCancelation(string meetingOrganizer, string meetingLink)
+    {
+        var dictData = new Dictionary<string, string>
+        {
+            {"MeetingOrganizer", meetingOrganizer},
+            {"MeetingLink", meetingLink},
+        };
+
+        return dictData;
+    }
 }

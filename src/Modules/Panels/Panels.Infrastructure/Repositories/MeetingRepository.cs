@@ -32,7 +32,7 @@ public class MeetingRepository : DapperContext, IMeetingRepository
         await _meetings.AddAsync(meeting, cancellationToken);
     }
 
-    public void UpdateMeetingAsync(Meeting meeting)
+    public void UpdateMeeting(Meeting meeting)
     {
         _meetings.Update(meeting);
     }

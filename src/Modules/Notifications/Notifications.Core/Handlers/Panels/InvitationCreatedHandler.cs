@@ -47,7 +47,7 @@ public class InvitationCreatedHandler : ICommandHandler<InvitationCreatedCommand
 
         var dictData = TemplateCreator.TemplateInvitation(organizer, meetingLink, invitationLink);
         var emailMessageBody = template.Body.ReplaceData(dictData);
-        var emailMessage = new EmailDetails(new List<string> { recipient }, Subjects.NewPassword, emailMessageBody);
+        var emailMessage = new EmailDetails(new List<string> { recipient }, Subjects.NewInvitation, emailMessageBody);
 
         _logger.Warning($"Sending mail with invitation to {recipient}...");
 
@@ -60,16 +60,16 @@ public class InvitationCreatedHandler : ICommandHandler<InvitationCreatedCommand
             return Unit.Value;
         }
 
-        var alertMessage = await _alertRepository.GetAlertDetailsByTypeAsync(AlertType.Invitation, cancellationToken);
+        var alertMessage = await _alertRepository.GetAlertDetailsByTypeAsync(AlertType.NewInvitation, cancellationToken);
         if (alertMessage == null)
         {
-            throw new NotFoundException($"Alert {AlertType.Invitation} message not found.");
+            throw new NotFoundException($"Alert {AlertType.NewInvitation} message not found.");
         }
 
-        var dictAlertData = AlertMessageCreator.InvitationAlertMessage(organizer, meetingLink, invitationLink);
+        var dictAlertData = AlertMessageCreator.NewInvitationAlertMessage(organizer, meetingLink, invitationLink);
 
         var message = alertMessage.MessageTemplate.ReplaceData(dictAlertData);
-        var newAlert = Alert.CreateAlert(AlertType.Invitation, message, recipientId);
+        var newAlert = Alert.CreateAlert(AlertType.NewInvitation, message, recipientId);
 
         await _alertRepository.AddAlertAsync(newAlert, cancellationToken);
 

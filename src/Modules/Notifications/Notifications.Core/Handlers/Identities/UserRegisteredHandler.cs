@@ -36,7 +36,7 @@ public class UserRegisteredHandler : ICommandHandler<UserRegisteredCommand, Unit
 
         var dictData = TemplateCreator.TemplateRegisterAccount(request.UserName, request.VerificationUri);
         var emailMessageBody = template.Body.ReplaceData(dictData);
-        var emailMessage = new EmailDetails(new List<string> { request.Email }, Subjects.WelcomeNewUser, emailMessageBody);
+        var emailMessage = new EmailDetails(new List<string> { request.Email }, Subjects.ApplicationUserConfirmation, emailMessageBody);
 
         _logger.Warning($"Sending registration user mail to {request.Email}...");
 

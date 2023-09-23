@@ -6,7 +6,8 @@ public class CreateMeetingInvitationParameters
 {
     public int MeetingId { get; init; }
     public DateTime InvitationExpirationDate { get; init; }
-    public string InvitationRecipient { get; init; }
+    public string? EmailInvitationRecipient { get; init; }
+    public string NameInvitationRecipient { get; init; }
 
     public CreateMeetingInvitationParameters()
     {
@@ -15,11 +16,13 @@ public class CreateMeetingInvitationParameters
     [JsonConstructor]
     public CreateMeetingInvitationParameters(
         DateTime invitationExpirationDate,
-        string invitationRecipient,
-        int meetingId)
+        string? emailInvitationRecipient,
+        int meetingId,
+        string nameInvitationRecipient)
     {
         InvitationExpirationDate = invitationExpirationDate;
-        InvitationRecipient = invitationRecipient;
+        EmailInvitationRecipient = emailInvitationRecipient;
         MeetingId = meetingId;
+        NameInvitationRecipient = nameInvitationRecipient;
     }
 }

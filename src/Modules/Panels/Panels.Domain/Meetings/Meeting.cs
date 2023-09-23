@@ -128,13 +128,13 @@ public class Meeting : Entity, IAggregateRoot
             invitation.Cancel();
         }
 
-        var invitationRecipients = invitations.Select(_ => _.Email.Value).ToList();
+        var invitationRecipients = invitations?.Select(_ => _.Email.Value).ToList();
 
-        this.AddEvent(MeetingCanceled.Create(Id, invitationRecipients));
+        this.AddEvent(MeetingCanceled.Create(ExplicitMeetingId.ToString(), Organizer.Name, invitationRecipients));
         IncrementVersion();
     }
 
-    public Invitation CreateNewInvitation(Email email, Date invitationExpirationDate)
+    public Invitation CreateNewInvitation(Email email, Date invitationExpirationDate, NameInvitationRecipient recipientName)
     {
         this.CheckIfMeetingOperationIsPossible();
         this.CheckIfMeetingWasCanceled();
@@ -163,7 +163,7 @@ public class Meeting : Entity, IAggregateRoot
             }
         }
 
-        var invitation = new Invitation(email, invitationExpirationDate, code);
+        var invitation = new Invitation(email, invitationExpirationDate, code, recipientName);
         _invitations.Add(invitation);
 
         this.AddEvent(NewInvitationCreated.Create(email, Organizer.Name, ExplicitMeetingId, code));
@@ -172,27 +172,28 @@ public class Meeting : Entity, IAggregateRoot
         return invitation;
     }
 
-    public void AcceptInvitation(Email email)
+    public void AcceptInvitation(InvitationCode code)
     {
         this.CheckIfMeetingOperationIsPossible();
         this.CheckIfMeetingWasCanceled();
 
-        var invitation = FindInvitation(email);
+        var invitation = FindInvitationByCode(code);
 
         invitation.Accept();
 
-        this.AddEvent(InvitationAccepted.Create(Id, Organizer.Identifier, email));
+        this.AddEvent(InvitationAccepted.Create(ExplicitMeetingId.ToString(), Organizer.Identifier, invitation.RecipientName));
         IncrementVersion();
     }
 
-    public void RejectInvitation(Email email)
+    public void RejectInvitation(InvitationCode code)
     {
         this.CheckIfMeetingOperationIsPossible();
+        this.CheckIfMeetingWasCanceled();
 
-        var invitation = FindInvitation(email);
+        var invitation = FindInvitationByCode(code);
         invitation.Reject();
 
-        this.AddEvent(InvitationRejected.Create(Organizer.Identifier));
+        this.AddEvent(InvitationRejected.Create(ExplicitMeetingId.ToString(), Organizer.Identifier, invitation.RecipientName));
         IncrementVersion();
     }
 
@@ -200,7 +201,7 @@ public class Meeting : Entity, IAggregateRoot
     {
         this.CheckIfMeetingOperationIsPossible();
 
-        var invitation = FindInvitation(email);
+        var invitation = FindInvitationByEmail(email);
         invitation.Expire();
 
         this.AddEvent(InvitationExpired.Create(email, Organizer.Name));
@@ -223,6 +224,9 @@ public class Meeting : Entity, IAggregateRoot
         }
     }
 
-    private Invitation FindInvitation(string email) =>
+    private Invitation FindInvitationByEmail(string email) =>
         _invitations.SingleOrDefault(_ => _.Email == email) ?? throw new InvitationNotFoundException(email, Id);
+
+    private Invitation FindInvitationByCode(string code) =>
+        _invitations.SingleOrDefault(_ => _.Code == code) ?? throw new InvitationNotFoundException(code, Id);
 }

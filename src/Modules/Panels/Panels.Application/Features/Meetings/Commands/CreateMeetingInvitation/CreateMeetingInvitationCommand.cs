@@ -8,11 +8,13 @@ public record CreateMeetingInvitationCommand : ICommand<Response<int>>
 {
     public int MeetingId { get; }
     public DateTime InvitationExpirationDate { get; }
-    public string InvitationRecipient { get; }
+    public string? EmailInvitationRecipient { get; }
+    public string NameInvitationRecipient { get; }
     public CreateMeetingInvitationCommand(CreateMeetingInvitationParameters parameters)
     {
         MeetingId = parameters.MeetingId;
         InvitationExpirationDate = parameters.InvitationExpirationDate;
-        InvitationRecipient = parameters.InvitationRecipient;
+        EmailInvitationRecipient = parameters.EmailInvitationRecipient;
+        NameInvitationRecipient = parameters.NameInvitationRecipient;
     }
 }

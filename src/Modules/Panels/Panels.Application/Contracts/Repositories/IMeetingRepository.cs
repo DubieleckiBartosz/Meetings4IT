@@ -9,5 +9,5 @@ public interface IMeetingRepository : IRepository<Meeting>
 
     Task CreateNewMeetingAsync(Meeting meeting, CancellationToken cancellationToken = default);
 
-    void UpdateMeetingAsync(Meeting meeting);
+    void UpdateMeeting(Meeting meeting);
 }

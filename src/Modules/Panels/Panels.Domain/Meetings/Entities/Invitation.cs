@@ -1,7 +1,6 @@
 ﻿using Meetings4IT.Shared.Abstractions.Kernel;
 using Meetings4IT.Shared.Abstractions.Kernel.ValueObjects;
 using Meetings4IT.Shared.Abstractions.Time;
-using Panels.Domain.Generators;
 using Panels.Domain.Meetings.Exceptions.InvitationExceptions;
 using Panels.Domain.Meetings.Statuses;
 using Panels.Domain.Meetings.ValueObjects;
@@ -12,6 +11,7 @@ public class Invitation : Entity
 {
     public InvitationCode Code { get; }
     public Email Email { get; }
+    public NameInvitationRecipient RecipientName { get; }
     public InvitationStatus Status { get; private set; }
     public Date ExpirationDate { get; private set; }
     private bool IsExpired => ExpirationDate.Value <= Clock.CurrentDate();
@@ -19,12 +19,17 @@ public class Invitation : Entity
     private Invitation()
     { }
 
-    internal Invitation(Email email, Date expirationDate, InvitationCode code)
+    internal Invitation(
+        Email email,
+        Date expirationDate,
+        InvitationCode code,
+        NameInvitationRecipient recipientName)
     {
         Email = email;
         Code = code;
         ExpirationDate = expirationDate;
         Status = InvitationStatus.Pending;
+        RecipientName = recipientName;
     }
 
     internal void Accept()
@@ -32,6 +37,11 @@ public class Invitation : Entity
         if (IsExpired)
         {
             throw new InvitationExpiredException(ExpirationDate);
+        }
+
+        if (Status == InvitationStatus.Canceled)
+        {
+            throw new InvitationCanceledException(this.Id);
         }
 
         Status = InvitationStatus.Accepted;
@@ -44,13 +54,18 @@ public class Invitation : Entity
             throw new InvitationExpiredException(ExpirationDate);
         }
 
+        if (Status == InvitationStatus.Canceled)
+        {
+            throw new InvitationCanceledException(this.Id);
+        }
+
         Status = InvitationStatus.Rejected;
     }
 
     internal void Cancel()
     {
         var statusToCancel = Status == InvitationStatus.Accepted || Status == InvitationStatus.Pending;
-        if (statusToCancel)
+        if (!statusToCancel)
         {
             throw new InvitationInvalidStatusException(Email, Status);
         }

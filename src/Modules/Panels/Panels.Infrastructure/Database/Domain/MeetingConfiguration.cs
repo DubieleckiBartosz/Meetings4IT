@@ -107,6 +107,11 @@ internal class MeetingConfiguration : WatcherConfiguration, IEntityTypeConfigura
               .HasConversion(x => x.Value, x => InvitationCode.Create(x))
               .IsRequired();
 
+            _.Property(p => p.RecipientName)
+              .HasColumnName("Code")
+              .HasConversion(x => x.Value, x => new NameInvitationRecipient(x))
+              .IsRequired();
+
             _.Property(p => p.ExpirationDate)
               .HasColumnName("ExpirationDate")
               .HasConversion(x => x.Value, x => new Date(x))

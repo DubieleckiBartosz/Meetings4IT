@@ -2,4 +2,4 @@
 
 namespace Panels.Application.IntegrationEvents.Events;
 
-public record InvitationRejectedIntegrationEvent(string MeetingLink, string RecipientId, string RejectedBy) : IntegrationEvent;
+public record InvitationAcceptedIntegrationEvent(string MeetingLink, string RecipientId, string AcceptedBy) : IntegrationEvent;

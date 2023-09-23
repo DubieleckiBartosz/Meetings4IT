@@ -4,19 +4,23 @@ using Meetings4IT.Shared.Implementations.Mediator;
 using Meetings4IT.Shared.Implementations.Services;
 using Meetings4IT.Shared.Implementations.Wrappers;
 using Panels.Application.Contracts.Repositories;
+using Panels.Domain.Meetings.ValueObjects;
 
 namespace Panels.Application.Features.Meetings.Commands.CreateMeetingInvitation;
 
 public class CreateMeetingInvitationHandler : ICommandHandler<CreateMeetingInvitationCommand, Response<int>>
 {
     private readonly IMeetingRepository _meetingRepository;
+    private readonly IUserRepository _userRepository;
     private readonly ICurrentUser _currentUser;
 
     public CreateMeetingInvitationHandler(
         IMeetingRepository meetingRepository,
+        IUserRepository userRepository,
         ICurrentUser currentUser)
     {
         _meetingRepository = meetingRepository;
+        _userRepository = userRepository;
         _currentUser = currentUser;
     }
 
@@ -31,11 +35,24 @@ public class CreateMeetingInvitationHandler : ICommandHandler<CreateMeetingInvit
         }
 
         Date expiration = request.InvitationExpirationDate;
-        Email recipient = request.InvitationRecipient!;
+        Email? email = request.EmailInvitationRecipient;
+        NameInvitationRecipient recipient = request.NameInvitationRecipient!;
 
-        var invitation = meeting.CreateNewInvitation(recipient, expiration);
+        if (email == null)
+        {
+            var result = await _userRepository.GetUserByNameNTAsync(recipient);
+            if (result == null)
+            {
+                throw new NotFoundException($"User {recipient.Value} not found." +
+                    $" Please provide an email address or a valid existing user name.");
+            }
 
-        _meetingRepository.UpdateMeetingAsync(meeting);
+            email = result.Email;
+        }
+
+        var invitation = meeting.CreateNewInvitation(email, expiration, recipient);
+
+        _meetingRepository.UpdateMeeting(meeting);
 
         await _meetingRepository.UnitOfWork.SaveAsync();
 

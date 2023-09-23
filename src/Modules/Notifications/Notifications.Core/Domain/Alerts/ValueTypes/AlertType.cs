@@ -2,5 +2,8 @@
 
 public enum AlertType
 {
-    Invitation = 1,
+    NewInvitation = 1,
+    InvitationAccepted = 2,
+    InvitationRejected = 3,
+    MeetingCaneled = 4,
 }
