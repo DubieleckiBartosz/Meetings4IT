@@ -2,13 +2,13 @@
 
 public class AlertMessageCreator
 {
-    public static Dictionary<string, string> InvitationAlertMessage(string meetingOrganizer, string meetingId, string code)
+    public static Dictionary<string, string> InvitationAlertMessage(string meetingOrganizer, string meetingLink, string invitationLink)
     {
         var dictData = new Dictionary<string, string>
         {
             {"MeetingOrganizer", meetingOrganizer},
-            {"MeetingId", meetingId},
-            {"Code", code}
+            {"MeetingLink", meetingLink},
+            {"InvitationLink", invitationLink}
         };
 
         return dictData;

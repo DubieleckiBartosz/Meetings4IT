@@ -40,12 +40,12 @@ public class InvitationCreatedHandler : ICommandHandler<InvitationCreatedCommand
         }
 
         var organizer = request.MeetingOrganizer;
-        var meetingId = request.Meeting;
-        var code = request.Code;
+        var meetingLink = request.MeetingLink;
+        var invitationLink = request.InvitationLink;
         var recipient = request.Recipient;
         var recipientId = request.RecipientId;
 
-        var dictData = TemplateCreator.TemplateInvitation(organizer, meetingId, code);
+        var dictData = TemplateCreator.TemplateInvitation(organizer, meetingLink, invitationLink);
         var emailMessageBody = template.Body.ReplaceData(dictData);
         var emailMessage = new EmailDetails(new List<string> { recipient }, Subjects.NewPassword, emailMessageBody);
 
@@ -66,7 +66,7 @@ public class InvitationCreatedHandler : ICommandHandler<InvitationCreatedCommand
             throw new NotFoundException($"Alert {AlertType.Invitation} message not found.");
         }
 
-        var dictAlertData = AlertMessageCreator.InvitationAlertMessage(organizer, meetingId, code);
+        var dictAlertData = AlertMessageCreator.InvitationAlertMessage(organizer, meetingLink, invitationLink);
 
         var message = alertMessage.MessageTemplate.ReplaceData(dictAlertData);
         var newAlert = Alert.CreateAlert(AlertType.Invitation, message, recipientId);

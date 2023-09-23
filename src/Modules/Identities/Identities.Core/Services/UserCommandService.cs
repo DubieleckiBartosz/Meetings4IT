@@ -20,12 +20,12 @@ internal class UserCommandService : IUserCommandService
     private readonly IUserRepository _userRepository;
     private readonly IIdentityIntegrationEventService _identityIntegrationEventService;
     private readonly IOpenIdDIctAuthService _openIdDIctAuthService;
-    private readonly PathOptions _options;
+    private readonly IdentityPathOptions _options;
 
     public UserCommandService(
         IUserRepository userRepository,
         IIdentityIntegrationEventService identityIntegrationEventService,
-        IOptions<PathOptions> options, IOpenIdDIctAuthService openIdDIctAuthService)
+        IOptions<IdentityPathOptions> options, IOpenIdDIctAuthService openIdDIctAuthService)
     {
         _userRepository = userRepository ?? throw new ArgumentNullException(nameof(userRepository));
         _identityIntegrationEventService = identityIntegrationEventService ?? throw new ArgumentNullException(nameof(identityIntegrationEventService));
@@ -65,7 +65,7 @@ internal class UserCommandService : IUserCommandService
         queryParams["code"] = token;
         queryParams["email"] = applicationUser.Email;
 
-        var verificationUri = QueryHelpers.AddQueryString(routeUri.ToString(), queryParams);
+        var verificationUri = QueryHelpers.AddQueryString(routeUri.ToString(), queryParams!);
 
         await _identityIntegrationEventService.SaveEventAndPublishAsync(
             new UserRegisteredIntegrationEvent(applicationUser.Email, applicationUser.UserName, verificationUri));
@@ -128,6 +128,9 @@ internal class UserCommandService : IUserCommandService
             var errors = result.ReadResult();
             return Response<List<IdentityErrorResponse>>.Error(errors);
         }
+
+        await _identityIntegrationEventService.SaveEventAndPublishAsync(
+            new UserConfirmedIntegrationEvent(email, user.UserName, user.Id));
 
         return Response.Ok();
     }

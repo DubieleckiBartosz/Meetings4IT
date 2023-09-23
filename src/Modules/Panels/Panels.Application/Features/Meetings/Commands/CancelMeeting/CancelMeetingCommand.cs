@@ -1,5 +1,8 @@
-﻿namespace Panels.Application.Features.Meetings.Commands.CancelMeeting;
+﻿using Meetings4IT.Shared.Implementations.Mediator;
+using Meetings4IT.Shared.Implementations.Wrappers;
 
-public class CancelMeetingCommand
+namespace Panels.Application.Features.Meetings.Commands.CancelMeeting;
+
+public class CancelMeetingCommand : ICommand<Response>
 {
 }

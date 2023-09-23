@@ -1,67 +1,83 @@
 ﻿using Meetings4IT.Shared.Abstractions.Kernel;
 using Meetings4IT.Shared.Abstractions.Kernel.ValueObjects;
 using Panels.Domain.Users.Exceptions;
+using Panels.Domain.Users.Technologies;
 using Panels.Domain.Users.ValueObjects;
 
 namespace Panels.Domain.Users;
 
 public class User : Entity, IAggregateRoot
 {
-    private readonly HashSet<Technology> _stack = new();
-    public List<Technology> TechStack => _stack.ToList();
-    public UserImage Image { get; private set; }
+    private readonly List<UserTechnology> _stack;
+    public List<UserTechnology> TechStack => _stack;
+    public UserImage? Image { get; private set; }
     public string Identifier { get; }
-    public string Name { get; private set; }
+    public string Name { get; }
     public Email Email { get; private set; }
 
-    private User(string identifier, UserImage image, string name, Email email, List<Technology>? stack)
+    private User()
+    {
+        _stack = new();
+    }
+
+    private User(string identifier, string name, Email email)
     {
         Identifier = identifier ?? throw new ArgumentNullException("User identifier cannot be null.");
         Name = name ?? throw new ArgumentNullException("Name cannot be null.");
         Email = email ?? throw new ArgumentNullException("Email cannot be null.");
-        Image = image;
-        if (stack != null && stack.Any())
-        {
-            foreach (var techItem in stack)
-            {
-                _stack.Add(techItem);
-            }
-        }
 
+        _stack = new();
         this.IncrementVersion();
-        Name = name;
-        Email = email;
     }
 
     public static User Create(
         string identifier,
-        UserImage image,
         string name,
-        Email email,
-        List<Technology>? stack)
+        Email email)
     {
-        return new User(identifier, image, name, email, stack);
+        return new User(identifier, name, email);
+    }
+
+    public void CompleteDetails(UserImage? image, List<Technology>? stack)
+    {
+        Image = image;
+
+        if (stack != null && stack.Any())
+        {
+            foreach (var techItem in stack)
+            {
+                var userTech = new UserTechnology(techItem, this);
+
+                _stack.Add(userTech);
+            }
+        }
+
+        this.IncrementVersion();
     }
 
     public void AddNewTechnology(Technology technology)
     {
-        var technologyAlreadyExists = _stack.FirstOrDefault(_ => _.Value == technology);
+        var technologyAlreadyExists = _stack.FirstOrDefault(_ => _.Technology.Equals(technology));
         if (technologyAlreadyExists != null)
         {
             throw new TechnologyExistsException();
         }
 
-        _stack.Add(technology);
+        var userNewTech = new UserTechnology(technology, this);
+
+        _stack.Add(userNewTech);
         this.IncrementVersion();
     }
 
     public void RemoveTechnology(string technology)
     {
-        var removedPositive = _stack.RemoveWhere(_ => _.Value == technology);
-        if (removedPositive == 0)
+        var tech = _stack.FirstOrDefault(_ => _.Technology.Value == technology);
+        if (tech == null)
         {
             throw new TechnologyNotFound(technology);
         }
+
+        _stack.Remove(tech);
         this.IncrementVersion();
     }
 

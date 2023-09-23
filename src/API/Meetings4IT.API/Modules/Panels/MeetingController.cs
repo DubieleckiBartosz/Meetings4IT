@@ -3,7 +3,6 @@ using Meetings4IT.Shared.Implementations.Wrappers;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using OpenIddict.Validation.AspNetCore;
-using Panels.Application.Contracts.Repositories;
 using Panels.Application.Features.Meetings.Commands.CreateMeetingInvitation;
 using Panels.Application.Features.Meetings.Commands.DeclareNewMeeting;
 using Panels.Application.Models.Parameters;
@@ -43,8 +42,15 @@ public class MeetingController : BaseController
     }
 
     [SwaggerOperation(Summary = "Get meeting by Id")]
-    [HttpGet("[action]/{meetingId}")]
-    public async Task<IActionResult> GetMeetingById([FromRoute] int meetingId)
+    [HttpGet("[action]")]
+    public async Task<IActionResult> GetMeetingById([FromQuery] int meetingId)
+    {
+        return Ok(new { Message = "OK" });
+    }
+
+    [SwaggerOperation(Summary = "Get invitation by code")]
+    [HttpGet("[action]")]
+    public async Task<IActionResult> GetInvitationByCode([FromQuery] int code)
     {
         return Ok(new { Message = "OK" });
     }

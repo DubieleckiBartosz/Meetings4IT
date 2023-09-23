@@ -1,5 +1,10 @@
-﻿namespace Panels.Application.Features.Meetings.Commands.AcceptMeetingInvitation;
+﻿using Meetings4IT.Shared.Implementations.Mediator;
+using Meetings4IT.Shared.Implementations.Wrappers;
 
-public class AcceptMeetingInvitationCommand
+namespace Panels.Application.Features.Meetings.Commands.AcceptMeetingInvitation;
+
+public class AcceptMeetingInvitationCommand : ICommand<Response>
 {
+    public int MeetingId { get; }
+    public string InvitationCode { get; }
 }

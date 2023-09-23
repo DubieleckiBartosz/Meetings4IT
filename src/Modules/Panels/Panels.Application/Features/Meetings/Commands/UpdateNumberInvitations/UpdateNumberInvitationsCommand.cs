@@ -1,5 +1,8 @@
-﻿namespace Panels.Application.Features.Meetings.Commands.UpdateNumberInvitations;
+﻿using Meetings4IT.Shared.Implementations.Mediator;
+using Meetings4IT.Shared.Implementations.Wrappers;
 
-public class UpdateNumberInvitationsCommand
+namespace Panels.Application.Features.Meetings.Commands.UpdateNumberInvitations;
+
+public class UpdateNumberInvitationsCommand : ICommand<Response>
 {
 }

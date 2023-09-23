@@ -1,4 +1,5 @@
 ﻿using Meetings4IT.Shared.Abstractions.Kernel.ValueObjects;
+using Panels.Domain.DomainServices.DomainServiceInterfaces;
 using Panels.Domain.Meetings;
 using Panels.Domain.Meetings.Categories;
 using Panels.Domain.Meetings.Exceptions;

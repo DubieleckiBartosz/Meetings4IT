@@ -1,6 +1,6 @@
 ﻿namespace Identities.Core.Options;
 
-public class PathOptions
+public class IdentityPathOptions
 {
     public string ClientAddress { get; set; }
     public string ResetPasswordPath { get; set; }

@@ -23,11 +23,12 @@ namespace Notifications.Core.Infrastructure.Migrations
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder, 1L, 1);
 
-            modelBuilder.Entity("Notifications.Core.Domain.Alerts.Entities.Alert", b =>
+            modelBuilder.Entity("Notifications.Core.Domain.Alerts.Alert", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
+                        .HasColumnType("int")
+                        .HasColumnName("Id");
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
 
@@ -36,27 +37,53 @@ namespace Notifications.Core.Infrastructure.Migrations
                         .HasColumnType("datetime2")
                         .HasDefaultValueSql("GETUTCDATE()");
 
-                    b.Property<string>("Description")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
                     b.Property<bool>("IsRead")
-                        .HasColumnType("bit");
+                        .HasColumnType("bit")
+                        .HasColumnName("IsRead");
 
                     b.Property<DateTime>("Modified")
                         .ValueGeneratedOnAddOrUpdate()
                         .HasColumnType("datetime2")
                         .HasDefaultValueSql("GETUTCDATE()");
 
-                    b.Property<int>("Type")
-                        .HasColumnType("int");
+                    b.Property<string>("RecipientId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)")
+                        .HasColumnName("RecipientId");
 
-                    b.Property<int>("Version")
-                        .HasColumnType("int");
+                    b.Property<int>("Type")
+                        .HasColumnType("int")
+                        .HasColumnName("Type");
 
                     b.HasKey("Id");
 
                     b.ToTable("Alerts", "notifications");
+                });
+
+            modelBuilder.Entity("Notifications.Core.Domain.Alerts.AlertDetails", b =>
+                {
+                    b.Property<int>("AlertDetailsId")
+                        .HasColumnType("int")
+                        .HasColumnName("AlertDetailsId");
+
+                    b.Property<DateTime>("Created")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("datetime2")
+                        .HasDefaultValueSql("GETUTCDATE()");
+
+                    b.Property<string>("MessageTemplate")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)")
+                        .HasColumnName("MessageTemplate");
+
+                    b.Property<string>("Title")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)")
+                        .HasColumnName("Title");
+
+                    b.HasKey("AlertDetailsId");
+
+                    b.ToTable("AlertDetails", "notifications");
                 });
 
             modelBuilder.Entity("Notifications.Core.Domain.Templates.Template", b =>

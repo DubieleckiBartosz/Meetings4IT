@@ -8,6 +8,9 @@ public class AlertDetails
     public string Title { get; }
     public string MessageTemplate { get; }
 
+    public AlertDetails()
+    { }
+
     public AlertDetails(AlertType messageId, string title, string messageTemplate)
     {
         AlertDetailsId = messageId;

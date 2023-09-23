@@ -129,6 +129,122 @@ namespace Panels.Infrastructure.Database.Migrations
                     b.ToTable("ScheduledMeetings", "panels");
                 });
 
+            modelBuilder.Entity("Panels.Domain.Users.Technologies.Technology", b =>
+                {
+                    b.Property<int>("Index")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Index"), 1L, 1);
+
+                    b.Property<string>("Value")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)")
+                        .HasColumnName("Value");
+
+                    b.HasKey("Index");
+
+                    b.ToTable("Technologies", "panels");
+
+                    b.HasData(
+                        new
+                        {
+                            Index = 1,
+                            Value = ".NET"
+                        },
+                        new
+                        {
+                            Index = 2,
+                            Value = "Java"
+                        },
+                        new
+                        {
+                            Index = 3,
+                            Value = "Python"
+                        },
+                        new
+                        {
+                            Index = 4,
+                            Value = "C++"
+                        },
+                        new
+                        {
+                            Index = 5,
+                            Value = "R"
+                        },
+                        new
+                        {
+                            Index = 6,
+                            Value = "SQL"
+                        },
+                        new
+                        {
+                            Index = 7,
+                            Value = "PostgreSql"
+                        },
+                        new
+                        {
+                            Index = 8,
+                            Value = "Ruby"
+                        },
+                        new
+                        {
+                            Index = 9,
+                            Value = "DevOps"
+                        },
+                        new
+                        {
+                            Index = 10,
+                            Value = "MongoDB"
+                        });
+                });
+
+            modelBuilder.Entity("Panels.Domain.Users.Technologies.UserTechnology", b =>
+                {
+                    b.Property<int>("UserId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("TechnologyIndex")
+                        .HasColumnType("int");
+
+                    b.HasKey("UserId", "TechnologyIndex");
+
+                    b.HasIndex("TechnologyIndex");
+
+                    b.ToTable("UserTechnology", "panels");
+                });
+
+            modelBuilder.Entity("Panels.Domain.Users.User", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
+
+                    b.Property<string>("Email")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)")
+                        .HasColumnName("Email");
+
+                    b.Property<string>("Identifier")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)")
+                        .HasColumnName("Identifier");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)")
+                        .HasColumnName("Name");
+
+                    b.Property<int>("Version")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Users", "panels");
+                });
+
             modelBuilder.Entity("Panels.Domain.Meetings.Meeting", b =>
                 {
                     b.HasOne("Panels.Domain.Meetings.Categories.MeetingCategory", "Category")
@@ -406,6 +522,66 @@ namespace Panels.Infrastructure.Database.Migrations
                         .IsRequired();
 
                     b.Navigation("_upcomingMeetings");
+                });
+
+            modelBuilder.Entity("Panels.Domain.Users.Technologies.UserTechnology", b =>
+                {
+                    b.HasOne("Panels.Domain.Users.Technologies.Technology", "Technology")
+                        .WithMany()
+                        .HasForeignKey("TechnologyIndex")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Panels.Domain.Users.User", "User")
+                        .WithMany("_stack")
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Technology");
+
+                    b.Navigation("User");
+                });
+
+            modelBuilder.Entity("Panels.Domain.Users.User", b =>
+                {
+                    b.OwnsOne("Panels.Domain.Users.ValueObjects.UserImage", "Image", b1 =>
+                        {
+                            b1.Property<int>("UserId")
+                                .HasColumnType("int");
+
+                            b1.Property<DateTime>("Created")
+                                .HasColumnType("datetime2")
+                                .HasColumnName("Created");
+
+                            b1.Property<DateTime?>("DeletedAt")
+                                .HasColumnType("datetime2")
+                                .HasColumnName("DeletedAt");
+
+                            b1.Property<string>("Key")
+                                .IsRequired()
+                                .HasColumnType("nvarchar(max)")
+                                .HasColumnName("Key");
+
+                            b1.Property<DateTime>("LastModified")
+                                .HasColumnType("datetime2")
+                                .HasColumnName("LastModified");
+
+                            b1.HasKey("UserId");
+
+                            b1.ToTable("UserImages", "panels");
+
+                            b1.WithOwner()
+                                .HasForeignKey("UserId");
+                        });
+
+                    b.Navigation("Image")
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("Panels.Domain.Users.User", b =>
+                {
+                    b.Navigation("_stack");
                 });
 #pragma warning restore 612, 618
         }

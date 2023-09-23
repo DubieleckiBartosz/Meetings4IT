@@ -1,5 +1,8 @@
-﻿namespace Panels.Application.Features.Meetings.Commands.RejectMeetingInvitation;
+﻿using Meetings4IT.Shared.Implementations.Mediator;
+using Meetings4IT.Shared.Implementations.Wrappers;
 
-public class RejectMeetingInvitationCommand
+namespace Panels.Application.Features.Meetings.Commands.RejectMeetingInvitation;
+
+public class RejectMeetingInvitationCommand : ICommand<Response>
 {
 }

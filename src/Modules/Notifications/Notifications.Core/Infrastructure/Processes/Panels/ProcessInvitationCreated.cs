@@ -23,6 +23,6 @@ public class ProcessInvitationCreated : IEventHandler<InvitationCreatedIntegrati
         _logger.Information($"Event processing {notification.GetType().Name}: {notification.Serialize()}");
 
         await _commandBus.Send(new InvitationCreatedCommand(notification.Recipient, notification.RecipientId,
-                          notification.MeetingOrganizer, notification.Meeting, notification.Code), cancellationToken);
+                          notification.MeetingOrganizer, notification.MeetingLink, notification.InvitationLink), cancellationToken);
     }
 }

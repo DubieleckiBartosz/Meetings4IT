@@ -43,6 +43,37 @@ namespace Panels.Infrastructure.Database.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "Technologies",
+                schema: "panels",
+                columns: table => new
+                {
+                    Index = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Value = table.Column<string>(type: "nvarchar(max)", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Technologies", x => x.Index);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Users",
+                schema: "panels",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Identifier = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Email = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Version = table.Column<int>(type: "int", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Users", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "Meetings",
                 schema: "panels",
                 columns: table => new
@@ -97,6 +128,56 @@ namespace Panels.Infrastructure.Database.Migrations
                         column: x => x.ScheduledMeetingId,
                         principalSchema: "panels",
                         principalTable: "ScheduledMeetings",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "UserImages",
+                schema: "panels",
+                columns: table => new
+                {
+                    UserId = table.Column<int>(type: "int", nullable: false),
+                    Key = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Created = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    DeletedAt = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    LastModified = table.Column<DateTime>(type: "datetime2", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_UserImages", x => x.UserId);
+                    table.ForeignKey(
+                        name: "FK_UserImages_Users_UserId",
+                        column: x => x.UserId,
+                        principalSchema: "panels",
+                        principalTable: "Users",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "UserTechnology",
+                schema: "panels",
+                columns: table => new
+                {
+                    TechnologyIndex = table.Column<int>(type: "int", nullable: false),
+                    UserId = table.Column<int>(type: "int", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_UserTechnology", x => new { x.UserId, x.TechnologyIndex });
+                    table.ForeignKey(
+                        name: "FK_UserTechnology_Technologies_TechnologyIndex",
+                        column: x => x.TechnologyIndex,
+                        principalSchema: "panels",
+                        principalTable: "Technologies",
+                        principalColumn: "Index",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_UserTechnology_Users_UserId",
+                        column: x => x.UserId,
+                        principalSchema: "panels",
+                        principalTable: "Users",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
@@ -165,6 +246,24 @@ namespace Panels.Infrastructure.Database.Migrations
                     { 6, "Unknown" }
                 });
 
+            migrationBuilder.InsertData(
+                schema: "panels",
+                table: "Technologies",
+                columns: new[] { "Index", "Value" },
+                values: new object[,]
+                {
+                    { 1, ".NET" },
+                    { 2, "Java" },
+                    { 3, "Python" },
+                    { 4, "C++" },
+                    { 5, "R" },
+                    { 6, "SQL" },
+                    { 7, "PostgreSql" },
+                    { 8, "Ruby" },
+                    { 9, "DevOps" },
+                    { 10, "MongoDB" }
+                });
+
             migrationBuilder.CreateIndex(
                 name: "IX_Images_MeetingId",
                 schema: "panels",
@@ -188,6 +287,12 @@ namespace Panels.Infrastructure.Database.Migrations
                 schema: "panels",
                 table: "Meetings",
                 column: "ExplicitMeetingId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_UserTechnology_TechnologyIndex",
+                schema: "panels",
+                table: "UserTechnology",
+                column: "TechnologyIndex");
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
@@ -205,11 +310,27 @@ namespace Panels.Infrastructure.Database.Migrations
                 schema: "panels");
 
             migrationBuilder.DropTable(
+                name: "UserImages",
+                schema: "panels");
+
+            migrationBuilder.DropTable(
+                name: "UserTechnology",
+                schema: "panels");
+
+            migrationBuilder.DropTable(
                 name: "Meetings",
                 schema: "panels");
 
             migrationBuilder.DropTable(
                 name: "ScheduledMeetings",
+                schema: "panels");
+
+            migrationBuilder.DropTable(
+                name: "Technologies",
+                schema: "panels");
+
+            migrationBuilder.DropTable(
+                name: "Users",
                 schema: "panels");
 
             migrationBuilder.DropTable(

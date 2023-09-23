@@ -8,6 +8,8 @@ using Panels.Domain.Meetings.Categories;
 using Panels.Domain.Meetings.Entities;
 using Panels.Domain.ScheduledMeetings;
 using Panels.Domain.Users;
+using Panels.Domain.Users.Technologies;
+using Panels.Domain.Users.ValueObjects;
 
 namespace Panels.Infrastructure.Database;
 
@@ -18,6 +20,7 @@ public class PanelContext : DbContext, IUnitOfWork
     public DbSet<User> Users { get; set; }
     public DbSet<MeetingCategory> MeetingCategories { get; set; }
     public DbSet<ScheduledMeeting> ScheduledMeetings { get; set; }
+    public DbSet<Technology> Technologies { get; set; }
 
     public PanelContext(DbContextOptions<PanelContext> options) : base(options)
     { }
@@ -38,7 +41,7 @@ public class PanelContext : DbContext, IUnitOfWork
 
     public override async Task<int> SaveChangesAsync(CancellationToken cancellationToken = default)
     {
-        var watcherTypes = new Type[] { typeof(Invitation) };
+        var watcherTypes = new Type[] { typeof(Invitation), typeof(UserImage) };
         var entries = ChangeTracker
             .Entries()
             .Where(e => watcherTypes.Contains(e.Entity.GetType()) && e.State is EntityState.Added or EntityState.Modified or EntityState.Deleted);

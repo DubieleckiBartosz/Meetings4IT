@@ -5,4 +5,4 @@ using Notifications.Core.Constants;
 namespace Notifications.Core.Infrastructure.Processes.Panels.IntegrationEvents;
 
 [IntegrationEventDecorator(Navigators.InvitationCreatedNavigator)]
-public record InvitationCreatedIntegrationEvent(string Recipient, string? RecipientId, string MeetingOrganizer, string Meeting, string Code) : IntegrationEvent;
+public record InvitationCreatedIntegrationEvent(string Recipient, string? RecipientId, string MeetingOrganizer, string MeetingLink, string InvitationLink) : IntegrationEvent;

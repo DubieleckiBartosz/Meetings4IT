@@ -8,7 +8,7 @@ public static class OptionsConfigurations
 {
     public static WebApplicationBuilder RegisterIdentitiesOptions(this WebApplicationBuilder builder)
     {
-        builder.Services.Configure<PathOptions>(builder.Configuration.GetSection("PathOptions"));
+        builder.Services.Configure<IdentityPathOptions>(builder.Configuration.GetSection("IdentityPathOptions"));
 
         return builder;
     }

@@ -1,5 +1,6 @@
-﻿namespace Panels.Application.Features.Users.Commands.CreateNewUser;
+﻿using MediatR;
+using Meetings4IT.Shared.Implementations.Mediator;
 
-public class CreateNewUserCommand
-{
-}
+namespace Panels.Application.Features.Users.Commands.CreateNewUser;
+
+public record CreateNewUserCommand(string Email, string Name, string UserId) : ICommand<Unit>;

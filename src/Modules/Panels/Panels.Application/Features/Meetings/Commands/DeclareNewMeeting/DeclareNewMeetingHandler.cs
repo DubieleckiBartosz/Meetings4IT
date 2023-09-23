@@ -4,7 +4,7 @@ using Meetings4IT.Shared.Implementations.Mediator;
 using Meetings4IT.Shared.Implementations.Services;
 using Meetings4IT.Shared.Implementations.Wrappers;
 using Panels.Application.Contracts.Repositories;
-using Panels.Domain.DomainServices;
+using Panels.Domain.DomainServices.DomainServiceInterfaces;
 using Panels.Domain.Meetings.Categories;
 using Panels.Domain.Meetings.ValueObjects;
 

@@ -8,6 +8,7 @@
 
   <ItemGroup>
     <Folder Include="Models\Views\" />
+    <Folder Include="Processing\" />
   </ItemGroup>
 
   <ItemGroup>

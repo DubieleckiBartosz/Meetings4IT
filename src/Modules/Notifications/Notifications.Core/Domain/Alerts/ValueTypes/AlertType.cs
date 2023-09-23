@@ -2,6 +2,5 @@
 
 public enum AlertType
 {
-    Welcome = 1,
-    Invitation = 2,
+    Invitation = 1,
 }

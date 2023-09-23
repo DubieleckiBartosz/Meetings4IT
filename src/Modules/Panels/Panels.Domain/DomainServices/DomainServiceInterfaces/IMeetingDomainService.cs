@@ -4,7 +4,7 @@ using Panels.Domain.Meetings.Categories;
 using Panels.Domain.Meetings.ValueObjects;
 using Panels.Domain.ScheduledMeetings;
 
-namespace Panels.Domain.DomainServices;
+namespace Panels.Domain.DomainServices.DomainServiceInterfaces;
 
 public interface IMeetingDomainService
 {

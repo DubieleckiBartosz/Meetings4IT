@@ -24,13 +24,13 @@ public class TemplateCreator
     }
 
     //PANELS
-    public static Dictionary<string, string> TemplateInvitation(string meetingOrganizer, string meetingId, string code)
+    public static Dictionary<string, string> TemplateInvitation(string meetingOrganizer, string meetingLink, string invitationLink)
     {
         var dictData = new Dictionary<string, string>
         {
             {"MeetingOrganizer", meetingOrganizer},
-            {"MeetingId", meetingId},
-            {"Code", code}
+            {"MeetingLink", meetingLink},
+            {"InvitationLink", invitationLink}
         };
 
         return dictData;
