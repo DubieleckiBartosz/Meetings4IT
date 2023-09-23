@@ -253,15 +253,16 @@ namespace Panels.Infrastructure.Database.Migrations
                 values: new object[,]
                 {
                     { 1, ".NET" },
-                    { 2, "Java" },
-                    { 3, "Python" },
+                    { 2, "JAVA" },
+                    { 3, "PYTHON" },
                     { 4, "C++" },
                     { 5, "R" },
                     { 6, "SQL" },
-                    { 7, "PostgreSql" },
-                    { 8, "Ruby" },
-                    { 9, "DevOps" },
-                    { 10, "MongoDB" }
+                    { 7, "PostgreSQL" },
+                    { 8, "RUBY" },
+                    { 9, "DEVOPS" },
+                    { 10, "MONGODB" },
+                    { 11, "DOCKER" }
                 });
 
             migrationBuilder.CreateIndex(

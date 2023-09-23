@@ -12,7 +12,7 @@ using Panels.Infrastructure.Database;
 namespace Panels.Infrastructure.Database.Migrations
 {
     [DbContext(typeof(PanelContext))]
-    [Migration("20230921215457_Init1")]
+    [Migration("20230923205510_Init1")]
     partial class Init1
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -157,12 +157,12 @@ namespace Panels.Infrastructure.Database.Migrations
                         new
                         {
                             Index = 2,
-                            Value = "Java"
+                            Value = "JAVA"
                         },
                         new
                         {
                             Index = 3,
-                            Value = "Python"
+                            Value = "PYTHON"
                         },
                         new
                         {
@@ -182,22 +182,27 @@ namespace Panels.Infrastructure.Database.Migrations
                         new
                         {
                             Index = 7,
-                            Value = "PostgreSql"
+                            Value = "PostgreSQL"
                         },
                         new
                         {
                             Index = 8,
-                            Value = "Ruby"
+                            Value = "RUBY"
                         },
                         new
                         {
                             Index = 9,
-                            Value = "DevOps"
+                            Value = "DEVOPS"
                         },
                         new
                         {
                             Index = 10,
-                            Value = "MongoDB"
+                            Value = "MONGODB"
+                        },
+                        new
+                        {
+                            Index = 11,
+                            Value = "DOCKER"
                         });
                 });
 
@@ -265,6 +270,7 @@ namespace Panels.Infrastructure.Database.Migrations
 
                             b1.Property<string>("Code")
                                 .IsRequired()
+                                .ValueGeneratedOnUpdateSometimes()
                                 .HasColumnType("nvarchar(max)")
                                 .HasColumnName("Code");
 
@@ -291,6 +297,12 @@ namespace Panels.Infrastructure.Database.Migrations
 
                             b1.Property<int>("MeetingId")
                                 .HasColumnType("int");
+
+                            b1.Property<string>("RecipientName")
+                                .IsRequired()
+                                .ValueGeneratedOnUpdateSometimes()
+                                .HasColumnType("nvarchar(max)")
+                                .HasColumnName("Code");
 
                             b1.Property<int>("Status")
                                 .HasColumnType("int")
@@ -577,8 +589,7 @@ namespace Panels.Infrastructure.Database.Migrations
                                 .HasForeignKey("UserId");
                         });
 
-                    b.Navigation("Image")
-                        .IsRequired();
+                    b.Navigation("Image");
                 });
 
             modelBuilder.Entity("Panels.Domain.Users.User", b =>
