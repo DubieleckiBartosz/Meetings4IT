@@ -12,6 +12,8 @@ using Meetings4IT.Shared.Implementations.EventBus.IntegrationEventLog.DAL.Reposi
 using Meetings4IT.Shared.Implementations.EventBus.IntegrationEventLog.Services;
 using Meetings4IT.Shared.Implementations.EventBus.IntegrationEventProcess;
 using Meetings4IT.Shared.Implementations.Mediator;
+using Meetings4IT.Shared.Implementations.Modules;
+using Meetings4IT.Shared.Implementations.Modules.Interfaces;
 using Meetings4IT.Shared.Implementations.Options;
 using Meetings4IT.Shared.Implementations.Reference;
 using Meetings4IT.Shared.Implementations.Services;
@@ -50,9 +52,16 @@ public static class Configurations
                 .AddScoped<ITransactionSupervisor, TransactionSupervisor>();
         }
 
+        //MODULE CLIENT
+        services
+            .AddSingleton<IModuleClient, ModuleClient>()
+            .AddSingleton<IModuleSubscriber, ModuleSubscriber>()
+            .AddSingleton<IModuleActionRegistration, ModuleActionRegistration>();
+
         //EVENT BUS (in memory)
-        services.AddScoped<IEventBus, InMemoryEventBus>();
-        services.AddSingleton<IEventRegistry, EventRegistry>();
+        services
+            .AddScoped<IEventBus, InMemoryEventBus>()
+            .AddSingleton<IEventRegistry, EventRegistry>();
 
         //Channel
         services.AddSingleton<IEventChannel, EventChannel>();
@@ -165,4 +174,7 @@ public static class Configurations
 
         return builder;
     }
+
+    public static IModuleSubscriber UseModuleRequests(this IApplicationBuilder app)
+    => app.ApplicationServices.GetRequiredService<IModuleSubscriber>();
 }

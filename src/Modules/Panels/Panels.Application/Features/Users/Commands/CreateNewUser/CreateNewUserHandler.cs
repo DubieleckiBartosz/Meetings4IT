@@ -1,12 +1,13 @@
 ﻿using MediatR;
 using Meetings4IT.Shared.Implementations.Mediator;
+using Meetings4IT.Shared.Implementations.Wrappers;
 using Panels.Application.Contracts.Repositories;
 using Panels.Domain.Users;
 using Serilog;
 
 namespace Panels.Application.Features.Users.Commands.CreateNewUser;
 
-public class CreateNewUserHandler : ICommandHandler<CreateNewUserCommand, Unit>
+public class CreateNewUserHandler : ICommandHandler<CreateNewUserCommand, Response>
 {
     private readonly IUserRepository _userRepository;
     private readonly ILogger _logger;
@@ -17,7 +18,7 @@ public class CreateNewUserHandler : ICommandHandler<CreateNewUserCommand, Unit>
         _logger = logger;
     }
 
-    public async Task<Unit> Handle(CreateNewUserCommand request, CancellationToken cancellationToken)
+    public async Task<Response> Handle(CreateNewUserCommand request, CancellationToken cancellationToken)
     {
         var userExists = await _userRepository.UserExistsAsync(request.UserId, cancellationToken);
         if (userExists)
@@ -31,6 +32,7 @@ public class CreateNewUserHandler : ICommandHandler<CreateNewUserCommand, Unit>
         await _userRepository.UnitOfWork.SaveChangesAsync(cancellationToken);
 
         _logger.Information($"User with external id {request.UserId} created");
-        return Unit.Value;
+        return Response.Ok();
+        //return Unit.Value;
     }
 }

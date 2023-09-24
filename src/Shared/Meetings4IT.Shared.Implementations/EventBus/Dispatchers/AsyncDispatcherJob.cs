@@ -33,7 +33,7 @@ public class AsyncDispatcherJob : BackgroundService
                 var body = message.Body.ToArray();
                 var messageString = Encoding.UTF8.GetString(body);
                 var target = _eventRegistry.Navigate(message.Navigator);
-                var @event = messageString.Deserialize<IntegrationEvent>(target, JsonSettings.DefaultSerializerSettings)!;
+                var @event = messageString.DeserializeString<IntegrationEvent>(target, JsonSettings.DefaultSerializerSettings)!;
 
                 await _eventDispatcher.PublishAsync(stoppingToken, @event);
             }

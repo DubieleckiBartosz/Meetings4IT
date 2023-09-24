@@ -1,4 +1,5 @@
-﻿using Identities.Core.DAL.Repositories;
+﻿using Identities.Core.DAL.Clients.Panel;
+using Identities.Core.DAL.Repositories;
 using Identities.Core.DAL.Seed;
 using Identities.Core.Integration;
 using Identities.Core.Interfaces.Repositories;
@@ -20,6 +21,7 @@ public static class DependencyInjection
 
         services
             .AddTransient<IIdentityIntegrationEventService, IdentityIntegrationEventService>()
+            .AddScoped<IPanelClient, PanelClient>()
             .AddScoped<IUserQueryService, UserQueryService>()
             .AddScoped<IUserCommandService, UserCommandService>()
             .AddScoped<IOpenIdDIctAuthService, OpenIdDIctAuthService>()

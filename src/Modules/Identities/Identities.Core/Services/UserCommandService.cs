@@ -1,4 +1,5 @@
-﻿using Identities.Core.Enums;
+﻿using Identities.Core.DAL.Clients.Panel;
+using Identities.Core.Enums;
 using Identities.Core.Helpers;
 using Identities.Core.Integration;
 using Identities.Core.Integration.Events;
@@ -12,21 +13,26 @@ using Meetings4IT.Shared.Abstractions.Exceptions;
 using Meetings4IT.Shared.Implementations.Wrappers;
 using Microsoft.AspNetCore.WebUtilities;
 using Microsoft.Extensions.Options;
+using System.Transactions;
 
 namespace Identities.Core.Services;
 
 internal class UserCommandService : IUserCommandService
 {
+    private readonly IPanelClient _panelClient;
     private readonly IUserRepository _userRepository;
     private readonly IIdentityIntegrationEventService _identityIntegrationEventService;
     private readonly IOpenIdDIctAuthService _openIdDIctAuthService;
     private readonly IdentityPathOptions _options;
 
     public UserCommandService(
+        IPanelClient panelClient,
         IUserRepository userRepository,
         IIdentityIntegrationEventService identityIntegrationEventService,
-        IOptions<IdentityPathOptions> options, IOpenIdDIctAuthService openIdDIctAuthService)
+        IOptions<IdentityPathOptions> options,
+        IOpenIdDIctAuthService openIdDIctAuthService)
     {
+        _panelClient = panelClient;
         _userRepository = userRepository ?? throw new ArgumentNullException(nameof(userRepository));
         _identityIntegrationEventService = identityIntegrationEventService ?? throw new ArgumentNullException(nameof(identityIntegrationEventService));
         _openIdDIctAuthService = openIdDIctAuthService;
@@ -122,16 +128,23 @@ internal class UserCommandService : IUserCommandService
             throw new NotFoundException(ErrorMessages.UserNotFound(email));
         }
 
-        var result = await _userRepository.ConfirmUserAsync(user!, tokenConfirmation);
-        if (!result.Succeeded!)
+        using (var scope = new TransactionScope(TransactionScopeAsyncFlowOption.Enabled))
         {
-            var errors = result.ReadResult();
-            return Response<List<IdentityErrorResponse>>.Error(errors);
+            var result = await _userRepository.ConfirmUserAsync(user!, tokenConfirmation);
+            if (!result.Succeeded!)
+            {
+                var errors = result.ReadResult();
+                return Response<List<IdentityErrorResponse>>.Error(errors);
+            }
+
+            var resultClient = await _panelClient.CreateNewPanelUserAsync(new PanelClient.CreateNewUserRequest(email, user.UserName, user.Id));
+
+            if (resultClient!.Success)
+            {
+                scope.Complete();
+            }
+
+            return Response.Ok();
         }
-
-        await _identityIntegrationEventService.SaveEventAndPublishAsync(
-            new UserConfirmedIntegrationEvent(email, user.UserName, user.Id));
-
-        return Response.Ok();
     }
 }
