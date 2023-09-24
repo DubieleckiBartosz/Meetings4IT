@@ -57,6 +57,9 @@ public class Meeting : Entity, IAggregateRoot
         this._images = new();
     }
 
+    //This constructor is special for optimization
+    public Meeting(int id, MeetingStatus meetingStatus) => (Id, Status) = (id, meetingStatus);
+
     private Meeting(
         UserInfo organizer,
         MeetingCategory category,

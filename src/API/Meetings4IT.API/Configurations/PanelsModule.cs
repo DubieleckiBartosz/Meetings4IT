@@ -8,6 +8,7 @@ public static class PanelsModule
     public static WebApplicationBuilder RegisterPanelsModule(this WebApplicationBuilder builder)
     {
         builder
+            .PanelsQuartzConfiguration()
             .RegisterPanelsOptions()
             .RegisterDatabasePanels()
             .RegisterPanelApplicationDependencyInjection()
