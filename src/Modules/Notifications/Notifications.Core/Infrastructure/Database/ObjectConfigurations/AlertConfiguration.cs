@@ -18,6 +18,7 @@ public class AlertConfiguration : IEntityTypeConfiguration<Alert>
         builder.Property(x => x.RecipientId).HasColumnName("RecipientId").IsRequired();
         builder.Property(x => x.Type).HasColumnName("Type").IsRequired();
         builder.Property(x => x.IsRead).HasColumnName("IsRead").IsRequired();
+        builder.Property(x => x.Message).HasColumnName("Message").IsRequired();
 
         builder.ConfigureDefaultDateProperties();
     }

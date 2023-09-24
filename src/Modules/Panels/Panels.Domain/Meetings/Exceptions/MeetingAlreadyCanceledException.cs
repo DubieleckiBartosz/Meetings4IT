@@ -1,6 +1,8 @@
-﻿namespace Panels.Domain.Meetings.Exceptions;
+﻿using Meetings4IT.Shared.Abstractions.Exceptions;
 
-public class MeetingAlreadyCanceledException : Meetings4IT.Shared.Abstractions.Exceptions.BaseException
+namespace Panels.Domain.Meetings.Exceptions;
+
+public class MeetingAlreadyCanceledException : BaseException
 {
     public MeetingAlreadyCanceledException(int meetingId) : base($"Meeting {meetingId} is canceled")
     {

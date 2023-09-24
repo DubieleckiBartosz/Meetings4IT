@@ -12,7 +12,7 @@ using Panels.Infrastructure.Database;
 namespace Panels.Infrastructure.Database.Migrations
 {
     [DbContext(typeof(PanelContext))]
-    [Migration("20230923205510_Init1")]
+    [Migration("20230924153933_Init1")]
     partial class Init1
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -102,6 +102,10 @@ namespace Panels.Infrastructure.Database.Migrations
                     b.Property<int?>("MaxInvitations")
                         .HasColumnType("int")
                         .HasColumnName("MaxInvitations");
+
+                    b.Property<int>("Status")
+                        .HasColumnType("int")
+                        .HasColumnName("Status");
 
                     b.Property<int>("Version")
                         .HasColumnType("int");
@@ -270,7 +274,6 @@ namespace Panels.Infrastructure.Database.Migrations
 
                             b1.Property<string>("Code")
                                 .IsRequired()
-                                .ValueGeneratedOnUpdateSometimes()
                                 .HasColumnType("nvarchar(max)")
                                 .HasColumnName("Code");
 
@@ -300,9 +303,8 @@ namespace Panels.Infrastructure.Database.Migrations
 
                             b1.Property<string>("RecipientName")
                                 .IsRequired()
-                                .ValueGeneratedOnUpdateSometimes()
                                 .HasColumnType("nvarchar(max)")
-                                .HasColumnName("Code");
+                                .HasColumnName("RecipientName");
 
                             b1.Property<int>("Status")
                                 .HasColumnType("int")

@@ -35,6 +35,11 @@ internal class MeetingConfiguration : WatcherConfiguration, IEntityTypeConfigura
           .HasColumnName("Description")
           .HasConversion(x => x.Value, x => new Description(x)).IsRequired();
 
+        builder.Property(p => p.Status)
+          .HasColumnName("Status")
+          .HasConversion<MeetingStatusConverter>()
+          .IsRequired();
+
         builder.HasOne(_ => _.Category).WithMany().HasForeignKey(x => x.CategoryIndex);
 
         builder.OwnsOne<UserInfo>("Organizer", _ =>
@@ -108,7 +113,7 @@ internal class MeetingConfiguration : WatcherConfiguration, IEntityTypeConfigura
               .IsRequired();
 
             _.Property(p => p.RecipientName)
-              .HasColumnName("Code")
+              .HasColumnName("RecipientName")
               .HasConversion(x => x.Value, x => new NameInvitationRecipient(x))
               .IsRequired();
 

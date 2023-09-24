@@ -26,4 +26,9 @@ public class Alert
     }
 
     public static Alert CreateAlert(AlertType type, string message, string recipientId) => new Alert(type, message, recipientId);
+
+    public void Read()
+    {
+        IsRead = true;
+    }
 }

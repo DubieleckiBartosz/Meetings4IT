@@ -35,8 +35,14 @@ public class Meeting : Entity, IAggregateRoot
     public Address Address { get; private set; }
     public MeetingCancellation? Cancellation { get; private set; }
     public DateRange Date { get; private set; }
+    public MeetingStatus Status { get; private set; }
 
-    public bool Completed => Date.StartDate <= Clock.CurrentDate() && Cancellation == null;
+    /// <summary>
+    /// This property gets information about the status of the meeting at this time
+    /// - probably redundant, but we'll leave it until we figure out how to update the "completed" status.
+    /// </summary>
+    public bool IsCompletedNow => Date.StartDate <= Clock.CurrentDate() && Status != MeetingStatus.Cancelled;
+
     private int AcceptedInvitations => NumberInvitationsByStatus(InvitationStatus.Accepted);
     private int PendingInvitations => NumberInvitationsByStatus(InvitationStatus.Pending);
 
@@ -68,6 +74,8 @@ public class Meeting : Entity, IAggregateRoot
         IsPublic = isPublic;
         MaxInvitations = maxInvitations;
         ExplicitMeetingId = MeetingId.Create();
+        Status = MeetingStatus.Active;
+
         this._invitations = new();
         this._images = new();
 
@@ -119,6 +127,7 @@ public class Meeting : Entity, IAggregateRoot
         this.CheckIfMeetingWasCanceled();
 
         Cancellation = MeetingCancellation.CreateCancellation(reason);
+        Status = MeetingStatus.Cancelled;
 
         var invitations = _invitations
             .Where(_ => _.Status == InvitationStatus.Pending || _.Status == InvitationStatus.Accepted).ToList();
@@ -208,6 +217,22 @@ public class Meeting : Entity, IAggregateRoot
         IncrementVersion();
     }
 
+    /// <summary>
+    /// Currently this method runs every hour using quartz
+    /// </summary>
+    /// <exception cref="MeetingActiveNowException"></exception>
+    public void Complete()
+    {
+        this.CheckIfMeetingWasCanceled();
+
+        if (Status == MeetingStatus.Active && Date.StartDate.Date >= Clock.CurrentDate().Date)
+        {
+            throw new MeetingActiveNowException(this.Id);
+        }
+
+        Status = MeetingStatus.Completed;
+    }
+
     private void CheckIfMeetingOperationIsPossible()
     {
         if (Date.StartDate.Date <= Clock.CurrentDate().Date)
@@ -218,7 +243,7 @@ public class Meeting : Entity, IAggregateRoot
 
     private void CheckIfMeetingWasCanceled()
     {
-        if (Cancellation != null)
+        if (Status == MeetingStatus.Cancelled)
         {
             throw new MeetingAlreadyCanceledException(this.Id);
         }

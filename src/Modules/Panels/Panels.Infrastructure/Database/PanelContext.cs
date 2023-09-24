@@ -67,7 +67,7 @@ public class PanelContext : DbContext, IUnitOfWork
             }
         }
 
-        return await base.SaveChangesAsync();
+        return await base.SaveChangesAsync(cancellationToken);
     }
 
     public async Task<int> SaveAsync(CancellationToken cancellationToken = default)

@@ -49,9 +49,9 @@ public class DataSeeder
         {
             UserName = "user_name",
             Email = "user.meetings@dev.com",
-            FirstName = "admin_dev",
-            LastName = "admin_meetings_dev",
-            EmailConfirmed = false
+            FirstName = "user_dev",
+            LastName = "user_meetings_dev",
+            EmailConfirmed = true
         };
 
         await SaveUser(user, "PasswordUser$123", Roles.User.ToString());

@@ -12,7 +12,7 @@ using Notifications.Core.Infrastructure.Database;
 namespace Notifications.Core.Infrastructure.Migrations
 {
     [DbContext(typeof(NotificationContext))]
-    [Migration("20230921181957_Init1")]
+    [Migration("20230923214124_Init1")]
     partial class Init1
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -42,6 +42,11 @@ namespace Notifications.Core.Infrastructure.Migrations
                     b.Property<bool>("IsRead")
                         .HasColumnType("bit")
                         .HasColumnName("IsRead");
+
+                    b.Property<string>("Message")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)")
+                        .HasColumnName("Message");
 
                     b.Property<DateTime>("Modified")
                         .ValueGeneratedOnAddOrUpdate()

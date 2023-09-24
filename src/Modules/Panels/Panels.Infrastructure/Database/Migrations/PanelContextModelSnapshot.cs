@@ -101,6 +101,10 @@ namespace Panels.Infrastructure.Database.Migrations
                         .HasColumnType("int")
                         .HasColumnName("MaxInvitations");
 
+                    b.Property<int>("Status")
+                        .HasColumnType("int")
+                        .HasColumnName("Status");
+
                     b.Property<int>("Version")
                         .HasColumnType("int");
 
@@ -268,7 +272,6 @@ namespace Panels.Infrastructure.Database.Migrations
 
                             b1.Property<string>("Code")
                                 .IsRequired()
-                                .ValueGeneratedOnUpdateSometimes()
                                 .HasColumnType("nvarchar(max)")
                                 .HasColumnName("Code");
 
@@ -298,9 +301,8 @@ namespace Panels.Infrastructure.Database.Migrations
 
                             b1.Property<string>("RecipientName")
                                 .IsRequired()
-                                .ValueGeneratedOnUpdateSometimes()
                                 .HasColumnType("nvarchar(max)")
-                                .HasColumnName("Code");
+                                .HasColumnName("RecipientName");
 
                             b1.Property<int>("Status")
                                 .HasColumnType("int")

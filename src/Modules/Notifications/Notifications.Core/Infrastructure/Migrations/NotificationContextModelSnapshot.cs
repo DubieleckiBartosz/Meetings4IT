@@ -41,6 +41,11 @@ namespace Notifications.Core.Infrastructure.Migrations
                         .HasColumnType("bit")
                         .HasColumnName("IsRead");
 
+                    b.Property<string>("Message")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)")
+                        .HasColumnName("Message");
+
                     b.Property<DateTime>("Modified")
                         .ValueGeneratedOnAddOrUpdate()
                         .HasColumnType("datetime2")
