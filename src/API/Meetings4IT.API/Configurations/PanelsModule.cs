@@ -11,6 +11,7 @@ public static class PanelsModule
             .PanelsQuartzConfiguration()
             .RegisterPanelsOptions()
             .RegisterDatabasePanels()
+            .RegisterProcesses()
             .RegisterPanelApplicationDependencyInjection()
             .RegisterPanelInfrastructureDependencyInjection();
 

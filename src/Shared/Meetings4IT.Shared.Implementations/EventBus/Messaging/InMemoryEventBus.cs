@@ -1,7 +1,7 @@
 ﻿using Meetings4IT.Shared.Implementations.EventBus.Dispatchers;
 using Meetings4IT.Shared.Implementations.EventBus.IntegrationEventProcess;
 
-namespace Meetings4IT.Shared.Implementations.EventBus.InMemoryMessaging;
+namespace Meetings4IT.Shared.Implementations.EventBus.Messaging;
 
 public class InMemoryEventBus : IEventBus
 {
@@ -11,6 +11,7 @@ public class InMemoryEventBus : IEventBus
     {
         _dispatcher = dispatcher ?? throw new ArgumentNullException(nameof(dispatcher));
     }
+
     public async Task PublishAsync<TEvent>(CancellationToken cancellationToken, params TEvent[] @events) where TEvent : IntegrationEvent
     {
         var tasks = @events.Select(@event =>

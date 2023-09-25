@@ -1,5 +1,5 @@
 ﻿using Meetings4IT.Shared.Implementations.EventBus.Attributes;
-using Meetings4IT.Shared.Implementations.EventBus.InMemoryMessaging;
+using Meetings4IT.Shared.Implementations.EventBus.Messaging;
 using System.Reflection;
 
 namespace Meetings4IT.Shared.Implementations.Extensions;

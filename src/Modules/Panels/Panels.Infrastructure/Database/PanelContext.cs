@@ -2,6 +2,8 @@
 using Meetings4IT.Shared.Abstractions.Kernel;
 using Meetings4IT.Shared.Abstractions.Time;
 using Meetings4IT.Shared.Implementations.EntityFramework.Extensions;
+using Meetings4IT.Shared.Implementations.Outbox;
+using Meetings4IT.Shared.Implementations.Outbox.DbConfig;
 using Microsoft.EntityFrameworkCore;
 using Panels.Domain.Meetings;
 using Panels.Domain.Meetings.Categories;
@@ -21,6 +23,7 @@ public class PanelContext : DbContext, IUnitOfWork
     public DbSet<MeetingCategory> MeetingCategories { get; set; }
     public DbSet<ScheduledMeeting> ScheduledMeetings { get; set; }
     public DbSet<Technology> Technologies { get; set; }
+    public DbSet<OutboxMessage> OutboxMessages { get; set; }
 
     public PanelContext(DbContextOptions<PanelContext> options) : base(options)
     { }
@@ -35,6 +38,7 @@ public class PanelContext : DbContext, IUnitOfWork
         modelBuilder.HasDefaultSchema("panels");
 
         modelBuilder.ApplyConfigurationsFromAssembly(typeof(PanelContext).Assembly);
+        modelBuilder.ApplyConfiguration(new OutboxMessageTypeConfiguration());
 
         base.OnModelCreating(modelBuilder);
     }

@@ -1,4 +1,4 @@
-﻿namespace Meetings4IT.Shared.Implementations.EventBus.InMemoryMessaging;
+﻿namespace Meetings4IT.Shared.Implementations.EventBus.Messaging;
 
 public interface IEventRegistry
 {

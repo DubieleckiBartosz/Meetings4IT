@@ -1,6 +1,6 @@
 ﻿using Meetings4IT.Shared.Implementations.EventBus.Channel;
-using Meetings4IT.Shared.Implementations.EventBus.InMemoryMessaging;
 using Meetings4IT.Shared.Implementations.EventBus.IntegrationEventProcess;
+using Meetings4IT.Shared.Implementations.EventBus.Messaging;
 using Meetings4IT.Shared.Implementations.Settings;
 using Meetings4IT.Shared.Implementations.Tools;
 using Microsoft.Extensions.Hosting;

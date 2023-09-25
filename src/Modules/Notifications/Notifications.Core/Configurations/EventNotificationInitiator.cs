@@ -1,4 +1,4 @@
-﻿using Meetings4IT.Shared.Implementations.EventBus.InMemoryMessaging;
+﻿using Meetings4IT.Shared.Implementations.EventBus.Messaging;
 using Meetings4IT.Shared.Implementations.Extensions;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.DependencyInjection;
