@@ -1,5 +1,5 @@
-﻿using Notifications.Core.Domain.Alerts.ValueTypes;
-using Notifications.Core.Domain.Alerts;
+﻿using Notifications.Core.Domain.Alerts;
+using Notifications.Core.Domain.Alerts.ValueTypes;
 
 namespace Notifications.Core.Interfaces.Repositories;
 

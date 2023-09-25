@@ -1,6 +1,5 @@
 ﻿using Notifications.Core.Domain.Templates;
 using Notifications.Core.Domain.Templates.ValueTypes;
-using System.Threading;
 
 namespace Notifications.Core.Interfaces.Repositories;
 

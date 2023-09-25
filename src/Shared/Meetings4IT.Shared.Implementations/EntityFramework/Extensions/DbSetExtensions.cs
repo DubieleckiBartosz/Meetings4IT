@@ -1,5 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore.Query.Internal;
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Query.Internal;
 
 namespace Meetings4IT.Shared.Implementations.EntityFramework.Extensions;
 

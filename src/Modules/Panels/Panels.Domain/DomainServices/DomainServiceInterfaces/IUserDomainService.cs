@@ -1,6 +1,6 @@
-﻿using Panels.Domain.Users.Technologies;
+﻿using Panels.Domain.Users;
+using Panels.Domain.Users.Technologies;
 using Panels.Domain.Users.ValueObjects;
-using Panels.Domain.Users;
 
 namespace Panels.Domain.DomainServices.DomainServiceInterfaces;
 

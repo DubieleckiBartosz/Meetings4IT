@@ -2,15 +2,15 @@
 using Meetings4IT.Shared.Abstractions.Exceptions;
 using Meetings4IT.Shared.Implementations.Mediator;
 using Notifications.Core.Constants;
-using Notifications.Core.Domain.Alerts.ValueTypes;
 using Notifications.Core.Domain.Alerts;
+using Notifications.Core.Domain.Alerts.ValueTypes;
 using Notifications.Core.Domain.Templates.ValueTypes;
 using Notifications.Core.Handlers.Panels.Commands;
 using Notifications.Core.Interfaces.Clients;
 using Notifications.Core.Interfaces.Repositories;
 using Notifications.Core.Models.Clients.EmailModels;
-using Notifications.Core.Tools.Creators;
 using Notifications.Core.Tools;
+using Notifications.Core.Tools.Creators;
 using Serilog;
 
 namespace Notifications.Core.Handlers.Panels;
