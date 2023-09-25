@@ -2,7 +2,6 @@
 using Meetings4IT.Shared.Implementations;
 using Meetings4IT.Shared.Implementations.EventBus.InMemoryMessaging;
 using Meetings4IT.Shared.Implementations.Extensions;
-using Meetings4IT.Shared.Implementations.Mediator;
 using Meetings4IT.Shared.Implementations.Wrappers;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.DependencyInjection;

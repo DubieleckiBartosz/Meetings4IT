@@ -7,7 +7,7 @@ internal class PanelClient : IPanelClient
 {
     private readonly IModuleClient _client;
 
-    internal record CreateNewUserRequest(string Email, string Name, string UserId);
+    internal record CreateNewUserRequest(string Email, string Name, string UserId, string City);
 
     public PanelClient(IModuleClient client)
     {

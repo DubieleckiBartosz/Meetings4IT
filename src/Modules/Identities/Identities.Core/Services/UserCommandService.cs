@@ -46,7 +46,8 @@ internal class UserCommandService : IUserCommandService
             UserName = parameters.UserName,
             Email = parameters.Email,
             FirstName = parameters.FirstName,
-            LastName = parameters.LastName
+            LastName = parameters.LastName,
+            City = parameters.City
         };
 
         var result = await _userRepository.CreateUserAsync(applicationUser, parameters.Password);
@@ -137,7 +138,7 @@ internal class UserCommandService : IUserCommandService
                 return Response<List<IdentityErrorResponse>>.Error(errors);
             }
 
-            var resultClient = await _panelClient.CreateNewPanelUserAsync(new PanelClient.CreateNewUserRequest(email, user.UserName, user.Id));
+            var resultClient = await _panelClient.CreateNewPanelUserAsync(new PanelClient.CreateNewUserRequest(email, user.UserName, user.Id, user.City));
 
             if (resultClient!.Success)
             {

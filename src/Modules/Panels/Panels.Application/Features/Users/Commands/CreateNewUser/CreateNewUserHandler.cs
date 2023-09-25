@@ -1,5 +1,4 @@
-﻿using MediatR;
-using Meetings4IT.Shared.Implementations.Mediator;
+﻿using Meetings4IT.Shared.Implementations.Mediator;
 using Meetings4IT.Shared.Implementations.Wrappers;
 using Panels.Application.Contracts.Repositories;
 using Panels.Domain.Users;
@@ -26,13 +25,12 @@ public class CreateNewUserHandler : ICommandHandler<CreateNewUserCommand, Respon
             throw new ArgumentException($"User already exists: {request.UserId}");
         }
 
-        var newUser = User.Create(request.UserId, request.Name, request.Email!);
+        var newUser = User.Create(request.UserId, request.Name, request.Email!, request.City);
 
         await _userRepository.AddAsync(newUser, cancellationToken);
         await _userRepository.UnitOfWork.SaveChangesAsync(cancellationToken);
 
         _logger.Information($"User with external id {request.UserId} created");
         return Response.Ok();
-        //return Unit.Value;
     }
 }

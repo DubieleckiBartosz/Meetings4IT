@@ -40,6 +40,7 @@ public class DataSeeder
             Email = "admin.meetings@dev.com",
             FirstName = "admin_dev",
             LastName = "admin_meetings_dev",
+            City = "TestCity",
             EmailConfirmed = true
         };
 
@@ -51,6 +52,7 @@ public class DataSeeder
             Email = "user.meetings@dev.com",
             FirstName = "user_dev",
             LastName = "user_meetings_dev",
+            City = "TestCity",
             EmailConfirmed = true
         };
 

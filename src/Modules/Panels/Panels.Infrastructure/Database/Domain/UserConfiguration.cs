@@ -18,6 +18,11 @@ public class UserConfiguration : WatcherConfiguration, IEntityTypeConfiguration<
           .HasConversion(x => x.Value, x => new Email(x))
           .IsRequired();
 
+        builder.Property(p => p.City)
+          .HasColumnName("City")
+          .HasConversion(x => x.Value, x => new City(x))
+          .IsRequired();
+
         builder.Property(p => p.Name)
           .HasColumnName("Name").IsRequired();
 

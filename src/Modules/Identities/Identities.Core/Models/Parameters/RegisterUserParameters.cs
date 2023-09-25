@@ -11,6 +11,8 @@ public class RegisterUserParameters
     public string ConfirmPassword { get; init; }
     public string FirstName { get; init; }
     public string LastName { get; init; }
+    public string City { get; init; }
+
     public RegisterUserParameters()
     {
     }
@@ -23,7 +25,8 @@ public class RegisterUserParameters
         string password,
         string confirmPassword,
         string firstName,
-        string lastName)
+        string lastName,
+        string city)
     {
         UserName = userName;
         Email = email;
@@ -32,5 +35,6 @@ public class RegisterUserParameters
         ConfirmPassword = confirmPassword;
         FirstName = firstName;
         LastName = lastName;
+        City = city;
     }
 }

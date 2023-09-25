@@ -66,6 +66,7 @@ namespace Panels.Infrastructure.Database.Migrations
                     Identifier = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Email = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    City = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Version = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
