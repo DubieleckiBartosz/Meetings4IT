@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Builder;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Panels.Infrastructure.Outbox;
 
@@ -8,7 +9,13 @@ public static class OutboxPanelConfiguration
 {
     public static WebApplicationBuilder RegisterProcesses(this WebApplicationBuilder builder)
     {
-        builder.Services.AddHostedService<OutboxPanelProcessor>();
+        var outboxEnabled = builder.Configuration.GetSection("OutboxPanelOptions:Enabled").Get<bool>();
+        if (outboxEnabled)
+        {
+            builder.Services.AddScoped<IOutboxPanelAccessor, OutboxPanelAccessor>();
+            builder.Services.AddHostedService<OutboxPanelProcessor>();
+        }
+
         return builder;
     }
 }
