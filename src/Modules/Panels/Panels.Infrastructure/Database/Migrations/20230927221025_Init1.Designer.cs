@@ -12,8 +12,8 @@ using Panels.Infrastructure.Database;
 namespace Panels.Infrastructure.Database.Migrations
 {
     [DbContext(typeof(PanelContext))]
-    [Migration("20230927175412_Init3")]
-    partial class Init3
+    [Migration("20230927221025_Init1")]
+    partial class Init1
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -199,6 +199,55 @@ namespace Panels.Infrastructure.Database.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("ScheduledMeetings", "panels");
+                });
+
+            modelBuilder.Entity("Panels.Domain.Users.Entities.Opinion", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
+
+                    b.Property<string>("Content")
+                        .HasColumnType("nvarchar(max)")
+                        .HasColumnName("Content");
+
+                    b.Property<DateTime>("Created")
+                        .HasColumnType("datetime2")
+                        .HasColumnName("Created");
+
+                    b.Property<string>("CreatorId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)")
+                        .HasColumnName("CreatorId");
+
+                    b.Property<string>("CreatorName")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)")
+                        .HasColumnName("CreatorName");
+
+                    b.Property<DateTime>("LastModified")
+                        .HasColumnType("datetime2")
+                        .HasColumnName("LastModified");
+
+                    b.Property<int?>("RatingSoftSkills")
+                        .HasColumnType("int")
+                        .HasColumnName("RatingSoftSkills");
+
+                    b.Property<int?>("RatingTechnicalSkills")
+                        .HasColumnType("int")
+                        .HasColumnName("RatingTechnicalSkills");
+
+                    b.Property<int>("UserId")
+                        .HasColumnType("int")
+                        .HasColumnName("UserId");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("UserOpinions", "panels");
                 });
 
             modelBuilder.Entity("Panels.Domain.Users.Technologies.Technology", b =>
@@ -620,6 +669,15 @@ namespace Panels.Infrastructure.Database.Migrations
                     b.Navigation("_upcomingMeetings");
                 });
 
+            modelBuilder.Entity("Panels.Domain.Users.Entities.Opinion", b =>
+                {
+                    b.HasOne("Panels.Domain.Users.User", null)
+                        .WithMany("_opinions")
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
             modelBuilder.Entity("Panels.Domain.Users.Technologies.UserTechnology", b =>
                 {
                     b.HasOne("Panels.Domain.Users.Technologies.Technology", "Technology")
@@ -681,6 +739,8 @@ namespace Panels.Infrastructure.Database.Migrations
 
             modelBuilder.Entity("Panels.Domain.Users.User", b =>
                 {
+                    b.Navigation("_opinions");
+
                     b.Navigation("_stack");
                 });
 #pragma warning restore 612, 618

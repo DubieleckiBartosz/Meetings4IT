@@ -1,6 +1,8 @@
-﻿namespace Panels.Domain.Users.Exceptions;
+﻿using Meetings4IT.Shared.Abstractions.Exceptions;
 
-public class TechnologyExistsException : Meetings4IT.Shared.Abstractions.Exceptions.BaseException
+namespace Panels.Domain.Users.Exceptions;
+
+public class TechnologyExistsException : BaseException
 {
     public TechnologyExistsException() : base("Technology is already assigned to the user.")
     {

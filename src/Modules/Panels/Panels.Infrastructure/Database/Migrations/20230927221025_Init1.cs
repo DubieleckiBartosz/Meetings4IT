@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore.Migrations;
+﻿using System;
+using Microsoft.EntityFrameworkCore.Migrations;
 
 #nullable disable
 
@@ -23,6 +24,22 @@ namespace Panels.Infrastructure.Database.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_MeetingCategories", x => x.Index);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "OutboxMessages",
+                schema: "panels",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    OccurredOn = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    Type = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Data = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    ProcessedDate = table.Column<DateTime>(type: "datetime2", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_OutboxMessages", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -157,6 +174,34 @@ namespace Panels.Infrastructure.Database.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "UserOpinions",
+                schema: "panels",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    UserId = table.Column<int>(type: "int", nullable: false),
+                    CreatorId = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    CreatorName = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    RatingTechnicalSkills = table.Column<int>(type: "int", nullable: true),
+                    RatingSoftSkills = table.Column<int>(type: "int", nullable: true),
+                    Content = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Created = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    LastModified = table.Column<DateTime>(type: "datetime2", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_UserOpinions", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_UserOpinions_Users_UserId",
+                        column: x => x.UserId,
+                        principalSchema: "panels",
+                        principalTable: "Users",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "UserTechnology",
                 schema: "panels",
                 columns: table => new
@@ -234,6 +279,32 @@ namespace Panels.Infrastructure.Database.Migrations
                         onDelete: ReferentialAction.Cascade);
                 });
 
+            migrationBuilder.CreateTable(
+                name: "MeetingComments",
+                schema: "panels",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    MeetingId = table.Column<int>(type: "int", nullable: false),
+                    CreatorId = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    CreatorName = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Content = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Created = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    Modified = table.Column<DateTime>(type: "datetime2", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_MeetingComments", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_MeetingComments_Meetings_MeetingId",
+                        column: x => x.MeetingId,
+                        principalSchema: "panels",
+                        principalTable: "Meetings",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
             migrationBuilder.InsertData(
                 schema: "panels",
                 table: "MeetingCategories",
@@ -280,6 +351,12 @@ namespace Panels.Infrastructure.Database.Migrations
                 column: "MeetingId");
 
             migrationBuilder.CreateIndex(
+                name: "IX_MeetingComments_MeetingId",
+                schema: "panels",
+                table: "MeetingComments",
+                column: "MeetingId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_Meetings_CategoryIndex",
                 schema: "panels",
                 table: "Meetings",
@@ -290,6 +367,12 @@ namespace Panels.Infrastructure.Database.Migrations
                 schema: "panels",
                 table: "Meetings",
                 column: "ExplicitMeetingId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_UserOpinions_UserId",
+                schema: "panels",
+                table: "UserOpinions",
+                column: "UserId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_UserTechnology_TechnologyIndex",
@@ -309,11 +392,23 @@ namespace Panels.Infrastructure.Database.Migrations
                 schema: "panels");
 
             migrationBuilder.DropTable(
+                name: "MeetingComments",
+                schema: "panels");
+
+            migrationBuilder.DropTable(
+                name: "OutboxMessages",
+                schema: "panels");
+
+            migrationBuilder.DropTable(
                 name: "UpcomingMeetings",
                 schema: "panels");
 
             migrationBuilder.DropTable(
                 name: "UserImages",
+                schema: "panels");
+
+            migrationBuilder.DropTable(
+                name: "UserOpinions",
                 schema: "panels");
 
             migrationBuilder.DropTable(

@@ -16,4 +16,8 @@
     <ProjectReference Include="..\..\..\Shared\Meetings4IT.Shared.Abstractions\Meetings4IT.Shared.Abstractions.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Users\ValueTypes\" />
+  </ItemGroup>
+
 </Project>

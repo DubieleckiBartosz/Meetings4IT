@@ -2,11 +2,14 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using Panels.Domain.Users;
+using Panels.Domain.Users.Entities;
 
 namespace Panels.Infrastructure.Database.Domain;
 
 public class UserConfiguration : WatcherConfiguration, IEntityTypeConfiguration<User>
 {
+    public const string UserOpinionsNavigationName = "_opinions";
+
     public void Configure(EntityTypeBuilder<User> builder)
     {
         builder.ToTable("Users", "panels");
@@ -28,6 +31,9 @@ public class UserConfiguration : WatcherConfiguration, IEntityTypeConfiguration<
 
         builder.Property(p => p.Identifier)
           .HasColumnName("Identifier").IsRequired();
+
+        builder.HasMany<Opinion>(UserOpinionsNavigationName)
+            .WithOne().HasForeignKey(_ => _.UserId);
 
         builder.OwnsOne(_ => _.Image, b =>
         {
