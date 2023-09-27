@@ -42,6 +42,8 @@ internal class MeetingConfiguration : WatcherConfiguration, IEntityTypeConfigura
 
         builder.HasOne(_ => _.Category).WithMany().HasForeignKey(x => x.CategoryIndex);
 
+        builder.HasMany("_comments").WithOne().HasForeignKey("MeetingId");
+
         builder.OwnsOne<UserInfo>("Organizer", _ =>
         {
             _.Property(p => p.Name).HasColumnName("OrganizerName").IsRequired();

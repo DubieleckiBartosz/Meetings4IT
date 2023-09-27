@@ -9,12 +9,14 @@ using Panels.Domain.Meetings.Exceptions;
 using Panels.Domain.Meetings.Exceptions.InvitationExceptions;
 using Panels.Domain.Meetings.Statuses;
 using Panels.Domain.Meetings.ValueObjects;
+using System.Xml.Linq;
 
 namespace Panels.Domain.Meetings;
 
 public class Meeting : Entity, IAggregateRoot
 {
     private readonly List<Invitation> _invitations;
+    private readonly List<Comment> _comments;
     private readonly List<MeetingImage> _images;
 
     /// <summary>
@@ -55,6 +57,7 @@ public class Meeting : Entity, IAggregateRoot
     {
         this._invitations = new();
         this._images = new();
+        this._comments = new();
     }
 
     //This constructor is special for optimization
@@ -81,6 +84,7 @@ public class Meeting : Entity, IAggregateRoot
 
         this._invitations = new();
         this._images = new();
+        this._comments = new();
 
         IncrementVersion();
 
@@ -234,6 +238,38 @@ public class Meeting : Entity, IAggregateRoot
         }
 
         Status = MeetingStatus.Completed;
+        IncrementVersion();
+    }
+
+    public void AddComment(string creatorId, string creatorName, Content content)
+    {
+        var newComment = Comment.CreateComment(this.Id, creatorName, creatorId, content);
+        _comments.Add(newComment);
+        IncrementVersion();
+    }
+
+    public void UpdateComment(string creatorId, int commentId, Content content)
+    {
+        var comment = _comments.FirstOrDefault(_ => _.Id == commentId && _.CreatorId == creatorId);
+        if (comment == null)
+        {
+            throw new CommentNotFoundException(creatorId, this.Id);
+        }
+
+        comment.Update(content);
+        IncrementVersion();
+    }
+
+    public void DeleteComment(string creatorId, int commentId)
+    {
+        var comment = _comments.FirstOrDefault(_ => _.Id == commentId && _.CreatorId == creatorId);
+        if (comment == null)
+        {
+            throw new CommentNotFoundException(creatorId, this.Id);
+        }
+
+        _comments.Remove(comment);
+        IncrementVersion();
     }
 
     private void CheckIfMeetingOperationIsPossible()
