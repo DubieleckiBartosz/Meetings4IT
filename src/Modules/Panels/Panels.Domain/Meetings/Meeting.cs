@@ -27,6 +27,10 @@ public class Meeting : Entity, IAggregateRoot
 
     public UserInfo Organizer { get; }
     public int CategoryIndex { get; private set; }
+
+    /// <summary>
+    /// We don't add category from UI, but we have categories as seed
+    /// </summary>
     public MeetingCategory Category { get; private set; }
 
     //Anyone can come if public property is true

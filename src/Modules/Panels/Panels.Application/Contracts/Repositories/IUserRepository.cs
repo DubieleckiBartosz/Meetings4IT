@@ -22,4 +22,6 @@ public interface IUserRepository : IRepository<User>
     Task<User?> GetUserByNameNTAsync(string name, CancellationToken cancellationToken = default);
 
     Task<User?> GetUserByIdentifierAsync(string identifier, CancellationToken cancellationToken = default);
+
+    Task<User?> GetUserWithOpinionsById(int userId, CancellationToken cancellationToken = default);
 }

@@ -14,7 +14,7 @@ public class Content : ValueObject
         this.Value = value;
     }
 
-    public static implicit operator Content(string value) => new(value);
+    public static implicit operator Content?(string? value) => value == null ? null : new(value);
 
     public static implicit operator string(Content content) => content.Value;
 

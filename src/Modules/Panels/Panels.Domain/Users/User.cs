@@ -15,6 +15,12 @@ public class User : Entity, IAggregateRoot
     public UserImage? Image { get; private set; }
     public string Identifier { get; }
     public string Name { get; }
+
+    /// <summary>
+    /// Eager to go out
+    /// </summary>
+    public bool IsEager { get; private set; }
+
     public Email Email { get; private set; }
     public City City { get; private set; }
 
@@ -94,20 +100,31 @@ public class User : Entity, IAggregateRoot
         this.IncrementVersion();
     }
 
-    public void AddOpinion(int userId, string creatorId, string creatorName,
-        Rating? ratingTechnicalSkills, Rating? ratingSoftSkills, Content? content)
+    public void AddOpinion(string creatorId, string creatorName,
+    Rating? ratingTechnicalSkills, Rating? ratingSoftSkills, Content? content)
     {
-        var newOpinion = Opinion.CreateNewOpinion(userId, creatorId, creatorName, ratingTechnicalSkills, ratingSoftSkills, content);
+        var existingOpinion = _opinions.FirstOrDefault(_ => _.CreatorId == creatorId);
+        if (existingOpinion != null)
+        {
+            throw new UserOpinionExistsException(this.Id, creatorId, existingOpinion.Id);
+        }
+
+        var newOpinion = Opinion.CreateNewOpinion(this.Id, creatorId, creatorName, ratingTechnicalSkills, ratingSoftSkills, content);
 
         _opinions.Add(newOpinion);
         this.IncrementVersion();
     }
 
-    public void UpdateOpinionTechnicalSkills(int opinionId, string creatorOpinionId, Rating? ratingTechnicalSkills)
+    public void UpdateOpinion(
+        int opinionId,
+        string creatorId,
+        Rating? ratingTechnicalSkills,
+        Rating? ratingSoftSkills,
+        Content? content)
     {
-        var opinion = FindOpinionOrThrow(opinionId, creatorOpinionId);
+        var opinion = FindOpinionOrThrow(opinionId, creatorId);
 
-        opinion.UpdateRatingTechnicalSkills(ratingTechnicalSkills);
+        opinion.Update(ratingTechnicalSkills, ratingSoftSkills, content);
 
         var deleteOpinion = OpinionToDelete(opinion);
         if (deleteOpinion)
@@ -118,32 +135,10 @@ public class User : Entity, IAggregateRoot
         this.IncrementVersion();
     }
 
-    public void UpdateOpinionSoftSkills(int opinionId, string creatorOpinionId, Rating? ratingSoftSkills)
+    public void DeleteOpinion(int opinionId, string deletedBy)
     {
-        var opinion = FindOpinionOrThrow(opinionId, creatorOpinionId);
-
-        opinion.UpdateRatingSoftSkills(ratingSoftSkills);
-        var deleteOpinion = OpinionToDelete(opinion);
-        if (deleteOpinion)
-        {
-            _opinions.Remove(opinion);
-        }
-
-        this.IncrementVersion();
-    }
-
-    public void UpdateOpinionContent(int opinionId, string creatorOpinionId, Content? content)
-    {
-        var opinion = FindOpinionOrThrow(opinionId, creatorOpinionId);
-
-        opinion.UpdateContent(content);
-        var deleteOpinion = OpinionToDelete(opinion);
-        if (deleteOpinion)
-        {
-            _opinions.Remove(opinion);
-        }
-
-        this.IncrementVersion();
+        var opinion = FindOpinionOrThrow(opinionId, deletedBy);
+        _opinions.Remove(opinion);
     }
 
     private Opinion FindOpinionOrThrow(int opinionId, string creatorOpinionId) =>

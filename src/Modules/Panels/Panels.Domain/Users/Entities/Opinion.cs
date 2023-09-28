@@ -62,21 +62,9 @@ public class Opinion : Entity
         return new Opinion(userId, creatorId, creatorName, ratingTechnicalSkills, ratingSoftSkills, content);
     }
 
-    public void UpdateRatingSoftSkills(Rating? ratingSoftSkills)
-    {
-        RatingSoftSkills = ratingSoftSkills;
-        LastModified = Clock.CurrentDate();
-    }
-
-    public void UpdateRatingTechnicalSkills(Rating? ratingTechnicalSkills)
+    public void Update(Rating? ratingTechnicalSkills, Rating? ratingSoftSkills, Content? content)
     {
         RatingTechnicalSkills = ratingTechnicalSkills;
-        LastModified = Clock.CurrentDate();
-    }
-
-    public void UpdateContent(Content? content)
-    {
-        Content = content;
         LastModified = Clock.CurrentDate();
     }
 }

@@ -3,6 +3,7 @@ using Microsoft.EntityFrameworkCore;
 using Panels.Application.Contracts.Repositories;
 using Panels.Domain.Users;
 using Panels.Infrastructure.Database;
+using Panels.Infrastructure.Database.Domain;
 
 namespace Panels.Infrastructure.Repositories;
 
@@ -62,5 +63,14 @@ public class UserRepository : IUserRepository
     public async Task<User?> GetUserByIdentifierAsync(string identifier, CancellationToken cancellationToken = default)
     {
         return await _users.FirstOrDefaultAsync(_ => _.Identifier == identifier, cancellationToken);
+    }
+
+    public async Task<User?> GetUserWithOpinionsById(int userId, CancellationToken cancellationToken = default)
+    {
+        var user = await _users
+                .Include(UserConfiguration.UserOpinionsNavigationName)
+                .FirstOrDefaultAsync(_ => _.Id == userId, cancellationToken);
+
+        return user;
     }
 }
