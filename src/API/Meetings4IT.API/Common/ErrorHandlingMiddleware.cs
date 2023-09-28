@@ -58,7 +58,7 @@ public class ErrorHandlingMiddleware
             _ => StatusCodes.Status500InternalServerError
         };
 
-    public static IReadOnlyList<string>? AssignErrors(Exception exception)
+    private IReadOnlyList<string>? AssignErrors(Exception exception)
     {
         IReadOnlyList<string>? errors = null;
 
