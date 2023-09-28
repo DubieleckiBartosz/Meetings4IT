@@ -1,6 +1,8 @@
-﻿namespace Panels.Domain.Meetings.Exceptions;
+﻿using Meetings4IT.Shared.Abstractions.Exceptions;
 
-public class MeetingEndedException : Meetings4IT.Shared.Abstractions.Exceptions.BaseException
+namespace Panels.Domain.Meetings.Exceptions;
+
+public class MeetingEndedException : BaseException
 {
     public MeetingEndedException(int meetingId) : base($"Meeting {meetingId} ended.")
     {

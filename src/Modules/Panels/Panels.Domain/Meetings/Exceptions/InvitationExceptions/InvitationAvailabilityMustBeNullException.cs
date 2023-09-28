@@ -1,6 +1,8 @@
-﻿namespace Panels.Domain.Meetings.Exceptions.InvitationExceptions;
+﻿using Meetings4IT.Shared.Abstractions.Exceptions;
 
-public class InvitationAvailabilityMustBeNullException : Meetings4IT.Shared.Abstractions.Exceptions.BaseException
+namespace Panels.Domain.Meetings.Exceptions.InvitationExceptions;
+
+public class InvitationAvailabilityMustBeNullException : BaseException
 {
     public InvitationAvailabilityMustBeNullException() : base(
         "If the meeting is public, we cannot set the availability of invitations because it can cause conflicts.")

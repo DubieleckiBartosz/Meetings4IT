@@ -1,6 +1,8 @@
-﻿namespace Panels.Domain.Meetings.Exceptions.InvitationExceptions;
+﻿using Meetings4IT.Shared.Abstractions.Exceptions;
 
-public class InvitationCanceledException : Meetings4IT.Shared.Abstractions.Exceptions.BaseException
+namespace Panels.Domain.Meetings.Exceptions.InvitationExceptions;
+
+public class InvitationCanceledException : BaseException
 {
     public InvitationCanceledException(int invitationId) : base($"The {invitationId} invitation has been canceled and cannot be changed.")
     {

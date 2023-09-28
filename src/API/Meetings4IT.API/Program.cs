@@ -1,4 +1,5 @@
 using Identities.Core.Reference;
+using Meetings4IT.API.Common;
 using Meetings4IT.API.Configurations;
 using Meetings4IT.API.Modules;
 using Meetings4IT.Shared.Implementations;
@@ -51,6 +52,8 @@ if (app.Environment.IsDevelopment())
     app.UseSwagger();
     app.UseSwaggerUI();
 }
+
+app.UseCustomExceptionHandler();
 
 app.UseHttpsRedirection();
 

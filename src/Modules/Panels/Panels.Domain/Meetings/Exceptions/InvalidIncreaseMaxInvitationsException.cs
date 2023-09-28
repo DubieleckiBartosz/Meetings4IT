@@ -1,6 +1,8 @@
-﻿namespace Panels.Domain.Meetings.Exceptions;
+﻿using Meetings4IT.Shared.Abstractions.Exceptions;
 
-public class InvalidIncreaseMaxInvitationsException : Meetings4IT.Shared.Abstractions.Exceptions.BaseException
+namespace Panels.Domain.Meetings.Exceptions;
+
+public class InvalidIncreaseMaxInvitationsException : BaseException
 {
     public InvalidIncreaseMaxInvitationsException() : base("The number of invitations can only be greater than before")
     {

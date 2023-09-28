@@ -1,6 +1,8 @@
-﻿namespace Panels.Domain.Meetings.Exceptions.InvitationExceptions;
+﻿using Meetings4IT.Shared.Abstractions.Exceptions;
 
-public class InvitationAlreadyExistsException : Meetings4IT.Shared.Abstractions.Exceptions.BaseException
+namespace Panels.Domain.Meetings.Exceptions.InvitationExceptions;
+
+public class InvitationAlreadyExistsException : BaseException
 {
     public InvitationAlreadyExistsException(string email) : base($"Invitation for {email} already exists.")
     {
