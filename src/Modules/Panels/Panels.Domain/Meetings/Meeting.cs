@@ -9,7 +9,6 @@ using Panels.Domain.Meetings.Exceptions;
 using Panels.Domain.Meetings.Exceptions.InvitationExceptions;
 using Panels.Domain.Meetings.Statuses;
 using Panels.Domain.Meetings.ValueObjects;
-using System.Xml.Linq;
 
 namespace Panels.Domain.Meetings;
 

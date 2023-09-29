@@ -8,7 +8,9 @@ using Panels.Application.Features.Meetings.Commands.CancelMeeting;
 using Panels.Application.Features.Meetings.Commands.CreateMeetingInvitation;
 using Panels.Application.Features.Meetings.Commands.DeclareNewMeeting;
 using Panels.Application.Features.Meetings.Commands.RejectMeetingInvitation;
+using Panels.Application.Features.Meetings.Queries.GetMeetingsBySearch;
 using Panels.Application.Models.Parameters;
+using Panels.Application.Models.Views;
 using Swashbuckle.AspNetCore.Annotations;
 
 namespace Meetings4IT.API.Modules.Panels;
@@ -55,6 +57,7 @@ public class MeetingController : BaseController
         return Ok(response);
     }
 
+    [AllowAnonymous]
     [SwaggerOperation(Summary = "Accepting invitation")]
     [ProducesResponseType(typeof(object), 400)]
     [ProducesResponseType(typeof(object), 500)]
@@ -66,6 +69,7 @@ public class MeetingController : BaseController
         return Ok(response);
     }
 
+    [AllowAnonymous]
     [SwaggerOperation(Summary = "Rejection invitation")]
     [ProducesResponseType(typeof(object), 400)]
     [ProducesResponseType(typeof(object), 500)]
@@ -77,9 +81,21 @@ public class MeetingController : BaseController
         return Ok(response);
     }
 
+    [AllowAnonymous]
+    [SwaggerOperation(Summary = "Get meetings by search")]
+    [ProducesResponseType(typeof(object), 400)]
+    [ProducesResponseType(typeof(object), 500)]
+    [ProducesResponseType(typeof(Response<List<MeetingSearchViewModel>>), 200)]
+    [HttpPost("[action]")]
+    public async Task<IActionResult> GetMeetingsBySearch([FromBody] GetMeetingsBySearchParameters parameters)
+    {
+        var response = await QueryBus.Send(new GetMeetingsBySearchQuery(parameters));
+        return Ok(response);
+    }
+
     [SwaggerOperation(Summary = "Get meeting by Id")]
     [HttpGet("[action]")]
-    public async Task<IActionResult> GetMeetingById([FromQuery] int meetingId)
+    public async Task<IActionResult> GetMeetingById([FromRoute] int meetingId)
     {
         return Ok(new { Message = "OK" });
     }

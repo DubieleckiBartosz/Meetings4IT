@@ -22,4 +22,8 @@
     <ProjectReference Include="..\..\Modules\Panels\Panels.Infrastructure\Panels.Infrastructure.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Logs\" />
+  </ItemGroup>
+
 </Project>

@@ -1,7 +1,9 @@
 ﻿using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.DependencyInjection;
+using Panels.Application.Contracts.ReadRepositories;
 using Panels.Application.Contracts.Repositories;
 using Panels.Infrastructure.Repositories;
+using Panels.Infrastructure.Repositories.ReadRepositories;
 
 namespace Panels.Infrastructure.Configurations;
 
@@ -15,7 +17,8 @@ public static class PanelInfrastructureDependencyInjection
             .AddScoped<IScheduledMeetingRepository, ScheduledMeetingRepository>()
             .AddScoped<IMeetingCategoryRepository, MeetingCategoryRepository>()
             .AddScoped<ITechnologyRepository, TechnologyRepository>()
-            .AddScoped<IUserRepository, UserRepository>();
+            .AddScoped<IUserRepository, UserRepository>()
+            .AddScoped<IMeetingReadRepository, MeetingReadRepository>();
 
         return builder;
     }

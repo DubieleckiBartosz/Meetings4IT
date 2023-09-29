@@ -1,29 +1,22 @@
 ﻿using Meetings4IT.Shared.Abstractions.Kernel;
 using Meetings4IT.Shared.Abstractions.Time;
-using Meetings4IT.Shared.Implementations.Dapper;
 using Meetings4IT.Shared.Implementations.EntityFramework.Extensions;
-using Meetings4IT.Shared.Implementations.Options;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Options;
 using Panels.Application.Contracts.Repositories;
 using Panels.Domain.Meetings;
 using Panels.Domain.Meetings.Statuses;
 using Panels.Infrastructure.Database;
 using Panels.Infrastructure.Database.Domain;
-using Serilog;
 
 namespace Panels.Infrastructure.Repositories;
 
-public class MeetingRepository : DapperContext, IMeetingRepository
+public class MeetingRepository : IMeetingRepository
 {
     private readonly DbSet<Meeting> _meetings;
     private readonly PanelContext _context;
     public IUnitOfWork UnitOfWork => _context;
 
-    public MeetingRepository(
-        PanelContext context,
-        IOptions<DapperOptions> options,
-        ILogger logger) : base(options.Value?.DefaultConnection!, logger)
+    public MeetingRepository(PanelContext context)
     {
         _meetings = context.Meetings;
         _context = context;

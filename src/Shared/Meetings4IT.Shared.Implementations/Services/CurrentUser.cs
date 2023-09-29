@@ -40,7 +40,7 @@ public class CurrentUser : ICurrentUser
     {
         get
         {
-            return Claims?.Claims?.First(_ => _.Type == MeetingsClaimTypes.Subject)?.Value!;
+            return Claims?.Claims?.FirstOrDefault(_ => _.Type == MeetingsClaimTypes.Subject)?.Value!;
         }
     }
 
@@ -48,7 +48,7 @@ public class CurrentUser : ICurrentUser
     {
         get
         {
-            var result = Claims?.Claims.First(_ => _.Type == MeetingsClaimTypes.UserName)?.Value;
+            var result = Claims?.Claims.FirstOrDefault(_ => _.Type == MeetingsClaimTypes.UserName)?.Value;
             if (result == null)
             {
                 throw new BaseException("User name cannot be null", "User name is null",
@@ -63,7 +63,7 @@ public class CurrentUser : ICurrentUser
     {
         get
         {
-            var result = Claims?.Claims.First(_ => _.Type == MeetingsClaimTypes.Email)?.Value;
+            var result = Claims?.Claims.FirstOrDefault(_ => _.Type == MeetingsClaimTypes.Email)?.Value;
             if (result == null)
             {
                 throw new BaseException("User mail cannot be null", "User mail is null",
