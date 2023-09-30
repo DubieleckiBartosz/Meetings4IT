@@ -30,6 +30,7 @@ internal class MeetingConfiguration : WatcherConfiguration, IEntityTypeConfigura
 
         builder.Property(_ => _.IsPublic).HasColumnName("IsPublic").IsRequired();
         builder.Property(_ => _.MaxInvitations).HasColumnName("MaxInvitations").IsRequired(false);
+        builder.Property(_ => _.Created).HasColumnName("Created").IsRequired();
 
         builder.Property(_ => _.Description)
           .HasColumnName("Description")
@@ -46,7 +47,10 @@ internal class MeetingConfiguration : WatcherConfiguration, IEntityTypeConfigura
 
         builder.OwnsOne<UserInfo>("Organizer", _ =>
         {
-            _.Property(p => p.Name).HasColumnName("OrganizerName").IsRequired();
+            _.Property(p => p.Name)
+                .HasColumnName("OrganizerName")
+                .HasColumnType("varchar(50)").IsRequired();
+
             _.Property(p => p.Identifier).HasColumnName("OrganizerId").IsRequired();
         });
 
@@ -78,16 +82,17 @@ internal class MeetingConfiguration : WatcherConfiguration, IEntityTypeConfigura
             //b.HasKey("AddressId", "MeetingId");
 
             b.Property(p => p.City)
-              .HasMaxLength(50)
+              .HasColumnType("varchar(50)")
               .HasColumnName("City")
               .IsRequired();
 
             b.Property(p => p.Street)
-              .HasMaxLength(50)
+              .HasColumnType("varchar(50)")
               .HasColumnName("Street")
               .IsRequired();
 
             b.Property(p => p.NumberStreet)
+              .HasColumnType("varchar(15)")
               .HasColumnName("NumberStreet")
               .IsRequired();
         });
@@ -101,6 +106,7 @@ internal class MeetingConfiguration : WatcherConfiguration, IEntityTypeConfigura
 
             _.Property(p => p.Email)
               .HasColumnName("Email")
+              .HasColumnType("varchar(50)")
               .HasConversion(x => x.Value, x => new Email(x))
               .IsRequired();
 
@@ -111,11 +117,13 @@ internal class MeetingConfiguration : WatcherConfiguration, IEntityTypeConfigura
 
             _.Property(p => p.Code)
               .HasColumnName("Code")
+              .HasColumnType("varchar(20)")
               .HasConversion(x => x.Value, x => InvitationCode.Create(x))
               .IsRequired();
 
             _.Property(p => p.RecipientName)
               .HasColumnName("RecipientName")
+              .HasColumnType("varchar(50)")
               .HasConversion(x => x.Value, x => new NameInvitationRecipient(x))
               .IsRequired();
 

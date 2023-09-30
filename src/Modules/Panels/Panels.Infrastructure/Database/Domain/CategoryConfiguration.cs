@@ -17,8 +17,8 @@ public class CategoryConfiguration : IEntityTypeConfiguration<MeetingCategory>
 
         builder
             .Property(category => category.Value)
-            .HasColumnName("Value").IsRequired()
-        .IsRequired();
+            .HasColumnName("Value")
+            .HasColumnType("varchar(30)").IsRequired();
 
         builder.HasData(
             new MeetingCategory(1, "Party"),

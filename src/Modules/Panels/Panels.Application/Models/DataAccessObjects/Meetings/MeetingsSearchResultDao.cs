@@ -2,10 +2,15 @@
 
 public class MeetingsSearchResultDao
 {
-    public string City { get; set; }
-    public string Status { get; set; }
-    public DateTime StartDate { get; set; }
-    public DateTime EndDate { get; set; }
-    public string Category { get; set; }
-    public string OrganizerName { get; set; }
+    public int MeetingId { get; init; }
+    public string City { get; init; }
+    public string Status { get; init; }
+    public DateTime StartDate { get; init; }
+    public DateTime? EndDate { get; init; }
+    public DateTime? CancellationDate { get; init; }
+    public DateTime Created { get; init; }
+    public string Category { get; init; }
+    public string OrganizerId { get; init; }
+    public string OrganizerName { get; init; }
+    public int TotalCount { get; init; }
 }

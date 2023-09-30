@@ -18,7 +18,10 @@ public class UserOpinionConfiguration : IEntityTypeConfiguration<Opinion>
 
         builder.Property(_ => _.CreatorId).HasColumnName("CreatorId").IsRequired();
         builder.Property(_ => _.UserId).HasColumnName("UserId").IsRequired();
-        builder.Property(_ => _.CreatorName).HasColumnName("CreatorName").IsRequired();
+        builder.Property(_ => _.CreatorName)
+            .HasColumnType("varchar(50)")
+            .HasColumnName("CreatorName").IsRequired();
+
         builder.Property(_ => _.Created).HasColumnName("Created").IsRequired();
         builder.Property(_ => _.LastModified).HasColumnName("LastModified").IsRequired();
 

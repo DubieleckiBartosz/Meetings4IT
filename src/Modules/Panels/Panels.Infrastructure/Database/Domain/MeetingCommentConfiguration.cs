@@ -17,7 +17,11 @@ public class MeetingCommentConfiguration : IEntityTypeConfiguration<Comment>
 
         builder.Property(_ => _.CreatorId).HasColumnName("CreatorId").IsRequired();
         builder.Property(_ => _.MeetingId).HasColumnName("MeetingId").IsRequired();
-        builder.Property(_ => _.CreatorName).HasColumnName("CreatorName").IsRequired();
+
+        builder.Property(_ => _.CreatorName)
+            .HasColumnName("CreatorName")
+            .HasColumnType("varchar(50)").IsRequired();
+
         builder.Property(_ => _.Created).HasColumnName("Created").IsRequired();
         builder.Property(_ => _.Modified).HasColumnName("Modified").IsRequired();
 

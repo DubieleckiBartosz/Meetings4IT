@@ -12,6 +12,6 @@ public class InvitationCodeGenerator
         var randomLetters = new string(Enumerable.Repeat(characters, length)
             .Select(_ => _[rnd.Next(_.Length)]).ToArray());
 
-        return $"{prefix}{randomLetters}{guidId}";
+        return $"{randomLetters}{prefix}{guidId}";
     }
 }

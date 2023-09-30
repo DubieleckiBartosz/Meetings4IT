@@ -7,7 +7,7 @@ using Panels.Application.Models.Views;
 
 namespace Panels.Application.Features.Meetings.Queries.GetMeetingsBySearch;
 
-public record GetMeetingsBySearchQuery : IQuery<Response<List<MeetingSearchViewModel>>>
+public record GetMeetingsBySearchQuery : IQuery<Response<ResponseSearchList<MeetingSearchViewModel>>>
 {
     public string? OrganizerName { get; }
     public DateTime? From { get; }

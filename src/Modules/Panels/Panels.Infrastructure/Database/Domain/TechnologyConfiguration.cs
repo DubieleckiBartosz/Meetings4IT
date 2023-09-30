@@ -18,6 +18,7 @@ public class TechnologyConfiguration : IEntityTypeConfiguration<Technology>
 
         builder
             .Property(_ => _.Value)
+            .HasColumnType("varchar(25)")
             .HasColumnName("Value").IsRequired()
         .IsRequired();
 

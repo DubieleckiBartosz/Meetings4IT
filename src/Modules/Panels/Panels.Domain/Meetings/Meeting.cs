@@ -36,6 +36,7 @@ public class Meeting : Entity, IAggregateRoot
     public bool IsPublic { get; private set; }
 
     public int? MaxInvitations { get; private set; }
+    public DateTime Created { get; }
     public Description Description { get; private set; }
     public Address Address { get; private set; }
     public MeetingCancellation? Cancellation { get; private set; }
@@ -82,6 +83,7 @@ public class Meeting : Entity, IAggregateRoot
         Date = date;
         IsPublic = isPublic;
         MaxInvitations = maxInvitations;
+        Created = Clock.CurrentDate();
         ExplicitMeetingId = MeetingId.Create();
         Status = MeetingStatus.Active;
 

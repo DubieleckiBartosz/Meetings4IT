@@ -23,11 +23,13 @@ public class UserConfiguration : WatcherConfiguration, IEntityTypeConfiguration<
 
         builder.Property(p => p.City)
           .HasColumnName("City")
+          .HasColumnType("varchar(50)")
           .HasConversion(x => x.Value, x => new City(x))
           .IsRequired();
 
         builder.Property(p => p.Name)
-          .HasColumnName("Name").IsRequired();
+            .HasColumnType("varchar(50)")
+            .HasColumnName("Name").IsRequired();
 
         builder.Property(p => p.Identifier)
           .HasColumnName("Identifier").IsRequired();
