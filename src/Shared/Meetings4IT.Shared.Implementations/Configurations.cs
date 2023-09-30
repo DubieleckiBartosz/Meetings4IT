@@ -42,7 +42,7 @@ public static class Configurations
 
         services.RegisterMediator(assemblyTypes);
 
-        services.Configure<LogOptions>(config.GetSection(nameof(LogOptions)));
+        services.Configure<IntegrationLogOptions>(config.GetSection(nameof(IntegrationLogOptions)));
 
         if (withDapper)
         {
@@ -79,7 +79,6 @@ public static class Configurations
 
         //INTEGRATION LOG REPO
         services
-            .AddScoped<IntegrationEventLogContext>()
             .AddTransient<IIntegrationEventLogRepository, IntegrationEventLogRepository>()
             .AddTransient<IIntegrationEventLogService, IntegrationEventLogService>();
 

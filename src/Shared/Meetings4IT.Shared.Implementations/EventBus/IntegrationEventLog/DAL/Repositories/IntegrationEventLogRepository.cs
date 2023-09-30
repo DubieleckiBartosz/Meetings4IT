@@ -1,17 +1,32 @@
 ﻿using Dapper;
 using Meetings4IT.Shared.Implementations.Dapper;
+using Meetings4IT.Shared.Implementations.Options;
+using Microsoft.Extensions.Options;
+using Serilog;
 using System.Data;
 
 namespace Meetings4IT.Shared.Implementations.EventBus.IntegrationEventLog.DAL.Repositories;
 
-public class IntegrationEventLogRepository : BaseRepository<IntegrationEventLogContext>, IIntegrationEventLogRepository
+public class IntegrationEventLogRepository : BaseRepository, IIntegrationEventLogRepository
 {
-    public IntegrationEventLogRepository(IntegrationEventLogContext dapperContext) : base(dapperContext)
+    private readonly IntegrationLogOptions _options;
+    private readonly ILogger _logger;
+
+    public IntegrationEventLogRepository(IOptions<IntegrationLogOptions> options, ILogger logger)
+        : base(options!.Value.LogConnection, logger)
     {
+        _options = options!.Value;
+        _logger = logger;
     }
 
     public async Task SaveEventLogAsync(IntegrationEventLog integrationEventLog)
     {
+        if (!_options.Enabled)
+        {
+            _logger.Information("IntegrationEventLogRepository is disabled");
+            return;
+        }
+
         var parameters = new DynamicParameters();
         parameters.Add("@eventId", integrationEventLog.EventId);
         parameters.Add("@creationTime", integrationEventLog.CreationTime);
@@ -41,6 +56,12 @@ public class IntegrationEventLogRepository : BaseRepository<IntegrationEventLogC
 
     private async Task UpdateStatusAsync(Guid eventId, EventState status, bool sent = false)
     {
+        if (!_options.Enabled)
+        {
+            _logger.Information("IntegrationEventLogRepository is disabled");
+            return;
+        }
+
         var parameters = new DynamicParameters();
 
         parameters.Add("@eventId", eventId);
