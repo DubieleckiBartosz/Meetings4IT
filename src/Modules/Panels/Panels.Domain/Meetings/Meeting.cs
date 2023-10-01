@@ -7,8 +7,10 @@ using Panels.Domain.Meetings.Entities;
 using Panels.Domain.Meetings.Events;
 using Panels.Domain.Meetings.Exceptions;
 using Panels.Domain.Meetings.Exceptions.InvitationExceptions;
+using Panels.Domain.Meetings.Exceptions.InvitationRequestExceptions;
 using Panels.Domain.Meetings.Statuses;
 using Panels.Domain.Meetings.ValueObjects;
+using System.Linq;
 
 namespace Panels.Domain.Meetings;
 
@@ -17,6 +19,7 @@ public class Meeting : Entity, IAggregateRoot
     private readonly List<Invitation> _invitations;
     private readonly List<Comment> _comments;
     private readonly List<MeetingImage> _images;
+    private readonly List<InvitationRequest> _requests;
 
     /// <summary>
     /// This property is responsible for upcoming meetings.
@@ -35,7 +38,20 @@ public class Meeting : Entity, IAggregateRoot
     //Anyone can come if public property is true
     public bool IsPublic { get; private set; }
 
+    /// <summary>
+    /// Property is responsible for the visibility of meeting on panel.
+    /// This is always true for a basic subscription or free account
+    /// </summary>
+    public bool HasPanelVisibility { get; private set; }
+
     public int? MaxInvitations { get; private set; }
+
+    /// <summary>
+    /// This property can be calculated by the invitation list,
+    /// but we choose this approach for faster queries
+    /// </summary>
+    public int AcceptedInvitations { get; private set; }
+
     public DateTime Created { get; }
     public Description Description { get; private set; }
     public Address Address { get; private set; }
@@ -49,7 +65,6 @@ public class Meeting : Entity, IAggregateRoot
     /// </summary>
     public bool IsCompletedNow => Date.StartDate <= Clock.CurrentDate() && Status != MeetingStatus.Cancelled;
 
-    private int AcceptedInvitations => NumberInvitationsByStatus(InvitationStatus.Accepted);
     private int PendingInvitations => NumberInvitationsByStatus(InvitationStatus.Pending);
 
     private int NumberInvitationsByStatus(InvitationStatus status)
@@ -62,6 +77,7 @@ public class Meeting : Entity, IAggregateRoot
         this._invitations = new();
         this._images = new();
         this._comments = new();
+        this._requests = new();
     }
 
     //This constructor is special for optimization
@@ -74,6 +90,7 @@ public class Meeting : Entity, IAggregateRoot
         Address address,
         DateRange date,
         bool isPublic,
+        bool hasPanelVisibility,
         int? maxInvitations)
     {
         Organizer = organizer;
@@ -82,7 +99,9 @@ public class Meeting : Entity, IAggregateRoot
         Address = address;
         Date = date;
         IsPublic = isPublic;
+        HasPanelVisibility = hasPanelVisibility;
         MaxInvitations = maxInvitations;
+        AcceptedInvitations = 0;
         Created = Clock.CurrentDate();
         ExplicitMeetingId = MeetingId.Create();
         Status = MeetingStatus.Active;
@@ -90,6 +109,7 @@ public class Meeting : Entity, IAggregateRoot
         this._invitations = new();
         this._images = new();
         this._comments = new();
+        this._requests = new();
 
         IncrementVersion();
 
@@ -103,6 +123,7 @@ public class Meeting : Entity, IAggregateRoot
         Address address,
         DateRange date,
         bool isPublic,
+        bool hasPanelVisibility,
         int? maxInvitations = null)
     {
         if (isPublic && maxInvitations.HasValue)
@@ -117,6 +138,7 @@ public class Meeting : Entity, IAggregateRoot
             address,
             date,
             isPublic,
+            hasPanelVisibility,
             maxInvitations);
     }
 
@@ -155,7 +177,11 @@ public class Meeting : Entity, IAggregateRoot
         IncrementVersion();
     }
 
-    public Invitation CreateNewInvitation(Email email, Date invitationExpirationDate, NameInvitationRecipient recipientName)
+    public Invitation CreateNewInvitation(
+        Email email,
+        Date invitationExpirationDate,
+        NameInvitationRecipient recipientName,
+        string? recipientId = null)
     {
         this.CheckIfMeetingOperationIsPossible();
         this.CheckIfMeetingWasCanceled();
@@ -187,6 +213,15 @@ public class Meeting : Entity, IAggregateRoot
         var invitation = new Invitation(email, invitationExpirationDate, code, recipientName);
         _invitations.Add(invitation);
 
+        if (recipientId != null)
+        {
+            var requestInvitation = this._requests.FirstOrDefault(_ => _.RequestCreator.Identifier == recipientId);
+            if (requestInvitation != null)
+            {
+                requestInvitation.Accept();
+            }
+        }
+
         this.AddEvent(NewInvitationCreated.Create(email, Organizer.Name, ExplicitMeetingId, code));
         IncrementVersion();
 
@@ -202,6 +237,8 @@ public class Meeting : Entity, IAggregateRoot
 
         invitation.Accept();
 
+        AcceptedInvitations = NumberInvitationsByStatus(InvitationStatus.Accepted);
+
         this.AddEvent(InvitationAccepted.Create(ExplicitMeetingId.ToString(), Organizer.Identifier, invitation.RecipientName));
         IncrementVersion();
     }
@@ -213,6 +250,8 @@ public class Meeting : Entity, IAggregateRoot
 
         var invitation = FindInvitationByCode(code);
         invitation.Reject();
+
+        AcceptedInvitations = NumberInvitationsByStatus(InvitationStatus.Accepted);
 
         this.AddEvent(InvitationRejected.Create(ExplicitMeetingId.ToString(), Organizer.Identifier, invitation.RecipientName));
         IncrementVersion();
@@ -275,6 +314,39 @@ public class Meeting : Entity, IAggregateRoot
 
         _comments.Remove(comment);
         IncrementVersion();
+    }
+
+    /// <summary>
+    /// Method responsible for changing the status of the invitation request
+    /// Method available only to the meeting creator
+    /// </summary>
+    /// <param name="requestInvitationCreatorId"></param>
+    /// <param name="reason"></param>
+    public void RejectRequestInvitation(string requestInvitationCreatorId, string? reason = null)
+    {
+        var requestInvitation = this._requests.FirstOrDefault(_ => _.RequestCreator.Identifier == requestInvitationCreatorId);
+        if (requestInvitation == null)
+        {
+            throw new InvitationRequestNotFoundException(this.Id, requestInvitationCreatorId);
+        }
+
+        requestInvitation.Reject(reason);
+    }
+
+    /// <summary>
+    /// Method available to invitation request creator.
+    /// E.g. I've created an invitation request by mistake and I want to delete it
+    /// </summary>
+    /// <param name="requestInvitationCreatorId"></param>
+    public void DeleteRequestInvitation(string requestInvitationCreatorId)
+    {
+        var requestInvitation = this._requests.FirstOrDefault(_ => _.RequestCreator.Identifier == requestInvitationCreatorId);
+        if (requestInvitation == null)
+        {
+            throw new InvitationRequestNotFoundException(this.Id, requestInvitationCreatorId);
+        }
+
+        this._requests.Remove(requestInvitation);
     }
 
     private void CheckIfMeetingOperationIsPossible()

@@ -30,10 +30,12 @@ public class UserOpinionConfiguration : IEntityTypeConfiguration<Opinion>
           .HasConversion(x => x.Value, x => new Content(x)).IsRequired(false);
 
         builder.Property(_ => _.RatingTechnicalSkills)
+          .HasColumnType("tinyint")
           .HasColumnName("RatingTechnicalSkills")
           .HasConversion(x => x.Value, x => new Rating(x)).IsRequired(false);
 
         builder.Property(_ => _.RatingSoftSkills)
+          .HasColumnType("tinyint")
           .HasColumnName("RatingSoftSkills")
           .HasConversion(x => x.Value, x => new Rating(x)).IsRequired(false);
     }

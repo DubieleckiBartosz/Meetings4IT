@@ -13,6 +13,7 @@ public class DeclareNewMeetingParameters
     public DateTime StartDate { get; init; }
     public DateTime? EndDate { get; init; }
     public int IndexCategory { get; init; }
+    public bool HasPanelVisibility { get; init; }
 
     public DeclareNewMeetingParameters()
     {
@@ -28,7 +29,8 @@ public class DeclareNewMeetingParameters
         int? maxInvitations,
         DateTime startDate,
         DateTime? endDate,
-        int indexCategory)
+        int indexCategory,
+        bool hasPanelVisibility)
     {
         Description = description;
         City = city;
@@ -39,5 +41,6 @@ public class DeclareNewMeetingParameters
         StartDate = startDate;
         EndDate = endDate;
         IndexCategory = indexCategory;
+        HasPanelVisibility = hasPanelVisibility;
     }
 }

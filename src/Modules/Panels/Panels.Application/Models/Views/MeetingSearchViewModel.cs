@@ -13,6 +13,8 @@ public class MeetingSearchViewModel
     public string Category { get; } = default!;
     public string OrganizerName { get; } = default!;
     public string OrganizerId { get; } = default!;
+    public int? MaxInvitations { get; }
+    public int AcceptedInvitations { get; }
     public DateTime Created { get; }
 
     private MeetingSearchViewModel(
@@ -25,7 +27,9 @@ public class MeetingSearchViewModel
         string category,
         string organizerName,
         string organizerId,
-        DateTime created)
+        DateTime created,
+        int? maxInvitations,
+        int acceptedInvitations)
     {
         MeetingId = meetingId;
         City = city;
@@ -37,6 +41,8 @@ public class MeetingSearchViewModel
         OrganizerName = organizerName;
         OrganizerId = organizerId;
         Created = created;
+        MaxInvitations = maxInvitations;
+        AcceptedInvitations = acceptedInvitations;
     }
 
     public static implicit operator MeetingSearchViewModel(
@@ -52,6 +58,8 @@ public class MeetingSearchViewModel
             meetingsSearchResultDao.Category,
             meetingsSearchResultDao.OrganizerName,
             meetingsSearchResultDao.OrganizerId,
-            meetingsSearchResultDao.Created);
+            meetingsSearchResultDao.Created,
+            meetingsSearchResultDao.MaxInvitations,
+            meetingsSearchResultDao.AcceptedInvitations);
     }
 }

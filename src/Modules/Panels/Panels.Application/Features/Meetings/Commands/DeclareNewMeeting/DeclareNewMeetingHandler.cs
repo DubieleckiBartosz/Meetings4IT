@@ -50,6 +50,11 @@ public class DeclareNewMeetingHandler : ICommandHandler<DeclareNewMeetingCommand
         UserInfo organizer = new UserInfo(organizerId, organizerName);
         DateRange dateRange = new DateRange(request.StartDate, request.EndDate);
 
+        if (request.HasPanelVisibility == false)
+        {
+            //After adding the subscription and companies, we need to check whether the operation is possible
+        }
+
         var newMeeting = _meetingDomainService.Creation(
             scheduledMeeting,
             organizer,
@@ -58,6 +63,7 @@ public class DeclareNewMeetingHandler : ICommandHandler<DeclareNewMeetingCommand
             address,
             dateRange,
             request.IsPublic,
+            request.HasPanelVisibility,
             request.MaxInvitations);
 
         await _meetingRepository.CreateNewMeetingAsync(newMeeting, cancellationToken);

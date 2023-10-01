@@ -9,7 +9,7 @@ namespace Panels.UnitTests.Domain.Generators;
 
 public static class MeetingGenerator
 {
-    public static Meeting GetMeeting(this Fixture fixture, bool isPublic = true)
+    public static Meeting GetMeeting(this Fixture fixture, bool isPublic = true, bool hasPanelVisibility = true)
     {
         var organizerId = fixture.Create<string>();
         var organizerName = fixture.Create<string>();
@@ -35,6 +35,7 @@ public static class MeetingGenerator
             address,
             dateRange,
             isPublic,
+            hasPanelVisibility,
             maxInvitations);
 
         return result;

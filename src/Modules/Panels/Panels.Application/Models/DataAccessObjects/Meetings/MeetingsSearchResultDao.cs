@@ -12,5 +12,7 @@ public class MeetingsSearchResultDao
     public string Category { get; init; }
     public string OrganizerId { get; init; }
     public string OrganizerName { get; init; }
+    public int? MaxInvitations { get; }
+    public int AcceptedInvitations { get; }
     public int TotalCount { get; init; }
 }

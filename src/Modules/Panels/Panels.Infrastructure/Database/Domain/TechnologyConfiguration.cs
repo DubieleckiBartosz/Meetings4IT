@@ -13,6 +13,7 @@ public class TechnologyConfiguration : IEntityTypeConfiguration<Technology>
 
         builder.HasKey(_ => _.Index);
         builder.Property(_ => _.Index)
+               .HasColumnType("int")
                .ValueGeneratedOnAdd()
                .UseIdentityColumn();
 

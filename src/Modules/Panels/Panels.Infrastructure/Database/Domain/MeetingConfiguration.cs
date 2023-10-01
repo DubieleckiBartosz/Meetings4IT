@@ -11,8 +11,9 @@ namespace Panels.Infrastructure.Database.Domain;
 internal class MeetingConfiguration : WatcherConfiguration, IEntityTypeConfiguration<Meeting>
 {
     internal const string Invitations = "_invitations";
-
     internal const string Images = "_images";
+    internal const string InvitationRequests = "_requests";
+    internal const string Comments = "_comments";
 
     public void Configure(EntityTypeBuilder<Meeting> builder)
     {
@@ -28,8 +29,23 @@ internal class MeetingConfiguration : WatcherConfiguration, IEntityTypeConfigura
 
         builder.Ignore(x => x.Events);
 
-        builder.Property(_ => _.IsPublic).HasColumnName("IsPublic").IsRequired();
-        builder.Property(_ => _.MaxInvitations).HasColumnName("MaxInvitations").IsRequired(false);
+        builder.Property(_ => _.IsPublic)
+            .HasColumnName("IsPublic")
+            .IsRequired();
+
+        builder.Property(_ => _.HasPanelVisibility)
+            .HasColumnName("HasPanelVisibility")
+            .IsRequired();
+
+        builder.Property(_ => _.AcceptedInvitations)
+            .HasColumnName("AcceptedInvitations")
+            .IsRequired();
+
+        builder.Property(_ => _.MaxInvitations)
+            .HasColumnName("MaxInvitations")
+            .HasColumnType("int")
+            .IsRequired(false);
+
         builder.Property(_ => _.Created).HasColumnName("Created").IsRequired();
 
         builder.Property(_ => _.Description)
@@ -38,12 +54,14 @@ internal class MeetingConfiguration : WatcherConfiguration, IEntityTypeConfigura
 
         builder.Property(p => p.Status)
           .HasColumnName("Status")
+          .HasColumnType("tinyint")
           .HasConversion<MeetingStatusConverter>()
           .IsRequired();
 
         builder.HasOne(_ => _.Category).WithMany().HasForeignKey(x => x.CategoryIndex);
 
-        builder.HasMany("_comments").WithOne().HasForeignKey("MeetingId");
+        builder.HasMany(Comments).WithOne().HasForeignKey("MeetingId");
+        builder.HasMany(InvitationRequests).WithOne().HasForeignKey("MeetingId");
 
         builder.OwnsOne<UserInfo>("Organizer", _ =>
         {
@@ -112,6 +130,7 @@ internal class MeetingConfiguration : WatcherConfiguration, IEntityTypeConfigura
 
             _.Property(p => p.Status)
               .HasColumnName("Status")
+              .HasColumnType("tinyint")
               .HasConversion<InvitationStatusConverter>()
               .IsRequired();
 

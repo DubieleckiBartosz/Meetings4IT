@@ -13,6 +13,7 @@ public class CategoryConfiguration : IEntityTypeConfiguration<MeetingCategory>
         builder.HasKey(category => category.Index);
         builder.Property(category => category.Index)
                .ValueGeneratedOnAdd()
+               .HasColumnType("tinyint")
                .UseIdentityColumn();
 
         builder

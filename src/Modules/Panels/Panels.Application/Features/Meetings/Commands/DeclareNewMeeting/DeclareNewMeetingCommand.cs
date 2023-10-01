@@ -15,6 +15,7 @@ public class DeclareNewMeetingCommand : ICommand<Response<int>>
     public DateTime StartDate { get; }
     public DateTime? EndDate { get; }
     public int IndexCategory { get; }
+    public bool HasPanelVisibility { get; }
 
     public DeclareNewMeetingCommand(DeclareNewMeetingParameters parameters)
     {
@@ -27,5 +28,6 @@ public class DeclareNewMeetingCommand : ICommand<Response<int>>
         StartDate = parameters.StartDate;
         EndDate = parameters.EndDate;
         IndexCategory = parameters.IndexCategory;
+        HasPanelVisibility = parameters.HasPanelVisibility;
     }
 }

@@ -16,5 +16,6 @@ public interface IMeetingDomainService
         Address address,
         DateRange date,
         bool isPublic,
+        bool hasPanelVisibility,
         int? maxInvitations);
 }

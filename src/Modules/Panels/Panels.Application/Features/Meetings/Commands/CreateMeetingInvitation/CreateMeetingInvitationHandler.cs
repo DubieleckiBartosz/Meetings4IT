@@ -38,9 +38,10 @@ public class CreateMeetingInvitationHandler : ICommandHandler<CreateMeetingInvit
         Email? email = request.EmailInvitationRecipient;
         NameInvitationRecipient recipient = request.NameInvitationRecipient!;
 
+        var result = await _userRepository.GetUserByNameNTAsync(recipient);
+
         if (email == null)
         {
-            var result = await _userRepository.GetUserByNameNTAsync(recipient);
             if (result == null)
             {
                 throw new NotFoundException($"User {recipient.Value} not found." +

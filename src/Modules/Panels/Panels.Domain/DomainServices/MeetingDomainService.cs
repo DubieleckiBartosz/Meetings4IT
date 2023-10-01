@@ -18,6 +18,7 @@ public class MeetingDomainService : IMeetingDomainService
         Address address,
         DateRange date,
         bool isPublic,
+        bool hasPanelVisibility,
         int? maxInvitations)
     {
         var scheduledMeeting = schedule?.UpcomingMeetings.SingleOrDefault(_ => IsOverlappingWithExisting(date, _.MeetingDateRange));
@@ -34,6 +35,7 @@ public class MeetingDomainService : IMeetingDomainService
             address,
             date,
             isPublic,
+            hasPanelVisibility,
             maxInvitations);
     }
 
