@@ -12,7 +12,7 @@ using Panels.Infrastructure.Database;
 namespace Panels.Infrastructure.Database.Migrations
 {
     [DbContext(typeof(PanelContext))]
-    [Migration("20231001183554_Init1")]
+    [Migration("20231001205807_Init1")]
     partial class Init1
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -455,7 +455,7 @@ namespace Panels.Infrastructure.Database.Migrations
                             b1.Property<string>("Name")
                                 .IsRequired()
                                 .HasColumnType("varchar(50)")
-                                .HasColumnName("Name");
+                                .HasColumnName("CreatorName");
 
                             b1.HasKey("InvitationRequestId");
 
@@ -513,6 +513,10 @@ namespace Panels.Infrastructure.Database.Migrations
 
                             b1.Property<int>("MeetingId")
                                 .HasColumnType("int");
+
+                            b1.Property<string>("RecipientId")
+                                .HasColumnType("nvarchar(max)")
+                                .HasColumnName("RecipientId");
 
                             b1.Property<string>("RecipientName")
                                 .IsRequired()

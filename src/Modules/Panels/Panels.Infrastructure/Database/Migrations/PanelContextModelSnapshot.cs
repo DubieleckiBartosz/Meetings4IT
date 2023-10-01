@@ -453,7 +453,7 @@ namespace Panels.Infrastructure.Database.Migrations
                             b1.Property<string>("Name")
                                 .IsRequired()
                                 .HasColumnType("varchar(50)")
-                                .HasColumnName("Name");
+                                .HasColumnName("CreatorName");
 
                             b1.HasKey("InvitationRequestId");
 
@@ -511,6 +511,10 @@ namespace Panels.Infrastructure.Database.Migrations
 
                             b1.Property<int>("MeetingId")
                                 .HasColumnType("int");
+
+                            b1.Property<string>("RecipientId")
+                                .HasColumnType("nvarchar(max)")
+                                .HasColumnName("RecipientId");
 
                             b1.Property<string>("RecipientName")
                                 .IsRequired()

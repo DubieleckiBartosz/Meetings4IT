@@ -36,26 +36,26 @@ public class CreateMeetingInvitationHandler : ICommandHandler<CreateMeetingInvit
 
         Date expiration = request.InvitationExpirationDate;
         Email? email = request.EmailInvitationRecipient;
-        NameInvitationRecipient recipient = request.NameInvitationRecipient!;
+        NameInvitationRecipient recipientName = request.NameInvitationRecipient!;
 
-        var result = await _userRepository.GetUserByNameNTAsync(recipient);
+        var result = await _userRepository.GetUserByNameNTAsync(recipientName);
 
         if (email == null)
         {
             if (result == null)
             {
-                throw new NotFoundException($"User {recipient.Value} not found." +
+                throw new NotFoundException($"User {recipientName.Value} not found." +
                     $" Please provide an email address or a valid existing user name.");
             }
 
             email = result.Email;
         }
 
-        var invitation = meeting.CreateNewInvitation(email, expiration, recipient);
+        var invitation = meeting.CreateNewInvitation(email, expiration, recipientName, result?.Identifier);
 
         _meetingRepository.UpdateMeeting(meeting);
 
-        await _meetingRepository.UnitOfWork.SaveAsync();
+        await _meetingRepository.UnitOfWork.SaveAsync(cancellationToken);
 
         return Response<int>.Ok(invitation.Id);
     }

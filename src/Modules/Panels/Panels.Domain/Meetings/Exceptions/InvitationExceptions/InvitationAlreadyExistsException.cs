@@ -4,7 +4,7 @@ namespace Panels.Domain.Meetings.Exceptions.InvitationExceptions;
 
 public class InvitationAlreadyExistsException : BaseException
 {
-    public InvitationAlreadyExistsException(string email) : base($"Invitation for {email} already exists.")
+    public InvitationAlreadyExistsException(string? resipient = null) : base($"Invitation already exists." + resipient != null ? $" [Recipient {resipient}]" : string.Empty)
     {
     }
 }

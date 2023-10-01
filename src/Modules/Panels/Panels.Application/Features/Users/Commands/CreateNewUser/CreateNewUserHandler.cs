@@ -28,6 +28,10 @@ public class CreateNewUserHandler : ICommandHandler<CreateNewUserCommand, Respon
         var newUser = User.Create(request.UserId, request.Name, request.Email!, request.City);
 
         await _userRepository.AddAsync(newUser, cancellationToken);
+
+        //Update all invitations containing this user via stored procedures
+        //- this is a potential solution, but we break some best practices
+
         await _userRepository.UnitOfWork.SaveChangesAsync(cancellationToken);
 
         _logger.Information($"User with external id {request.UserId} created");

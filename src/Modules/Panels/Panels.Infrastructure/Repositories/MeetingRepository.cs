@@ -48,6 +48,14 @@ public class MeetingRepository : IMeetingRepository
         return await _meetings
             .IncludePaths(MeetingConfiguration.Invitations)
             .Include(_ => _.Category)
-            .FirstOrDefaultAsync(_ => _.Id == meetingId);
+            .FirstOrDefaultAsync(_ => _.Id == meetingId, cancellationToken);
+    }
+
+    public async Task<Meeting?> GetMeetingWithInvitationsAndRequestsByIdAsync(int meetingId, CancellationToken cancellationToken = default)
+    {
+        return await _meetings
+            .IncludePaths(MeetingConfiguration.Invitations)
+            .Include(MeetingConfiguration.InvitationRequests)
+            .FirstOrDefaultAsync(_ => _.Id == meetingId, cancellationToken);
     }
 }

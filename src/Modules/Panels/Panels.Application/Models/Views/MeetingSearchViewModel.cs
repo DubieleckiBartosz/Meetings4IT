@@ -9,7 +9,7 @@ public class MeetingSearchViewModel
     public string Status { get; } = default!;
     public DateTime StartDate { get; } = default!;
     public DateTime? EndDate { get; }
-    public DateTime? CancellationDate { get; init; }
+    public DateTime? CancellationDate { get; }
     public string Category { get; } = default!;
     public string OrganizerName { get; } = default!;
     public string OrganizerId { get; } = default!;

@@ -151,6 +151,10 @@ internal class MeetingConfiguration : WatcherConfiguration, IEntityTypeConfigura
               .HasConversion(x => x.Value, x => new Date(x))
               .IsRequired();
 
+            _.Property(p => p.RecipientId)
+              .HasColumnName("RecipientId")
+              .IsRequired(false);
+
             this.ConfigureWatcher(_);
 
             _.Ignore(x => x.Events);

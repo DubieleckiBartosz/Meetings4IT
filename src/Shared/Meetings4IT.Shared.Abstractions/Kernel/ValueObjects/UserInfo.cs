@@ -11,12 +11,12 @@ public class UserInfo : ValueObject
     {
         if (string.IsNullOrEmpty(identifier))
         {
-            throw new ArgumentException("OrganizerId cannot be null or empty.", nameof(identifier));
+            throw new ArgumentException($"Identifier cannot be null or empty.", nameof(identifier));
         }
 
         if (string.IsNullOrEmpty(name))
         {
-            throw new ArgumentException("OrganizerName cannot be null or empty.", nameof(name));
+            throw new ArgumentException($"Name cannot be null or empty.", nameof(name));
         }
 
         Identifier = identifier;

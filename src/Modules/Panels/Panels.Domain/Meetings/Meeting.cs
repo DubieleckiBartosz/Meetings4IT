@@ -10,7 +10,6 @@ using Panels.Domain.Meetings.Exceptions.InvitationExceptions;
 using Panels.Domain.Meetings.Exceptions.InvitationRequestExceptions;
 using Panels.Domain.Meetings.Statuses;
 using Panels.Domain.Meetings.ValueObjects;
-using System.Linq;
 
 namespace Panels.Domain.Meetings;
 
@@ -171,6 +170,8 @@ public class Meeting : Entity, IAggregateRoot
             invitation.Cancel();
         }
 
+        //[TODO] invitation requests
+
         var invitationRecipients = invitations?.Select(_ => _.Email.Value).ToList();
 
         this.AddEvent(MeetingCanceled.Create(ExplicitMeetingId.ToString(), Organizer.Name, invitationRecipients));
@@ -210,7 +211,7 @@ public class Meeting : Entity, IAggregateRoot
             }
         }
 
-        var invitation = new Invitation(email, invitationExpirationDate, code, recipientName);
+        var invitation = new Invitation(email, invitationExpirationDate, code, recipientName, recipientId);
         _invitations.Add(invitation);
 
         if (recipientId != null)
@@ -316,6 +317,30 @@ public class Meeting : Entity, IAggregateRoot
         IncrementVersion();
     }
 
+    public void AddRequestInvitation(string requestInvitationCreatorId, string creatorName)
+    {
+        this.CheckIfMeetingOperationIsPossible();
+        this.CheckIfMeetingWasCanceled();
+
+        var invitationExists = this._invitations.Any(_ => _.RecipientId != null && _.RecipientId == requestInvitationCreatorId);
+        if (invitationExists)
+        {
+            throw new InvitationAlreadyExistsException();
+        }
+
+        var requestInvitationExists = this._requests.Any(_ => _.RequestCreator.Identifier == requestInvitationCreatorId);
+        if (requestInvitationExists)
+        {
+            throw new InvitationRequestExistsException(this.Id, requestInvitationCreatorId);
+        }
+
+        UserInfo creator = new UserInfo(requestInvitationCreatorId, creatorName);
+        var newRequest = InvitationRequest.Create(this.Id, creator);
+
+        _requests.Add(newRequest);
+        IncrementVersion();
+    }
+
     /// <summary>
     /// Method responsible for changing the status of the invitation request
     /// Method available only to the meeting creator
@@ -331,6 +356,7 @@ public class Meeting : Entity, IAggregateRoot
         }
 
         requestInvitation.Reject(reason);
+        IncrementVersion();
     }
 
     /// <summary>
@@ -347,6 +373,7 @@ public class Meeting : Entity, IAggregateRoot
         }
 
         this._requests.Remove(requestInvitation);
+        IncrementVersion();
     }
 
     private void CheckIfMeetingOperationIsPossible()

@@ -14,6 +14,7 @@ public class Invitation : Entity
     public NameInvitationRecipient RecipientName { get; }
     public InvitationStatus Status { get; private set; }
     public Date ExpirationDate { get; private set; }
+    public string? RecipientId { get; private set; }
     private bool IsExpired => ExpirationDate.Value <= Clock.CurrentDate();
 
     private Invitation()
@@ -23,13 +24,15 @@ public class Invitation : Entity
         Email email,
         Date expirationDate,
         InvitationCode code,
-        NameInvitationRecipient recipientName)
+        NameInvitationRecipient recipientName,
+        string? recipientId)
     {
         Email = email;
         Code = code;
         ExpirationDate = expirationDate;
         Status = InvitationStatus.Pending;
         RecipientName = recipientName;
+        RecipientId = recipientId;
     }
 
     internal void Accept()

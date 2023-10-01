@@ -26,10 +26,11 @@ public class InvitationRequestConfiguration : IEntityTypeConfiguration<Invitatio
         builder.OwnsOne<UserInfo>("RequestCreator", _ =>
         {
             _.Property(p => p.Name)
-                .HasColumnName("Name")
+                .HasColumnName("CreatorName")
                 .HasColumnType("varchar(50)").IsRequired();
 
-            _.Property(p => p.Identifier).HasColumnName("CreatorId").IsRequired();
+            _.Property(p => p.Identifier)
+                .HasColumnName("CreatorId").IsRequired();
         });
 
         builder.Ignore(_ => _.Version);
