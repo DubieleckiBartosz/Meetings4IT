@@ -27,6 +27,7 @@ public class User : Entity, IAggregateRoot
     private User()
     {
         _stack = new();
+        _opinions = new();
     }
 
     private User(string identifier, string name, Email email, City city)
@@ -35,6 +36,8 @@ public class User : Entity, IAggregateRoot
         Name = name ?? throw new ArgumentNullException("Name cannot be null.");
         City = city ?? throw new ArgumentNullException("City cannot be null.");
         Email = email ?? throw new ArgumentNullException("Email cannot be null.");
+
+        IsEager = false;
 
         _stack = new();
         _opinions = new();
@@ -139,6 +142,11 @@ public class User : Entity, IAggregateRoot
     {
         var opinion = FindOpinionOrThrow(opinionId, deletedBy);
         _opinions.Remove(opinion);
+    }
+
+    public void SetUserEagerToOpposite()
+    {
+        IsEager = !IsEager;
     }
 
     private Opinion FindOpinionOrThrow(int opinionId, string creatorOpinionId) =>
