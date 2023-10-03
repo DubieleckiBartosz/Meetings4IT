@@ -2,6 +2,7 @@
 using Meetings4IT.IntegrationTests.Constants;
 using Meetings4IT.IntegrationTests.Modules.Mocks;
 using Meetings4IT.Shared.Implementations.EventBus.Dispatchers;
+using Meetings4IT.Shared.Implementations.EventBus.IntegrationEventLog.DAL.Repositories;
 using Microsoft.AspNetCore.Authorization.Policy;
 using Microsoft.AspNetCore.Mvc.Testing;
 using Microsoft.AspNetCore.TestHost;
@@ -35,6 +36,7 @@ public class CustomWebApplicationFactory<TEntryPoint> : WebApplicationFactory<Pr
         builder.ConfigureTestServices(services =>
         {
             services.AddScoped<IAsyncEventDispatcher, TestAsyncEventDispatcher>();
+            services.AddScoped<IIntegrationEventLogRepository, TestIntegrationEventLogRepository>();
         });
 
         builder.ConfigureServices(services =>
