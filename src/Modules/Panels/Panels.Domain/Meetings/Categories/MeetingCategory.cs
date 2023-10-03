@@ -5,14 +5,6 @@ namespace Panels.Domain.Meetings.Categories;
 
 public class MeetingCategory : IndexValuePair
 {
-    /*
-        Party
-        Social
-        Business
-        SomeCoffee
-        Unknown
-     */
-
     public MeetingCategory(int index, string value) : base(index, value, Validator)
     {
     }

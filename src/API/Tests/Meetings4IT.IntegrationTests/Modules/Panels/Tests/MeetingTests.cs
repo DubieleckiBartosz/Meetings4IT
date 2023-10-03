@@ -3,6 +3,7 @@ using Meetings4IT.IntegrationTests.Setup;
 using Meetings4IT.Shared.Implementations.Wrappers;
 using Panels.Domain.Meetings.Categories;
 using Panels.Infrastructure.Database;
+using Panels.Infrastructure.Database.Domain.Seed;
 
 namespace Meetings4IT.IntegrationTests.Modules.Panels.Tests;
 
@@ -10,17 +11,7 @@ public class MeetingTests : ControllerBaseTests
 {
     public MeetingTests(CustomWebApplicationFactory<Program> factory) : base(factory)
     {
-        var list = new List<MeetingCategory>()
-    {
-            new MeetingCategory(1, "Party"),
-            new MeetingCategory(2, "Social"),
-            new MeetingCategory(3, "Business"),
-            new MeetingCategory(4, "SomeCoffee"),
-            new MeetingCategory(5, "Mentoring"),
-            new MeetingCategory(6, "Unknown")
-    };
-
-        InitData<PanelContext, MeetingCategory>(list);
+        InitData<PanelContext, MeetingCategory>(SeedData.MeetingCategories());
     }
 
     [Fact]
