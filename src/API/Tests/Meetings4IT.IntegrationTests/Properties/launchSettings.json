@@ -1,0 +1,12 @@
+{
+  "profiles": {
+    "Meetings4IT.IntegrationTests": {
+      "commandName": "Project",
+      "launchBrowser": true,
+      "environmentVariables": {
+        "ASPNETCORE_ENVIRONMENT": "Development"
+      },
+      "applicationUrl": "https://localhost:4614;http://localhost:4615"
+    }
+  }
+}

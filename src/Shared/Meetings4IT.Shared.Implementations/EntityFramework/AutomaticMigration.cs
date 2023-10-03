@@ -11,6 +11,12 @@ public static class AutomaticMigration
 {
     public static WebApplication RunMigration<TContext>(this WebApplication app) where TContext : DbContext
     {
+        var env = app.Environment.EnvironmentName;
+        if (env == "TestEnv")
+        {
+            return app;
+        }
+
         using (var scope = app.Services.CreateScope())
         {
             var dbContext = scope.ServiceProvider

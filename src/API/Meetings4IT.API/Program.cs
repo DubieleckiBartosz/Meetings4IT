@@ -10,6 +10,13 @@ using Serilog;
 
 var builder = WebApplication.CreateBuilder(args);
 var configuration = builder.Configuration;
+var env = builder.Environment;
+
+builder.Configuration
+    .AddJsonFile("appsettings.json", optional: true)
+    .AddJsonFile($"appsettings.{env.EnvironmentName}.json", optional: true)
+    .AddEnvironmentVariables();
+
 // Add services to the container.
 
 builder
@@ -38,6 +45,7 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 
 builder.Host.UseSerilog((ctx, lc) => lc.LogConfigurationService(builder.Configuration));
+
 builder.SwaggerConfiguration();
 
 var app = builder.Build();
@@ -69,3 +77,6 @@ app.ConfigureIdentities(configuration);
 app.ConfigureNotifications();
 
 app.Run();
+
+public partial class Program
+{ }

@@ -2,8 +2,14 @@
 
 public class Response
 {
-    public bool Success { get; }
-    public string? Message { get; }
+    public bool Success { get; private set; }
+    public string? Message { get; private set; }
+
+    /// <summary>
+    /// Empty constructor for integration tests
+    /// </summary>
+    public Response()
+    { }
 
     protected Response(string? message, bool success)
     {
@@ -29,7 +35,13 @@ public class Response
 
 public class Response<T> : Response
 {
-    public T Data { get; set; }
+    public T Data { get; private set; }
+
+    /// <summary>
+    /// Empty constructor for integration tests
+    /// </summary>
+    public Response()
+    { }
 
     private Response(T data, bool success, string? message) : base(message, success)
     {

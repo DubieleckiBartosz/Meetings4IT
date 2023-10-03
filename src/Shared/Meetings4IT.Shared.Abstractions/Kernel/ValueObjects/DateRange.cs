@@ -10,7 +10,7 @@ public class DateRange : ValueObject
 
     public DateRange(DateTime startDate, DateTime? endDate)
     {
-        if (endDate.HasValue && endDate.Value < startDate)
+        if (endDate.HasValue && endDate.HasValue && endDate.Value < startDate)
         {
             throw new ArgumentException("EndDate must be greater than StartDate.");
         }

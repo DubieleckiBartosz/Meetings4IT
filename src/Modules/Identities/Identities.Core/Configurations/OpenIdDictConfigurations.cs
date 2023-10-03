@@ -49,8 +49,10 @@ public static class OpenIdDictConfigurations
                 options.SetAccessTokenLifetime(TimeSpan.FromMinutes(30))
                     .SetRefreshTokenLifetime(TimeSpan.FromDays(7));
 
-                if (builder.Environment.IsDevelopment())
+                if (!builder.Environment.IsProduction())
                 {
+                    //Local tests
+
                     options
                     .AddDevelopmentEncryptionCertificate()
                     .AddDevelopmentSigningCertificate();
@@ -59,6 +61,8 @@ public static class OpenIdDictConfigurations
                 }
                 else
                 {
+                    //https://documentation.openiddict.com/configuration/encryption-and-signing-credentials.html
+
                     //registration real certification
                 }
 
