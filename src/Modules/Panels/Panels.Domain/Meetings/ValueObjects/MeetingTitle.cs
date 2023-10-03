@@ -17,7 +17,9 @@ public class MeetingTitle : ValueObject
     }
 
     public static implicit operator MeetingTitle(string value) => new(value);
+
     public static implicit operator string(MeetingTitle meetingTitle) => meetingTitle.Value;
+
     protected override IEnumerable<object?> GetEqualityComponents()
     {
         yield return this.Value;

@@ -12,7 +12,6 @@ namespace Meetings4IT.IntegrationTests.Modules;
 public abstract class ControllerBaseTests : IClassFixture<CustomWebApplicationFactory<Program>>
 {
     protected readonly CustomWebApplicationFactory<Program> _factory;
-    protected MockAbstractions Mocks;
     protected HttpClient Client;
     protected Fixture Fixture;
     protected AutoMocker Mocker;
@@ -20,8 +19,6 @@ public abstract class ControllerBaseTests : IClassFixture<CustomWebApplicationFa
     protected ControllerBaseTests(CustomWebApplicationFactory<Program> factory)
     {
         _factory = factory;
-
-        Mocks = _factory.FakeServices();
         Mocker = new AutoMocker();
         Fixture = new Fixture();
         Client = _factory.CreateClient(new WebApplicationFactoryClientOptions

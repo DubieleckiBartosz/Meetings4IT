@@ -10,8 +10,9 @@ public class MeetingCategory : IndexValuePair
         Social
         Business
         SomeCoffee
-        Unknown 
+        Unknown
      */
+
     public MeetingCategory(int index, string value) : base(index, value, Validator)
     {
     }

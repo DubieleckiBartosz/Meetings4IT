@@ -6,7 +6,6 @@ using Meetings4IT.Shared.Implementations.Decorators;
 using Meetings4IT.Shared.Implementations.EventBus;
 using Meetings4IT.Shared.Implementations.EventBus.Channel;
 using Meetings4IT.Shared.Implementations.EventBus.Dispatchers;
-using Meetings4IT.Shared.Implementations.EventBus.IntegrationEventLog.DAL;
 using Meetings4IT.Shared.Implementations.EventBus.IntegrationEventLog.DAL.Repositories;
 using Meetings4IT.Shared.Implementations.EventBus.IntegrationEventLog.Services;
 using Meetings4IT.Shared.Implementations.EventBus.IntegrationEventProcess;

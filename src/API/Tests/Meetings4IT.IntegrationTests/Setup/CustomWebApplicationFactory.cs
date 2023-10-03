@@ -13,15 +13,6 @@ namespace Meetings4IT.IntegrationTests.Setup;
 
 public class CustomWebApplicationFactory<TEntryPoint> : WebApplicationFactory<Program> where TEntryPoint : Program
 {
-    private MockAbstractions? _servicesMock;
-
-    public MockAbstractions FakeServices()
-    {
-        _servicesMock ??= new MockAbstractions();
-
-        return _servicesMock;
-    }
-
     protected override IHost CreateHost(IHostBuilder builder)
     {
         /*
@@ -55,8 +46,6 @@ public class CustomWebApplicationFactory<TEntryPoint> : WebApplicationFactory<Pr
 
             services.AddSingleton<IPolicyEvaluator, FakePolicyEvaluator>();
             services.AddMvc(_ => _.Filters.Add(new FakeUserFilter()));
-
-            MockAbstractions.RegisterMockServices(services: ref services, FakeServices().GetMocks());
         });
     }
 

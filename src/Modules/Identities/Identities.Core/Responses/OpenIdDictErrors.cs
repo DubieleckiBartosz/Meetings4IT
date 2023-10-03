@@ -3,6 +3,7 @@
 public class OpenIdDictErrors
 {
     public const string GrantTypeNotImplemented = "The specified grant type is not implemented.";
+
     public static Dictionary<string, string> ErrorWhenInvalidUser() => new Dictionary<string, string>
     {
         [".error"] = "invalid_grant",

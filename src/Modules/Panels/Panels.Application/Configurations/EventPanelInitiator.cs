@@ -1,6 +1,5 @@
 ﻿using MediatR;
 using Meetings4IT.Shared.Implementations;
-using Meetings4IT.Shared.Implementations.EventBus.Dispatchers;
 using Meetings4IT.Shared.Implementations.EventBus.Messaging;
 using Meetings4IT.Shared.Implementations.Extensions;
 using Meetings4IT.Shared.Implementations.Wrappers;

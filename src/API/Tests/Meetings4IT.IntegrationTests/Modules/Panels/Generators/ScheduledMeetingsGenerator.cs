@@ -1,5 +1,4 @@
-﻿using AutoFixture;
-using Meetings4IT.IntegrationTests.Constants;
+﻿using Meetings4IT.IntegrationTests.Constants;
 using Meetings4IT.Shared.Abstractions.Kernel.ValueObjects;
 using Meetings4IT.Shared.Abstractions.Time;
 using Panels.Domain.Meetings;

@@ -7,6 +7,7 @@ public class Template
     public int Id { get; private set; }
     public string Body { get; private set; }
     public TemplateType Type { get; private set; }
+
     public Template()
     {
     }

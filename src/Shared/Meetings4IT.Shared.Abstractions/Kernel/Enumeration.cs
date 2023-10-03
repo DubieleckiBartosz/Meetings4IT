@@ -40,6 +40,7 @@ public class Enumeration : IComparable
 
         return a.Equals(b);
     }
+
     public override bool Equals(object? obj)
     {
         if (obj is not Enumeration otherValue)
@@ -61,6 +62,6 @@ public class Enumeration : IComparable
     public int CompareTo(object? other) => Id.CompareTo(((Enumeration?)other)?.Id);
 
     public static implicit operator string(Enumeration value) => value.Name;
-    public static bool operator !=(Enumeration s, Enumeration b) => !(s == b);
 
+    public static bool operator !=(Enumeration s, Enumeration b) => !(s == b);
 }

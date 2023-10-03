@@ -14,6 +14,7 @@ public static class EnumTools
         var values = Enum.GetValues(typeof(T)).Cast<T>().Select(s => s.ToString())?.ToList();
         return values;
     }
+
     public static T ToEnum<T>(this string enumString)
     {
         CheckType<T>();

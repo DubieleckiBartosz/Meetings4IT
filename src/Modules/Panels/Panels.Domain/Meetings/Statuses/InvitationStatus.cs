@@ -9,6 +9,7 @@ public class InvitationStatus : Enumeration
     public static InvitationStatus Rejected = new InvitationStatus(3, nameof(Rejected));
     public static InvitationStatus Expired = new InvitationStatus(4, nameof(Expired));
     public static InvitationStatus Canceled = new InvitationStatus(5, nameof(Canceled));
+
     protected InvitationStatus(int id, string name) : base(id, name)
     {
     }

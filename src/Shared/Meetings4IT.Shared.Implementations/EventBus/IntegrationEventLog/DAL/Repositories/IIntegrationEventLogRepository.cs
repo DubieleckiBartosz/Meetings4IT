@@ -3,7 +3,10 @@
 public interface IIntegrationEventLogRepository
 {
     Task SaveEventLogAsync(IntegrationEventLog integrationEventLog);
+
     Task MarkEventAsPublishedAsync(Guid eventId);
+
     Task MarkEventAsInProgressAsync(Guid eventId);
+
     Task MarkEventAsFailedAsync(Guid eventId);
 }

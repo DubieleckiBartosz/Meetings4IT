@@ -28,7 +28,6 @@ public class PolicySetup
             }
         );
 
-
     public AsyncPolicy PolicyQueryAsync(ILogger logger) => Policy.Handle<SqlException>()
         .WaitAndRetryAsync(
             3,
@@ -45,10 +44,9 @@ public class PolicySetup
             }
         );
 
-
     #region Private
 
     private string GetProcedure(Exception? exception) => exception is SqlException ex ? ex.Procedure : string.Empty;
 
-    #endregion
+    #endregion Private
 }

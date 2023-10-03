@@ -4,6 +4,7 @@
 public class IntegrationEventDecoratorAttribute : Attribute
 {
     public string Navigator { get; set; }
+
     public IntegrationEventDecoratorAttribute(string navigator)
     {
         Navigator = navigator;

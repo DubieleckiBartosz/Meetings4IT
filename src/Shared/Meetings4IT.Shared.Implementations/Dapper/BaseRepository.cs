@@ -1,8 +1,8 @@
 ﻿using Dapper;
 using Meetings4IT.Shared.Implementations.Polly;
 using Polly;
-using System.Data;
 using Serilog;
+using System.Data;
 using System.Data.SqlClient;
 
 namespace Meetings4IT.Shared.Implementations.Dapper;

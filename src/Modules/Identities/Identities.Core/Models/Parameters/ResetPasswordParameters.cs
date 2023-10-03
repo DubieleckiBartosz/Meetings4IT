@@ -8,6 +8,7 @@ public class ResetPasswordParameters
     public string ConfirmPassword { get; init; }
     public string Email { get; init; }
     public string Token { get; init; }
+
     public ResetPasswordParameters()
     {
     }
