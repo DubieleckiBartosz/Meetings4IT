@@ -9,14 +9,14 @@ using System.Net.Http.Headers;
 
 namespace Meetings4IT.IntegrationTests.Modules;
 
-public abstract class ControllerBaseTests : IClassFixture<CustomWebApplicationFactory<Program>>
+public abstract class ControllerBaseTests : IClassFixture<CustomWebApplicationFactory>
 {
-    protected readonly CustomWebApplicationFactory<Program> _factory;
+    protected readonly CustomWebApplicationFactory _factory;
     protected HttpClient Client;
     protected Fixture Fixture;
     protected AutoMocker Mocker;
 
-    protected ControllerBaseTests(CustomWebApplicationFactory<Program> factory)
+    protected ControllerBaseTests(CustomWebApplicationFactory factory)
     {
         _factory = factory;
         Mocker = new AutoMocker();

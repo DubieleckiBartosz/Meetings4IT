@@ -18,9 +18,12 @@ public static class PanelsModule
         return builder;
     }
 
-    public static WebApplication ConfigurePanels(this WebApplication app)
+    public static WebApplication ConfigurePanels(this WebApplication app, IConfiguration configuration)
     {
-        app.PanelsMigration();
+        if (configuration.GetSection("UsePanelsMigration").Get<bool>())
+        {
+            app.PanelsMigration();
+        }
 
         return app;
     }

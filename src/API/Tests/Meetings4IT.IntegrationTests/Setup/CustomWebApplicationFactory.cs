@@ -1,5 +1,4 @@
-﻿using Identities.Core.DAL;
-using Meetings4IT.IntegrationTests.Constants;
+﻿using Meetings4IT.IntegrationTests.Constants;
 using Meetings4IT.IntegrationTests.Modules.Mocks;
 using Meetings4IT.Shared.Implementations.EventBus.Dispatchers;
 using Meetings4IT.Shared.Implementations.EventBus.IntegrationEventLog.DAL.Repositories;
@@ -7,12 +6,10 @@ using Microsoft.AspNetCore.Authorization.Policy;
 using Microsoft.AspNetCore.Mvc.Testing;
 using Microsoft.AspNetCore.TestHost;
 using Microsoft.EntityFrameworkCore;
-using Notifications.Core.Infrastructure.Database;
-using Panels.Infrastructure.Database;
 
 namespace Meetings4IT.IntegrationTests.Setup;
 
-public class CustomWebApplicationFactory<TEntryPoint> : WebApplicationFactory<Program> where TEntryPoint : Program
+public class CustomWebApplicationFactory : WebApplicationFactory<Program>
 {
     protected override IHost CreateHost(IHostBuilder builder)
     {
@@ -42,9 +39,9 @@ public class CustomWebApplicationFactory<TEntryPoint> : WebApplicationFactory<Pr
         builder.ConfigureServices(services =>
         {
             //Configuration options https://blog.markvincze.com/overriding-configuration-in-asp-net-core-integration-tests/
-            RegisterLiteContext<PanelContext>(services);
-            RegisterLiteContext<NotificationContext>(services);
-            RegisterLiteContext<ApplicationDbContext>(services);
+            //RegisterLiteContext<PanelContext>(services);
+            //RegisterLiteContext<NotificationContext>(services);
+            //RegisterLiteContext<ApplicationDbContext>(services);
 
             services.AddSingleton<IPolicyEvaluator, FakePolicyEvaluator>();
             services.AddMvc(_ => _.Filters.Add(new FakeUserFilter()));
@@ -79,5 +76,10 @@ public class CustomWebApplicationFactory<TEntryPoint> : WebApplicationFactory<Pr
                 Console.WriteLine(ex?.Message);
             }
         }
+    }
+
+    public override ValueTask DisposeAsync()
+    {
+        return base.DisposeAsync();
     }
 }

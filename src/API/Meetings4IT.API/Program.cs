@@ -74,8 +74,8 @@ app.RegisterEvents();
 
 //Modules
 app.ConfigureIdentities(configuration);
-app.ConfigureNotifications();
-app.ConfigurePanels();
+app.ConfigureNotifications(configuration);
+app.ConfigurePanels(configuration);
 
 app.Run();
 

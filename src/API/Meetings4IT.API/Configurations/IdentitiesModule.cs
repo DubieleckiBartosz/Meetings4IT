@@ -22,7 +22,11 @@ public static class IdentitiesModule
 
     public static WebApplication ConfigureIdentities(this WebApplication app, IConfiguration configuration)
     {
-        app.IdentitiesMigration();
+        if (configuration.GetSection("UseIdentityMigration").Get<bool>())
+        {
+            app.IdentitiesMigration();
+        }
+
         app.InitDataIdentitiesModule(configuration);
 
         return app;

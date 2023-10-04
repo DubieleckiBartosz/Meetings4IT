@@ -2,17 +2,14 @@
 using Meetings4IT.IntegrationTests.Setup;
 using Meetings4IT.Shared.Implementations.Wrappers;
 using Panels.Domain.Meetings;
-using Panels.Domain.Meetings.Categories;
 using Panels.Infrastructure.Database;
-using Panels.Infrastructure.Database.Domain.Seed;
 
 namespace Meetings4IT.IntegrationTests.Modules.Panels.Tests;
 
 public class MeetingTests : ControllerBaseTests
 {
-    public MeetingTests(CustomWebApplicationFactory<Program> factory) : base(factory)
+    public MeetingTests(CustomWebApplicationFactory factory) : base(factory)
     {
-        InitData<PanelContext, MeetingCategory>(SeedData.MeetingCategories());
     }
 
     [Fact]

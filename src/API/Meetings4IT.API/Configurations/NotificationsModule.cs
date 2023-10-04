@@ -14,9 +14,12 @@ public static class NotificationsModule
         return builder;
     }
 
-    public static WebApplication ConfigureNotifications(this WebApplication app)
+    public static WebApplication ConfigureNotifications(this WebApplication app, IConfiguration configuration)
     {
-        app.NotificationsMigration();
+        if (configuration.GetSection("UseNotificationsMigration").Get<bool>())
+        {
+            app.NotificationsMigration();
+        }
 
         return app;
     }

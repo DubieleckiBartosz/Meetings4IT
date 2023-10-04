@@ -3,12 +3,17 @@
 public class TestSettings
 {
     public const string TestEnvironment = "TestEnv";
-    public const string ConnectionString = "Meetings4ITMemory";
+    public const string ConnectionString = "FakeConnectionMeeting4IT";
 
     public static Dictionary<string, string> Apply() => new Dictionary<string, string>()
     {
         //Email
         { "EmailOptions:LocalMail", "true" },
+
+        //Migrations
+        { "UsePanelsMigration", "false" },
+        { "UseNotificationsMigration", "false" },
+        { "UseIdentityMigration", "false" },
 
         //Logging
         { "LoggingOptions:Address", "http://some_address" },
