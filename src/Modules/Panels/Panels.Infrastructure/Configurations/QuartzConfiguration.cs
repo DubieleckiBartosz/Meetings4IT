@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Builder;
+using Microsoft.Extensions.Configuration;
 using Panels.Infrastructure.Jobs;
 using Quartz;
 
@@ -8,6 +9,12 @@ public static class QuartzConfiguration
 {
     public static WebApplicationBuilder PanelsQuartzConfiguration(this WebApplicationBuilder builder)
     {
+        var quartzEnabled = builder.Configuration.GetSection("QuartzOptions:Enabled").Get<bool>();
+        if (!quartzEnabled)
+        {
+            return builder;
+        }
+
         var services = builder.Services;
 
         services.AddQuartz(q =>

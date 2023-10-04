@@ -13,6 +13,7 @@ public static class MeetingRequestsGenerator
             .With(_ => _.IndexCategory, categoryIndex)
             .With(_ => _.IsPublic, false)
             .With(_ => _.StartDate, Clock.CurrentDate().AddDays(7))
+            .With(_ => _.NumberStreet, fixture.Create<uint>().ToString())
             .Without(_ => _.EndDate).Create();
 
         return request;

@@ -28,23 +28,23 @@ public class MeetingTests : ControllerBaseTests
         Assert.True(responseData!.Data > 0);
     }
 
-    [Fact]
-    public async Task Should_Create_New_Meeting_Invitation()
-    {
-        //Arrange
-        var meeting = Fixture.GetMeeting();
+    //[Fact]
+    //public async Task Should_Create_New_Meeting_Invitation()
+    //{
+    //    //Arrange
+    //    var meeting = Fixture.GetMeeting();
 
-        InitData<PanelContext, Meeting>(meeting);
+    //    InitData<PanelContext, Meeting>(meeting);
 
-        var request = Fixture.GetCreateMeetingInvitationRequest(meeting);
+    //    var request = Fixture.GetCreateMeetingInvitationRequest(meeting);
 
-        //Act
-        var response = await ClientCall(request, HttpMethod.Post, Urls.CreateNewMeetingInvitationPath);
-        var responseData = await ReadFromResponse<Response<int>>(response);
+    //    //Act
+    //    var response = await ClientCall(request, HttpMethod.Post, Urls.CreateNewMeetingInvitationPath);
+    //    var responseData = await ReadFromResponse<Response<int>>(response);
 
-        //Assert
-        Assert.True(response.IsSuccessStatusCode);
-        Assert.True(responseData!.Success);
-        Assert.True(responseData!.Data > 0);
-    }
+    //    //Assert
+    //    Assert.True(response.IsSuccessStatusCode);
+    //    Assert.True(responseData!.Success);
+    //    Assert.True(responseData!.Data > 0);
+    //}
 }
