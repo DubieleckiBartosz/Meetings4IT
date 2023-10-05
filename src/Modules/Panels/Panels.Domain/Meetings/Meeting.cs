@@ -57,6 +57,7 @@ public class Meeting : Entity, IAggregateRoot
     public MeetingCancellation? Cancellation { get; private set; }
     public DateRange Date { get; private set; }
     public MeetingStatus Status { get; private set; }
+    public List<Invitation> Invitations => _invitations;
 
     /// <summary>
     /// This property gets information about the status of the meeting at this time

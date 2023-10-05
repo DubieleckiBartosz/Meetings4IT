@@ -5,7 +5,7 @@ using Panels.Domain.Meetings;
 using Panels.Domain.ScheduledMeetings;
 using Panels.Domain.ScheduledMeetings.ValueObjects;
 
-namespace Meetings4IT.IntegrationTests.Modules.Panels.Generators;
+namespace Meetings4IT.IntegrationTests.Generators.Panels.Meetings;
 
 public static class ScheduledMeetingsGenerator
 {

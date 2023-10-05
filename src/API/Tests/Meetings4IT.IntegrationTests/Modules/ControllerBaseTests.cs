@@ -97,4 +97,14 @@ public abstract class ControllerBaseTests : IClassFixture<CustomWebApplicationFa
             Console.WriteLine(ex?.Message);
         }
     }
+
+    protected async Task AssertWithContext<TContext>(Func<TContext, Task> assertAction)
+    where TContext : DbContext
+    {
+        var serviceScopeFactory = _factory.Services.GetRequiredService<IServiceScopeFactory>();
+        using var scope = serviceScopeFactory.CreateScope();
+        var context = scope.ServiceProvider.GetRequiredService<TContext>();
+
+        await assertAction.Invoke(context);
+    }
 }

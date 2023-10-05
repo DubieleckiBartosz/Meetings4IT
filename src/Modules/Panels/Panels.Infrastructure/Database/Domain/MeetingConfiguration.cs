@@ -28,6 +28,7 @@ internal class MeetingConfiguration : WatcherConfiguration, IEntityTypeConfigura
         builder.HasIndex("ExplicitMeetingId");
 
         builder.Ignore(x => x.Events);
+        builder.Ignore(x => x.Invitations);
 
         builder.Property(_ => _.IsPublic)
             .HasColumnName("IsPublic")
