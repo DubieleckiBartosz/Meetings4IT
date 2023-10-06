@@ -1,6 +1,6 @@
 ﻿using Meetings4IT.Shared.Implementations.Mediator;
 using Meetings4IT.Shared.Implementations.Wrappers;
-using Panels.Application.Models.Parameters;
+using Panels.Application.Models.Parameters.MeetingParams;
 
 namespace Panels.Application.Features.Meetings.Commands.AcceptMeetingInvitation;
 

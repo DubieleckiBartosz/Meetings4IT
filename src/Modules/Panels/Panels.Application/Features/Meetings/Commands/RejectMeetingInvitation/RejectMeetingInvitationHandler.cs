@@ -23,8 +23,8 @@ public class RejectMeetingInvitationHandler : ICommandHandler<RejectMeetingInvit
         }
 
         meetingResult.RejectInvitation(request.InvitationCode);
-        _meetingRepository.UpdateMeeting(meetingResult);
 
+        _meetingRepository.UpdateMeeting(meetingResult);
         await _meetingRepository.UnitOfWork.SaveAsync(cancellationToken);
 
         return Response.Ok();

@@ -2,7 +2,7 @@
 using Meetings4IT.Shared.Implementations.Search.SearchParameters;
 using Newtonsoft.Json;
 
-namespace Panels.Application.Models.Parameters;
+namespace Panels.Application.Models.Parameters.MeetingParams;
 
 public class GetMeetingsBySearchParameters : BaseSearchQueryParameters, IFilterModel
 {

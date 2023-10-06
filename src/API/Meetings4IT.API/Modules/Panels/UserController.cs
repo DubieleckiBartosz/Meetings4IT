@@ -7,7 +7,7 @@ using Panels.Application.Features.Users.Commands.AddNewUserOpinion;
 using Panels.Application.Features.Users.Commands.CompleteUserDetails;
 using Panels.Application.Features.Users.Commands.DeleteUserOpinion;
 using Panels.Application.Features.Users.Commands.UpdateUserOpinion;
-using Panels.Application.Models.Parameters;
+using Panels.Application.Models.Parameters.UserParams;
 using Swashbuckle.AspNetCore.Annotations;
 
 namespace Meetings4IT.API.Modules.Panels;

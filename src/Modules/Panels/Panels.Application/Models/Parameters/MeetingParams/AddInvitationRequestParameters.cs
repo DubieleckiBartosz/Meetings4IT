@@ -1,6 +1,6 @@
 ﻿using Newtonsoft.Json;
 
-namespace Panels.Application.Models.Parameters;
+namespace Panels.Application.Models.Parameters.MeetingParams;
 
 public class AddInvitationRequestParameters
 {
@@ -10,5 +10,5 @@ public class AddInvitationRequestParameters
     { }
 
     [JsonConstructor]
-    public AddInvitationRequestParameters(int meetingId) => (MeetingId) = (meetingId);
+    public AddInvitationRequestParameters(int meetingId) => MeetingId = meetingId;
 }

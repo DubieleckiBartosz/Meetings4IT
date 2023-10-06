@@ -1,4 +1,5 @@
-﻿using Meetings4IT.Shared.Abstractions.Kernel;
+﻿using Meetings4IT.Shared.Abstractions.Exceptions;
+using Meetings4IT.Shared.Abstractions.Kernel;
 using Meetings4IT.Shared.Abstractions.Kernel.ValueObjects;
 using Meetings4IT.Shared.Abstractions.Time;
 using Panels.Domain.Generators;
@@ -318,7 +319,7 @@ public class Meeting : Entity, IAggregateRoot
         IncrementVersion();
     }
 
-    public void AddRequestInvitation(string requestInvitationCreatorId, string creatorName)
+    public void AddInvitationRequest(string requestInvitationCreatorId, string creatorName)
     {
         this.CheckIfMeetingOperationIsPossible();
         this.CheckIfMeetingWasCanceled();
@@ -346,14 +347,19 @@ public class Meeting : Entity, IAggregateRoot
     /// Method responsible for changing the status of the invitation request
     /// Method available only to the meeting creator
     /// </summary>
-    /// <param name="requestInvitationCreatorId"></param>
+    /// <param name="invitationRequestId"></param>
     /// <param name="reason"></param>
-    public void RejectRequestInvitation(string requestInvitationCreatorId, string? reason = null)
+    public void RejectInvitationRequest(string rejectBy, int invitationRequestId, string? reason = null)
     {
-        var requestInvitation = this._requests.FirstOrDefault(_ => _.RequestCreator.Identifier == requestInvitationCreatorId);
+        if (rejectBy != Organizer.Identifier)
+        {
+            throw new NoUserAccessOperation();
+        }
+
+        var requestInvitation = this._requests.FirstOrDefault(_ => _.Id == invitationRequestId);
         if (requestInvitation == null)
         {
-            throw new InvitationRequestNotFoundException(this.Id, requestInvitationCreatorId);
+            throw new InvitationRequestNotFoundException(this.Id, invitationRequestId);
         }
 
         requestInvitation.Reject(reason);
@@ -364,13 +370,13 @@ public class Meeting : Entity, IAggregateRoot
     /// Method available to invitation request creator.
     /// E.g. I've created an invitation request by mistake and I want to delete it
     /// </summary>
-    /// <param name="requestInvitationCreatorId"></param>
-    public void DeleteRequestInvitation(string requestInvitationCreatorId)
+    /// <param name="invitationRequestCreatorId"></param>
+    public void DeleteInvitationRequest(string invitationRequestCreatorId)
     {
-        var requestInvitation = this._requests.FirstOrDefault(_ => _.RequestCreator.Identifier == requestInvitationCreatorId);
+        var requestInvitation = this._requests.FirstOrDefault(_ => _.RequestCreator.Identifier == invitationRequestCreatorId);
         if (requestInvitation == null)
         {
-            throw new InvitationRequestNotFoundException(this.Id, requestInvitationCreatorId);
+            throw new InvitationRequestNotFoundException(this.Id, invitationRequestCreatorId);
         }
 
         this._requests.Remove(requestInvitation);

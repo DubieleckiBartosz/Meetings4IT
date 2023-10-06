@@ -1,6 +1,6 @@
 ﻿using Newtonsoft.Json;
 
-namespace Panels.Application.Models.Parameters;
+namespace Panels.Application.Models.Parameters.UserParams;
 
 public class UpdateUserOpinionParameters
 {

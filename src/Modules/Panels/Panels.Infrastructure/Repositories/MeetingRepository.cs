@@ -43,6 +43,20 @@ public class MeetingRepository : IMeetingRepository
         return result;
     }
 
+    public async Task<Meeting?> GetMeetingWithInvitationRequestsByIdAsync(int meetingId, CancellationToken cancellationToken = default)
+    {
+        return await _meetings
+            .Include(MeetingConfiguration.InvitationRequests)
+            .FirstOrDefaultAsync(_ => _.Id == meetingId, cancellationToken);
+    }
+
+    public async Task<Meeting?> GetMeetingWithCommentsByIdAsync(int meetingId, CancellationToken cancellationToken = default)
+    {
+        return await _meetings
+            .IncludePaths(MeetingConfiguration.Comments)
+            .FirstOrDefaultAsync(_ => _.Id == meetingId, cancellationToken);
+    }
+
     public async Task<Meeting?> GetMeetingWithInvitationsByIdAsync(int meetingId, CancellationToken cancellationToken = default)
     {
         return await _meetings

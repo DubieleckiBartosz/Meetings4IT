@@ -2,7 +2,7 @@
 using Meetings4IT.Shared.Implementations.Search;
 using Meetings4IT.Shared.Implementations.Tools;
 using Meetings4IT.Shared.Implementations.Wrappers;
-using Panels.Application.Models.Parameters;
+using Panels.Application.Models.Parameters.MeetingParams;
 using Panels.Application.Models.Views;
 
 namespace Panels.Application.Features.Meetings.Queries.GetMeetingsBySearch;

@@ -1,7 +1,7 @@
 ﻿using Meetings4IT.Shared.Implementations.Mediator;
 using Meetings4IT.Shared.Implementations.Wrappers;
 using Microsoft.AspNetCore.Http;
-using Panels.Application.Models.Parameters;
+using Panels.Application.Models.Parameters.UserParams;
 
 namespace Panels.Application.Features.Users.Commands.CompleteUserDetails;
 

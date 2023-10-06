@@ -2,7 +2,7 @@
 using Bogus;
 using Meetings4IT.IntegrationTests.Constants;
 using Meetings4IT.Shared.Abstractions.Time;
-using Panels.Application.Models.Parameters;
+using Panels.Application.Models.Parameters.MeetingParams;
 using Panels.Domain.Meetings;
 
 namespace Meetings4IT.IntegrationTests.Modules.Panels.Requests;
