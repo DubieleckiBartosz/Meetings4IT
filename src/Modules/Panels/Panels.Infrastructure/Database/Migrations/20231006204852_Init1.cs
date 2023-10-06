@@ -297,7 +297,7 @@ namespace Panels.Infrastructure.Database.Migrations
                     Created = table.Column<DateTime>(type: "datetime2", nullable: false),
                     DeletedAt = table.Column<DateTime>(type: "datetime2", nullable: true),
                     LastModified = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    MeetingId = table.Column<int>(type: "int", nullable: false)
+                    MeetingId = table.Column<int>(type: "int", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -307,8 +307,7 @@ namespace Panels.Infrastructure.Database.Migrations
                         column: x => x.MeetingId,
                         principalSchema: "panels",
                         principalTable: "Meetings",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        principalColumn: "Id");
                 });
 
             migrationBuilder.CreateTable(

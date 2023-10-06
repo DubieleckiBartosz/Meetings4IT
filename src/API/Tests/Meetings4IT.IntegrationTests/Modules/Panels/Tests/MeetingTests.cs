@@ -1,4 +1,5 @@
-﻿using Meetings4IT.IntegrationTests.Generators.Panels.Meetings;
+﻿using Meetings4IT.IntegrationTests.Constants;
+using Meetings4IT.IntegrationTests.Generators.Panels.Meetings;
 using Meetings4IT.IntegrationTests.Modules.Panels.Requests;
 using Meetings4IT.IntegrationTests.Setup;
 using Meetings4IT.Shared.Implementations.Wrappers;
@@ -91,7 +92,10 @@ public class MeetingTests : ControllerBaseTests
 
         await AssertWithContext<PanelContext>(async _ =>
         {
-            var result = await _.Meetings.FirstOrDefaultAsync(_ => _.Id == meeting.Id);
+            var result = await _.Meetings
+            .Include(RepoPathQueries.Invitations)
+            .FirstOrDefaultAsync(_ => _.Id == meeting.Id);
+
             var invotation = result!.Invitations.First(i => i.Code == code);
             Assert.NotNull(invotation);
             Assert.True(invotation.Status == InvitationStatus.Accepted);
@@ -119,7 +123,10 @@ public class MeetingTests : ControllerBaseTests
 
         await AssertWithContext<PanelContext>(async _ =>
         {
-            var result = await _.Meetings.FirstOrDefaultAsync(_ => _.Id == meeting.Id);
+            var result = await _.Meetings
+            .Include(RepoPathQueries.Invitations)
+            .FirstOrDefaultAsync(_ => _.Id == meeting.Id);
+
             var invotation = result!.Invitations.First(i => i.Code == code);
             Assert.NotNull(invotation);
             Assert.True(invotation.Status == InvitationStatus.Rejected);

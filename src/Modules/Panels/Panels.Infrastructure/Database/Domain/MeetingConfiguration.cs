@@ -2,7 +2,6 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using Panels.Domain.Meetings;
-using Panels.Domain.Meetings.Entities;
 using Panels.Domain.Meetings.ValueObjects;
 using Panels.Infrastructure.Database.Domain.Converters;
 
@@ -63,6 +62,7 @@ internal class MeetingConfiguration : WatcherConfiguration, IEntityTypeConfigura
 
         builder.HasMany(Comments).WithOne().HasForeignKey("MeetingId");
         builder.HasMany(InvitationRequests).WithOne().HasForeignKey("MeetingId");
+        builder.HasMany(Invitations).WithOne().HasForeignKey("MeetingId");
 
         builder.OwnsOne<UserInfo>("Organizer", _ =>
         {
@@ -114,52 +114,6 @@ internal class MeetingConfiguration : WatcherConfiguration, IEntityTypeConfigura
               .HasColumnType("varchar(15)")
               .HasColumnName("NumberStreet")
               .IsRequired();
-        });
-
-        builder.OwnsMany<Invitation>(Invitations, _ =>
-        {
-            _.WithOwner().HasForeignKey("MeetingId");
-            _.ToTable("Invitations", "panels");
-
-            _.HasKey(_ => _.Id);
-
-            _.Property(p => p.Email)
-              .HasColumnName("Email")
-              .HasColumnType("varchar(50)")
-              .HasConversion(x => x.Value, x => new Email(x))
-              .IsRequired();
-
-            _.Property(p => p.Status)
-              .HasColumnName("Status")
-              .HasColumnType("tinyint")
-              .HasConversion<InvitationStatusConverter>()
-              .IsRequired();
-
-            _.Property(p => p.Code)
-              .HasColumnName("Code")
-              .HasColumnType("varchar(20)")
-              .HasConversion(x => x.Value, x => InvitationCode.Create(x))
-              .IsRequired();
-
-            _.Property(p => p.RecipientName)
-              .HasColumnName("RecipientName")
-              .HasColumnType("varchar(50)")
-              .HasConversion(x => x.Value, x => new NameInvitationRecipient(x))
-              .IsRequired();
-
-            _.Property(p => p.ExpirationDate)
-              .HasColumnName("ExpirationDate")
-              .HasConversion(x => x.Value, x => new Date(x))
-              .IsRequired();
-
-            _.Property(p => p.RecipientId)
-              .HasColumnName("RecipientId")
-              .IsRequired(false);
-
-            this.ConfigureWatcher(_);
-
-            _.Ignore(x => x.Events);
-            _.Ignore(x => x.Version);
         });
 
         builder.OwnsMany<MeetingImage>(Images, _ =>

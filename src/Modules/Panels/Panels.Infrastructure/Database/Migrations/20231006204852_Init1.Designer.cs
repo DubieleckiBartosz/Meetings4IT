@@ -12,7 +12,7 @@ using Panels.Infrastructure.Database;
 namespace Panels.Infrastructure.Database.Migrations
 {
     [DbContext(typeof(PanelContext))]
-    [Migration("20231005223111_Init1")]
+    [Migration("20231006204852_Init1")]
     partial class Init1
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -139,6 +139,63 @@ namespace Panels.Infrastructure.Database.Migrations
                     b.HasIndex("MeetingId");
 
                     b.ToTable("MeetingComments", "panels");
+                });
+
+            modelBuilder.Entity("Panels.Domain.Meetings.Entities.Invitation", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
+
+                    b.Property<string>("Code")
+                        .IsRequired()
+                        .HasColumnType("varchar(20)")
+                        .HasColumnName("Code");
+
+                    b.Property<DateTime>("Created")
+                        .HasColumnType("datetime2")
+                        .HasColumnName("Created");
+
+                    b.Property<DateTime?>("DeletedAt")
+                        .HasColumnType("datetime2")
+                        .HasColumnName("DeletedAt");
+
+                    b.Property<string>("Email")
+                        .IsRequired()
+                        .HasColumnType("varchar(50)")
+                        .HasColumnName("Email");
+
+                    b.Property<DateTime>("ExpirationDate")
+                        .HasColumnType("datetime2")
+                        .HasColumnName("ExpirationDate");
+
+                    b.Property<DateTime>("LastModified")
+                        .HasColumnType("datetime2")
+                        .HasColumnName("LastModified");
+
+                    b.Property<int?>("MeetingId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("RecipientId")
+                        .HasColumnType("nvarchar(max)")
+                        .HasColumnName("RecipientId");
+
+                    b.Property<string>("RecipientName")
+                        .IsRequired()
+                        .HasColumnType("varchar(50)")
+                        .HasColumnName("RecipientName");
+
+                    b.Property<int>("Status")
+                        .HasColumnType("tinyint")
+                        .HasColumnName("Status");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("MeetingId");
+
+                    b.ToTable("Invitations", "panels");
                 });
 
             modelBuilder.Entity("Panels.Domain.Meetings.Entities.InvitationRequest", b =>
@@ -434,6 +491,13 @@ namespace Panels.Infrastructure.Database.Migrations
                         .IsRequired();
                 });
 
+            modelBuilder.Entity("Panels.Domain.Meetings.Entities.Invitation", b =>
+                {
+                    b.HasOne("Panels.Domain.Meetings.Meeting", null)
+                        .WithMany("_invitations")
+                        .HasForeignKey("MeetingId");
+                });
+
             modelBuilder.Entity("Panels.Domain.Meetings.Entities.InvitationRequest", b =>
                 {
                     b.HasOne("Panels.Domain.Meetings.Meeting", null)
@@ -476,66 +540,6 @@ namespace Panels.Infrastructure.Database.Migrations
                         .HasForeignKey("CategoryIndex")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
-
-                    b.OwnsMany("Panels.Domain.Meetings.Entities.Invitation", "_invitations", b1 =>
-                        {
-                            b1.Property<int>("Id")
-                                .ValueGeneratedOnAdd()
-                                .HasColumnType("int");
-
-                            SqlServerPropertyBuilderExtensions.UseIdentityColumn(b1.Property<int>("Id"), 1L, 1);
-
-                            b1.Property<string>("Code")
-                                .IsRequired()
-                                .HasColumnType("varchar(20)")
-                                .HasColumnName("Code");
-
-                            b1.Property<DateTime>("Created")
-                                .HasColumnType("datetime2")
-                                .HasColumnName("Created");
-
-                            b1.Property<DateTime?>("DeletedAt")
-                                .HasColumnType("datetime2")
-                                .HasColumnName("DeletedAt");
-
-                            b1.Property<string>("Email")
-                                .IsRequired()
-                                .HasColumnType("varchar(50)")
-                                .HasColumnName("Email");
-
-                            b1.Property<DateTime>("ExpirationDate")
-                                .HasColumnType("datetime2")
-                                .HasColumnName("ExpirationDate");
-
-                            b1.Property<DateTime>("LastModified")
-                                .HasColumnType("datetime2")
-                                .HasColumnName("LastModified");
-
-                            b1.Property<int>("MeetingId")
-                                .HasColumnType("int");
-
-                            b1.Property<string>("RecipientId")
-                                .HasColumnType("nvarchar(max)")
-                                .HasColumnName("RecipientId");
-
-                            b1.Property<string>("RecipientName")
-                                .IsRequired()
-                                .HasColumnType("varchar(50)")
-                                .HasColumnName("RecipientName");
-
-                            b1.Property<int>("Status")
-                                .HasColumnType("tinyint")
-                                .HasColumnName("Status");
-
-                            b1.HasKey("Id");
-
-                            b1.HasIndex("MeetingId");
-
-                            b1.ToTable("Invitations", "panels");
-
-                            b1.WithOwner()
-                                .HasForeignKey("MeetingId");
-                        });
 
                     b.OwnsOne("Meetings4IT.Shared.Abstractions.Kernel.ValueObjects.DateRange", "Date", b1 =>
                         {
@@ -670,8 +674,6 @@ namespace Panels.Infrastructure.Database.Migrations
                         .IsRequired();
 
                     b.Navigation("_images");
-
-                    b.Navigation("_invitations");
                 });
 
             modelBuilder.Entity("Panels.Domain.ScheduledMeetings.ScheduledMeeting", b =>
@@ -821,6 +823,8 @@ namespace Panels.Infrastructure.Database.Migrations
             modelBuilder.Entity("Panels.Domain.Meetings.Meeting", b =>
                 {
                     b.Navigation("_comments");
+
+                    b.Navigation("_invitations");
 
                     b.Navigation("_requests");
                 });

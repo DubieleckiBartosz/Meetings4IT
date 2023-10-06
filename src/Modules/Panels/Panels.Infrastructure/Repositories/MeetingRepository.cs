@@ -1,6 +1,5 @@
 ﻿using Meetings4IT.Shared.Abstractions.Kernel;
 using Meetings4IT.Shared.Abstractions.Time;
-using Meetings4IT.Shared.Implementations.EntityFramework.Extensions;
 using Microsoft.EntityFrameworkCore;
 using Panels.Application.Contracts.Repositories;
 using Panels.Domain.Meetings;
@@ -53,14 +52,14 @@ public class MeetingRepository : IMeetingRepository
     public async Task<Meeting?> GetMeetingWithCommentsByIdAsync(int meetingId, CancellationToken cancellationToken = default)
     {
         return await _meetings
-            .IncludePaths(MeetingConfiguration.Comments)
+            .Include(MeetingConfiguration.Comments)
             .FirstOrDefaultAsync(_ => _.Id == meetingId, cancellationToken);
     }
 
     public async Task<Meeting?> GetMeetingWithInvitationsByIdAsync(int meetingId, CancellationToken cancellationToken = default)
     {
         return await _meetings
-            .IncludePaths(MeetingConfiguration.Invitations)
+            .Include(MeetingConfiguration.Invitations)
             .Include(_ => _.Category)
             .FirstOrDefaultAsync(_ => _.Id == meetingId, cancellationToken);
     }
@@ -68,7 +67,7 @@ public class MeetingRepository : IMeetingRepository
     public async Task<Meeting?> GetMeetingWithInvitationsAndRequestsByIdAsync(int meetingId, CancellationToken cancellationToken = default)
     {
         return await _meetings
-            .IncludePaths(MeetingConfiguration.Invitations)
+            .Include(MeetingConfiguration.Invitations)
             .Include(MeetingConfiguration.InvitationRequests)
             .FirstOrDefaultAsync(_ => _.Id == meetingId, cancellationToken);
     }
