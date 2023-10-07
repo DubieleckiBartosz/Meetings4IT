@@ -45,10 +45,10 @@ public static class MeetingGenerators
         return meeting;
     }
 
-    public static Meeting GetMeetingWthInvotations(int cnt = 1)
+    public static Meeting GetMeetingWthInvotations(int cnt = 1, string? organizerId = null, string? organizerName = null)
     {
         var faker = new Faker(FakerSettings.EnglishLocalCode);
-        var meeting = GetActiveMeeting();
+        var meeting = GetActiveMeeting(organizerId, organizerName);
 
         for (int i = 0; i < cnt; i++)
         {
@@ -62,20 +62,20 @@ public static class MeetingGenerators
         return meeting;
     }
 
-    public static Meeting GetMeetingWthInvotationRequests(int cnt = 1)
+    public static Meeting GetMeetingWthInvotationRequests(Meeting? meeting = null, int cnt = 1)
     {
         var faker = new Faker(FakerSettings.EnglishLocalCode);
-        var meeting = GetActiveMeeting();
+        var activeMeeting = meeting ?? GetActiveMeeting();
 
         for (int i = 0; i < cnt; i++)
         {
             var userName = faker.Internet.UserName();
             var userId = Guid.NewGuid().ToString();
 
-            meeting.AddInvitationRequest(userId, userName);
+            activeMeeting.AddInvitationRequest(userId, userName);
         }
 
-        return meeting;
+        return activeMeeting;
     }
 
     public static Meeting GetMeetingWthInvotationRequest()
@@ -90,14 +90,14 @@ public static class MeetingGenerators
         return meeting;
     }
 
-    public static Meeting GetMeetingWthComment()
+    public static Meeting GetMeetingWthComment(Meeting? meeting = null)
     {
         var faker = new Faker(FakerSettings.EnglishLocalCode);
-        var meeting = GetActiveMeeting(Guid.NewGuid().ToString(), faker.Internet.UserName());
+        var activeMeeting = meeting ?? GetActiveMeeting(Guid.NewGuid().ToString(), faker.Internet.UserName());
 
         var content = faker.Lorem.Sentence();
-        meeting.AddComment(GlobalUserData.Identifier, GlobalUserData.UserName, content);
+        activeMeeting.AddComment(GlobalUserData.Identifier, GlobalUserData.UserName, content!);
 
-        return meeting;
+        return activeMeeting;
     }
 }
