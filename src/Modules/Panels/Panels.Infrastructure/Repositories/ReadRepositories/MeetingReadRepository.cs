@@ -32,7 +32,7 @@ public class MeetingReadRepository : BaseRepository, IMeetingReadRepository
         parameters.Add("@pageNumber", searchDao.PageNumber);
         parameters.Add("@pageSize", searchDao.PageSize);
 
-        var result = await this.QueryAsync<MeetingsSearchResultDao>("meetings_getBySearch_S", parameters, System.Data.CommandType.StoredProcedure);
+        var result = await this.QueryAsync<MeetingsSearchResultDao>("[panels].[meetings_getBySearch_S]", parameters, System.Data.CommandType.StoredProcedure);
         return result?.ToList();
     }
 }

@@ -4,5 +4,5 @@ namespace Meetings4IT.Shared.Implementations.Search;
 
 public interface IFilterModel
 {
-    SortModelParameters Sort { get; set; }
+    SortModelParameters Sort { get; init; }
 }

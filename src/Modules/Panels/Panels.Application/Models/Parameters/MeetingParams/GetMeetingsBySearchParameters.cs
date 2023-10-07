@@ -6,15 +6,15 @@ namespace Panels.Application.Models.Parameters.MeetingParams;
 
 public class GetMeetingsBySearchParameters : BaseSearchQueryParameters, IFilterModel
 {
-    public string? OrganizerName { get; }
-    public DateTime? From { get; }
-    public DateTime? To { get; }
-    public bool? Public { get; }
-    public string? City { get; }
-    public string? Street { get; }
-    public int? Status { get; set; }
-    public int? Category { get; set; }
-    public SortModelParameters Sort { get; set; }
+    public string? OrganizerName { get; init; }
+    public DateTime? From { get; init; }
+    public DateTime? To { get; init; }
+    public bool? Public { get; init; }
+    public string? City { get; init; }
+    public string? Street { get; init; }
+    public int? Status { get; init; }
+    public int? Category { get; init; }
+    public SortModelParameters Sort { get; init; }
 
     public GetMeetingsBySearchParameters()
     { }
