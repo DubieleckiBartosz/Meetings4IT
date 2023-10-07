@@ -36,7 +36,7 @@ public class MeetingTests : ControllerBaseTests
     public async Task Should_Create_New_Meeting_Invitation()
     {
         //Arrange
-        var meeting = MeetingGenerators.GetMeeting();
+        var meeting = MeetingGenerators.GetActiveMeeting();
 
         InitData<PanelContext, Meeting>(meeting);
 
@@ -131,5 +131,119 @@ public class MeetingTests : ControllerBaseTests
             Assert.NotNull(invotation);
             Assert.True(invotation.Status == InvitationStatus.Rejected);
         });
+    }
+
+    [Fact]
+    public async Task Should_Add_New_Invotation_Request()
+    {
+        //Arrange
+        var meeting = MeetingGenerators.GetActiveMeeting();
+
+        InitData<PanelContext, Meeting>(meeting);
+
+        var request = MeetingRequests.AddInvitationRequestParametersRequest(meeting);
+
+        //Act
+        var response = await ClientCall(request, HttpMethod.Post, Urls.AddInvitationRequestPath);
+        var responseData = await ReadFromResponse<Response>(response);
+
+        //Assert
+        Assert.True(response.IsSuccessStatusCode);
+        Assert.True(responseData!.Success);
+    }
+
+    [Fact]
+    public async Task Should_Reject_Invotation_Request()
+    {
+        //Arrange
+        var meeting = MeetingGenerators.GetMeetingWthInvotationRequests();
+
+        InitData<PanelContext, Meeting>(meeting);
+
+        var request = MeetingRequests.RejectInvitationRequestParametersRequest(meeting, meeting.InvitationRequests[0].Id);
+
+        //Act
+        var response = await ClientCall(request, HttpMethod.Put, Urls.RejectInvitationRequestPath);
+        var responseData = await ReadFromResponse<Response>(response);
+
+        //Assert
+        Assert.True(response.IsSuccessStatusCode);
+        Assert.True(responseData!.Success);
+    }
+
+    [Fact]
+    public async Task Should_Delete_Invotation_Request()
+    {
+        //Arrange
+        var meeting = MeetingGenerators.GetMeetingWthInvotationRequest();
+
+        InitData<PanelContext, Meeting>(meeting);
+
+        var request = MeetingRequests.DeleteInvitationRequestParametersRequest(meeting);
+
+        //Act
+        var response = await ClientCall(request, HttpMethod.Delete, Urls.DeleteInvitationRequestPath);
+        var responseData = await ReadFromResponse<Response>(response);
+
+        //Assert
+        Assert.True(response.IsSuccessStatusCode);
+        Assert.True(responseData!.Success);
+    }
+
+    [Fact]
+    public async Task Should_Add_Meeting_Comment()
+    {
+        //Arrange
+        var meeting = MeetingGenerators.GetActiveMeeting();
+
+        InitData<PanelContext, Meeting>(meeting);
+
+        var request = MeetingRequests.AddMeetingCommentParametersRequest(meeting);
+
+        //Act
+        var response = await ClientCall(request, HttpMethod.Post, Urls.AddMeetingCommentPath);
+        var responseData = await ReadFromResponse<Response>(response);
+
+        //Assert
+        Assert.True(response.IsSuccessStatusCode);
+        Assert.True(responseData!.Success);
+    }
+
+    [Fact]
+    public async Task Should_Update_Meeting_Comment()
+    {
+        //Arrange
+        var meeting = MeetingGenerators.GetMeetingWthComment();
+
+        InitData<PanelContext, Meeting>(meeting);
+
+        var request = MeetingRequests.UpdateMeetingCommentParametersRequest(meeting, meeting.Comments[0].Id);
+
+        //Act
+        var response = await ClientCall(request, HttpMethod.Put, Urls.UpdateMeetingCommentPath);
+        var responseData = await ReadFromResponse<Response>(response);
+
+        //Assert
+        Assert.True(response.IsSuccessStatusCode);
+        Assert.True(responseData!.Success);
+    }
+
+    [Fact]
+    public async Task Should_Delete_Meeting_Comment()
+    {
+        //Arrange
+        var meeting = MeetingGenerators.GetMeetingWthComment();
+
+        InitData<PanelContext, Meeting>(meeting);
+
+        var request = MeetingRequests.DeleteMeetingCommentParametersRequest(meeting, meeting.Comments[0].Id);
+
+        //Act
+        var response = await ClientCall(request, HttpMethod.Delete, Urls.DeleteMeetingCommentPath);
+        var responseData = await ReadFromResponse<Response>(response);
+
+        //Assert
+        Assert.True(response.IsSuccessStatusCode);
+        Assert.True(responseData!.Success);
     }
 }

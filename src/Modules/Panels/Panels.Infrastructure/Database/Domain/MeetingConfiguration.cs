@@ -28,6 +28,9 @@ internal class MeetingConfiguration : WatcherConfiguration, IEntityTypeConfigura
 
         builder.Ignore(x => x.Events);
         builder.Ignore(x => x.Invitations);
+        builder.Ignore(x => x.Comments);
+        builder.Ignore(x => x.MeetingImages);
+        builder.Ignore(x => x.InvitationRequests);
 
         builder.Property(_ => _.IsPublic)
             .HasColumnName("IsPublic")

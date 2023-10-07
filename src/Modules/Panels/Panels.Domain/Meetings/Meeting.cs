@@ -59,6 +59,9 @@ public class Meeting : Entity, IAggregateRoot
     public DateRange Date { get; private set; }
     public MeetingStatus Status { get; private set; }
     public List<Invitation> Invitations => _invitations;
+    public List<Comment> Comments => _comments;
+    public List<MeetingImage> MeetingImages => _images;
+    public List<InvitationRequest> InvitationRequests => _requests;
 
     /// <summary>
     /// This property gets information about the status of the meeting at this time
@@ -309,6 +312,7 @@ public class Meeting : Entity, IAggregateRoot
 
     public void DeleteComment(string creatorId, int commentId)
     {
+        //[TODO]We will probably add a maximum time to create a comment
         var comment = _comments.FirstOrDefault(_ => _.Id == commentId && _.CreatorId == creatorId);
         if (comment == null)
         {

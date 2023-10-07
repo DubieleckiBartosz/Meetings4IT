@@ -59,4 +59,58 @@ public static class MeetingRequests
 
         return cancelMeetingParameters.Generate();
     }
+
+    public static AddInvitationRequestParameters AddInvitationRequestParametersRequest(Meeting meeting)
+    {
+        var addInvitationRequestParameters = new Faker<AddInvitationRequestParameters>(FakerSettings.EnglishLocalCode)
+            .RuleFor(p => p.MeetingId, f => meeting.Id);
+
+        return addInvitationRequestParameters.Generate();
+    }
+
+    public static RejectInvitationRequestParameters RejectInvitationRequestParametersRequest(Meeting meeting, int invitationRequestId)
+    {
+        var rejectInvitationRequestParameters = new Faker<RejectInvitationRequestParameters>(FakerSettings.EnglishLocalCode)
+            .RuleFor(p => p.MeetingId, f => meeting.Id)
+            .RuleFor(p => p.Reason, f => f.Lorem.Sentence())
+            .RuleFor(p => p.InvitationRequestId, f => invitationRequestId);
+
+        return rejectInvitationRequestParameters.Generate();
+    }
+
+    public static DeleteInvitationRequestParameters DeleteInvitationRequestParametersRequest(Meeting meeting)
+    {
+        var deleteInvitationRequestParameters = new Faker<DeleteInvitationRequestParameters>(FakerSettings.EnglishLocalCode)
+            .RuleFor(p => p.MeetingId, f => meeting.Id);
+
+        return deleteInvitationRequestParameters.Generate();
+    }
+
+    public static AddMeetingCommentParameters AddMeetingCommentParametersRequest(Meeting meeting)
+    {
+        var addMeetingCommentParameters = new Faker<AddMeetingCommentParameters>(FakerSettings.EnglishLocalCode)
+            .RuleFor(p => p.MeetingId, f => meeting.Id)
+            .RuleFor(p => p.Content, f => f.Lorem.Sentence());
+
+        return addMeetingCommentParameters.Generate();
+    }
+
+    public static UpdateMeetingCommentParameters UpdateMeetingCommentParametersRequest(Meeting meeting, int commentId)
+    {
+        var updateMeetingCommentParameters = new Faker<UpdateMeetingCommentParameters>(FakerSettings.EnglishLocalCode)
+            .RuleFor(p => p.MeetingId, f => meeting.Id)
+            .RuleFor(p => p.CommentId, f => commentId)
+            .RuleFor(p => p.Content, f => f.Lorem.Sentence());
+
+        return updateMeetingCommentParameters.Generate();
+    }
+
+    public static DeleteMeetingCommentParameters DeleteMeetingCommentParametersRequest(Meeting meeting, int commentId)
+    {
+        var cancelMeetingParameters = new Faker<DeleteMeetingCommentParameters>(FakerSettings.EnglishLocalCode)
+            .RuleFor(p => p.MeetingId, f => meeting.Id)
+            .RuleFor(p => p.CommentId, f => commentId);
+
+        return cancelMeetingParameters.Generate();
+    }
 }

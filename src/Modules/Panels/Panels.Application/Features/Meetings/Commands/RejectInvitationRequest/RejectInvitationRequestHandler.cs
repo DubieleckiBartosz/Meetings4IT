@@ -19,7 +19,7 @@ public class RejectInvitationRequestHandler : ICommandHandler<RejectInvitationRe
 
     public async Task<Response> Handle(RejectInvitationRequestCommand request, CancellationToken cancellationToken)
     {
-        var meetingResult = await _meetingRepository.GetMeetingWithCommentsByIdAsync(request.MeetingId, cancellationToken);
+        var meetingResult = await _meetingRepository.GetMeetingWithInvitationRequestsByIdAsync(request.MeetingId, cancellationToken);
         if (meetingResult == null)
         {
             throw new NotFoundException($"Meeting {request.MeetingId} not found.");

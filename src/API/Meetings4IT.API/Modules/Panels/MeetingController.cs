@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using OpenIddict.Validation.AspNetCore;
 using Panels.Application.Features.Meetings.Commands.AcceptMeetingInvitation;
+using Panels.Application.Features.Meetings.Commands.AddInvitationRequest;
 using Panels.Application.Features.Meetings.Commands.AddMeetingComment;
 using Panels.Application.Features.Meetings.Commands.CancelMeeting;
 using Panels.Application.Features.Meetings.Commands.CreateMeetingInvitation;
@@ -86,6 +87,17 @@ public class MeetingController : BaseController
         return Ok(response);
     }
 
+    [SwaggerOperation(Summary = "Adding invitation request")]
+    [ProducesResponseType(typeof(object), 400)]
+    [ProducesResponseType(typeof(object), 500)]
+    [ProducesResponseType(typeof(Response), 200)]
+    [HttpPost("[action]")]
+    public async Task<IActionResult> AddInvitationRequest([FromBody] AddInvitationRequestParameters parameters)
+    {
+        var response = await CommandBus.Send(new AddInvitationRequestCommand(parameters));
+        return Ok(response);
+    }
+
     [SwaggerOperation(Summary = "Rejection invitation request")]
     [ProducesResponseType(typeof(object), 400)]
     [ProducesResponseType(typeof(object), 500)]
@@ -152,17 +164,17 @@ public class MeetingController : BaseController
         return Ok(response);
     }
 
-    [SwaggerOperation(Summary = "Get meeting by Id")]
-    [HttpGet("[action]")]
-    public async Task<IActionResult> GetMeetingById([FromRoute] int meetingId)
-    {
-        return Ok(new { Message = "OK" });
-    }
+    //[SwaggerOperation(Summary = "Get meeting by Id")]
+    //[HttpGet("[action]")]
+    //public async Task<IActionResult> GetMeetingById([FromRoute] int meetingId)
+    //{
+    //    return Ok(new { Message = "OK" });
+    //}
 
-    [SwaggerOperation(Summary = "Get invitation by code")]
-    [HttpGet("[action]")]
-    public async Task<IActionResult> GetInvitationByCode([FromQuery] int code)
-    {
-        return Ok(new { Message = "OK" });
-    }
+    //[SwaggerOperation(Summary = "Get invitation by code")]
+    //[HttpGet("[action]")]
+    //public async Task<IActionResult> GetInvitationByCode([FromQuery] int code)
+    //{
+    //    return Ok(new { Message = "OK" });
+    //}
 }

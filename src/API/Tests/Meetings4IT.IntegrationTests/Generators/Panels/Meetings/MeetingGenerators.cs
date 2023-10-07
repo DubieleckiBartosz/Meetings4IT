@@ -10,7 +10,7 @@ namespace Meetings4IT.IntegrationTests.Generators.Panels.Meetings;
 
 public static class MeetingGenerators
 {
-    public static Meeting GetMeeting()
+    public static Meeting GetActiveMeeting(string? organizerId = null, string? organizerName = null)
     {
         var meetingFaker = new Faker<Meeting>(FakerSettings.EnglishLocalCode)
             .CustomInstantiator(f =>
@@ -25,7 +25,7 @@ public static class MeetingGenerators
                   var address = Address.Create(city, street, numberStreet);
                   var description = f.Lorem.Sentence();
                   var meetingCategory = f.PickRandom(SeedData.MeetingCategories());
-                  var organizer = new UserInfo(GlobalUserData.Identifier, GlobalUserData.UserName);
+                  var organizer = new UserInfo(organizerId ?? GlobalUserData.Identifier, organizerName ?? GlobalUserData.UserName);
                   var startDate = Clock.CurrentDate().AddDays(f.Random.Int(7, 14));
                   var dateRange = new DateRange(startDate, null);
 
@@ -48,7 +48,7 @@ public static class MeetingGenerators
     public static Meeting GetMeetingWthInvotations(int cnt = 1)
     {
         var faker = new Faker(FakerSettings.EnglishLocalCode);
-        var meeting = GetMeeting();
+        var meeting = GetActiveMeeting();
 
         for (int i = 0; i < cnt; i++)
         {
@@ -58,6 +58,45 @@ public static class MeetingGenerators
 
             meeting.CreateNewInvitation(email!, invitationExpirationDate, recipientName);
         }
+
+        return meeting;
+    }
+
+    public static Meeting GetMeetingWthInvotationRequests(int cnt = 1)
+    {
+        var faker = new Faker(FakerSettings.EnglishLocalCode);
+        var meeting = GetActiveMeeting();
+
+        for (int i = 0; i < cnt; i++)
+        {
+            var userName = faker.Internet.UserName();
+            var userId = Guid.NewGuid().ToString();
+
+            meeting.AddInvitationRequest(userId, userName);
+        }
+
+        return meeting;
+    }
+
+    public static Meeting GetMeetingWthInvotationRequest()
+    {
+        var faker = new Faker(FakerSettings.EnglishLocalCode);
+        var meeting = GetActiveMeeting(Guid.NewGuid().ToString());
+
+        var userName = faker.Internet.UserName();
+
+        meeting.AddInvitationRequest(GlobalUserData.Identifier, userName);
+
+        return meeting;
+    }
+
+    public static Meeting GetMeetingWthComment()
+    {
+        var faker = new Faker(FakerSettings.EnglishLocalCode);
+        var meeting = GetActiveMeeting(Guid.NewGuid().ToString(), faker.Internet.UserName());
+
+        var content = faker.Lorem.Sentence();
+        meeting.AddComment(GlobalUserData.Identifier, GlobalUserData.UserName, content);
 
         return meeting;
     }
