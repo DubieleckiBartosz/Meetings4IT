@@ -18,7 +18,8 @@ public static class PanelInfrastructureDependencyInjection
             .AddScoped<IMeetingCategoryRepository, MeetingCategoryRepository>()
             .AddScoped<ITechnologyRepository, TechnologyRepository>()
             .AddScoped<IUserRepository, UserRepository>()
-            .AddScoped<IMeetingReadRepository, MeetingReadRepository>();
+            .AddScoped<IMeetingReadRepository, MeetingReadRepository>()
+            .AddScoped<IUserReadRepository, UserReadRepository>();
 
         return builder;
     }
